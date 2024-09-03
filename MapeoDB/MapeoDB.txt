@@ -1,0 +1,13 @@
+create schema app_revistas;
+use revistas;
+
+CREATE TABLE usuarios (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    rolUsuario ENUM('COMPRADOR', 'SUSCRIPTOR', 'EDITOR', 'ADMINISTRADOR') NOT NULL,
+    nombreUsuario VARCHAR(15) NOT NULL UNIQUE,
+    password VARCHAR(50) NOT NULL,
+    nombre VARCHAR(100) NOT NULL,
+    descripcion TEXT,
+    foto BLOB
+);
+

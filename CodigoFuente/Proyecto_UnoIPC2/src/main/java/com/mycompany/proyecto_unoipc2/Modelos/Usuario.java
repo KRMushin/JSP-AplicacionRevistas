@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class Usuario {
     
+    private final Long id;
     private final Rol rol;
     private final String nombreUsuario;
     private final String password;
@@ -70,8 +71,9 @@ public class Usuario {
         return password;
     }
     
+    public Usuario(Long id,Rol rol, String nombreUsuario, String password, String nombre) {
     // CONSTRUCTOR 
-    public Usuario(Rol rol, String nombreUsuario, String password, String nombre) {
+        this.id = id;
         this.rol = rol;
         this.nombreUsuario = nombreUsuario;
         this.password = password;
