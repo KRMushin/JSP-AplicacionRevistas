@@ -22,6 +22,8 @@ public interface RepositorioCRUD<T>{
     
     T obtenerPorId(Long id) throws SQLException;
     
+    void eliminar(Long id) throws SQLException;
+    
     
     
     

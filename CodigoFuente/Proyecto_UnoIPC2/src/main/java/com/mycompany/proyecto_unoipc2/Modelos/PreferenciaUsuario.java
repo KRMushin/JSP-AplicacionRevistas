@@ -36,10 +36,6 @@ public class PreferenciaUsuario {
                 this.idPreferencia = idPreferencia;
             }
             
-            
-            
-            
-            
             // COSNTRUCTOR DE UNA PREFERENCIA DEL USUARIO
     public PreferenciaUsuario(String preferencia, Long idUsuario, TipoPreferencia tipoPreferencia) {
         this.preferencia = preferencia;

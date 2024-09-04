@@ -26,7 +26,7 @@ public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuari
     public RepositorioPreferencia(Connection conn) {
         this.conn = conn;
     }
-
+    
     @Override
     public List<PreferenciaUsuario> listar(Long id) throws SQLException {
 
@@ -78,6 +78,30 @@ public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuari
         return modelo;
     }
 
+    @Override
+    public PreferenciaUsuario obtenerPorId(Long id) throws SQLException {
+        PreferenciaUsuario preferenciaUsuario = null;
+        String query = "SELECT * FROM preferencias_usuario WHERE id_preferencia = ?";
+
+        try (PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setLong(1, id);
+            ResultSet resultSet = stmt.executeQuery();
+
+            if (resultSet.next()) {
+                preferenciaUsuario = crearPreferencia(resultSet);
+            }
+        }
+
+        return preferenciaUsuario;
+    }
+    @Override
+    public void eliminar(Long id) throws SQLException {
+        String deleteQuery = "DELETE FROM preferencias_usuario WHERE id_preferencia = ?";
+        try (PreparedStatement stmt = conn.prepareStatement(deleteQuery)) {
+            stmt.setLong(1, id);
+            stmt.executeUpdate();
+        }
+    }
 
     private PreferenciaUsuario crearPreferencia(ResultSet resultSet) throws SQLException {
         TipoPreferencia tipo = TipoPreferencia.valueOf(resultSet.getString("tipo_preferencia").toUpperCase());
@@ -87,10 +111,6 @@ public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuari
 
     }
 
-    @Override
-    public PreferenciaUsuario obtenerPorId(Long id) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-    }
 
     
     
