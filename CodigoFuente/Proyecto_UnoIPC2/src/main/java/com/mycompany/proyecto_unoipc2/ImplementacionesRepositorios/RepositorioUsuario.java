@@ -19,11 +19,13 @@ import java.sql.Statement;
  */
 public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario> {
     
-    private final Connection conn;
+    private  Connection conn;
 
     public RepositorioUsuario(Connection conn) {
         this.conn = conn;
     }
+
+    
     
     @Override
     public Usuario guardar(Usuario t) throws SQLException {
@@ -89,6 +91,22 @@ public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario> 
 
 
     }
+    
+    public Usuario obtenerPorNombreUsuario(String nombreUsuario) throws SQLException {
+            Usuario usuario = null;
+            String query = "SELECT * FROM usuarios WHERE nombre_usuario = ?";
+
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, nombreUsuario);
+                ResultSet resultSet = stmt.executeQuery();
+
+                if (resultSet.next()) {
+                    usuario = crearUsuario(resultSet); 
+                }
+            }
+            return usuario;
+}
+
     
     private Usuario crearUsuario(ResultSet rs) throws SQLException{
          

@@ -23,7 +23,9 @@ public class RepositorioCarteraDigital implements RepositorioLecturaEscritura<Ca
     public RepositorioCarteraDigital(Connection conn) {
         this.conn = conn;
     }
+
     
+
     @Override
     public CarteraDigital guardar(CarteraDigital modelo) throws SQLException {
         String insertQuery = "INSERT INTO carteras_digitales(id_usuario) values (?)";

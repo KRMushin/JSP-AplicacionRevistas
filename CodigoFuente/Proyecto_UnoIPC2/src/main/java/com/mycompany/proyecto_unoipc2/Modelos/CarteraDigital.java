@@ -38,6 +38,13 @@ public class CarteraDigital {
         this.idUsuario = idUsuario;
     }    
     
+
+    /*  cosntructor para registrs*/
+    public CarteraDigital(Double saldoDisponible, Long idUsuario) {
+        this.saldoDisponible = saldoDisponible;
+        this.idUsuario = idUsuario;
+    }
+    /* constructor para DB*/
     public CarteraDigital(Long idCartera, Double saldoDisponible, Long idUsuario) {
         this.idCartera = idCartera;
         this.saldoDisponible = saldoDisponible;

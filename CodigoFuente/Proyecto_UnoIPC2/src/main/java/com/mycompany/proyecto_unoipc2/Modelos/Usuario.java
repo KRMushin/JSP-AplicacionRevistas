@@ -85,8 +85,17 @@ public class Usuario {
     public Usuario(){
     
     }
+    public Usuario(Rol rol, String nombreUsuario, String password, String nombre) {
+    // CONSTRUCTOR PARA METODOS DE REGISTRO
+        this.rol = rol;
+        this.nombreUsuario = nombreUsuario;
+        this.password = password;
+        this.nombre = nombre;
+        this.preferencias = new ArrayList<>();
+        
+    }
     public Usuario(Long id,Rol rol, String nombreUsuario, String password, String nombre) {
-    // CONSTRUCTOR 
+    // CONSTRUCTOR PARA METODOS DE DB
         this.id = id;
         this.rol = rol;
         this.nombreUsuario = nombreUsuario;

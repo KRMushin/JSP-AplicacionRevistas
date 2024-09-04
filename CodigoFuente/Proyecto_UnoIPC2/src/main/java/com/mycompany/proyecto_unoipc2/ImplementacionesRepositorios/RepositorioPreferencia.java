@@ -21,11 +21,13 @@ import java.util.List;
  */
 public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuario> {
 
-    private final Connection conn;
+    private Connection conn;
 
     public RepositorioPreferencia(Connection conn) {
         this.conn = conn;
     }
+
+    
     
     @Override
     public List<PreferenciaUsuario> listar(Long id) throws SQLException {
