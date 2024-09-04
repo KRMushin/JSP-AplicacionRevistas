@@ -14,13 +14,13 @@ import java.util.List;
  */
 public interface RepositorioCRUD<T>{
     
-    List<T> listar() throws SQLException;
+    List<T> listar(Long id) throws SQLException;
     
-    T guardar(T t) throws SQLException;
+    T guardar(T modelo) throws SQLException;
     
-    T actualizar(T t) throws SQLException;
+    T actualizar(T modelo) throws SQLException;
     
-    T porId(String t) throws SQLException;
+    T obtenerPorId(Long id) throws SQLException;
     
     
     

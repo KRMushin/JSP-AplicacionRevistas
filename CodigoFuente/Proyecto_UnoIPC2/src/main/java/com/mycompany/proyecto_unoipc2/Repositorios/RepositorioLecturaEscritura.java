@@ -4,6 +4,8 @@
  */
 package com.mycompany.proyecto_unoipc2.Repositorios;
 
+import java.sql.SQLException;
+
 /**
  *
  * @author kevin-mushin
@@ -11,11 +13,11 @@ package com.mycompany.proyecto_unoipc2.Repositorios;
 public interface RepositorioLecturaEscritura<T> {
     
     
-        T guardar(T t);
+        T guardar(T modelo) throws SQLException;
     
-        T actualizar(T t);
+        T actualizar(T modelo) throws SQLException;
     
-        T porNombreUsuario(String nombreUsuario);
+        T obtenerPorId(Long id) throws SQLException;
     
     
 }

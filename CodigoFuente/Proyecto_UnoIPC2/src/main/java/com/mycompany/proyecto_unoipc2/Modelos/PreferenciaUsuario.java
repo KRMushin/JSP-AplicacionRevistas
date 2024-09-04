@@ -11,27 +11,39 @@ import com.mycompany.proyecto_unoipc2.Utileria.TipoPreferencia;
  * @author kevin-mushin
  */
 public class PreferenciaUsuario {
- 
-        private final String preferencia;
-        private final String nombreUsuario;
+    
+        private  Long idPreferencia; 
+        private  Long idUsuario;
+        private  String preferencia;
         private final TipoPreferencia tipoPreferencia;
 
             public String getPreferencia() {
                 return preferencia;
             }
-
-            public String getNombreUsuario() {
-                return nombreUsuario;
-            }
-
             public TipoPreferencia getTipoPreferencia() {
                 return tipoPreferencia;
             }
+
+            public Long getIdUsuario() {
+                return idUsuario;
+            }
+
+            public Long getIdPreferencia() {
+                return idPreferencia;
+            }
+
+            public void setIdPreferencia(Long idPreferencia) {
+                this.idPreferencia = idPreferencia;
+            }
+            
+            
+            
+            
             
             // COSNTRUCTOR DE UNA PREFERENCIA DEL USUARIO
-    public PreferenciaUsuario(String preferencia, String nombreUsuario, TipoPreferencia tipoPreferencia) {
+    public PreferenciaUsuario(String preferencia, Long idUsuario, TipoPreferencia tipoPreferencia) {
         this.preferencia = preferencia;
-        this.nombreUsuario = nombreUsuario;
+        this.idUsuario = idUsuario;
         this.tipoPreferencia = tipoPreferencia;
     }
         

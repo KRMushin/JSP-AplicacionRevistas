@@ -14,10 +14,10 @@ import java.util.List;
  */
 public class Usuario {
     
-    private final Long id;
-    private final Rol rol;
-    private final String nombreUsuario;
-    private final String password;
+    private Long id;
+    private Rol rol;
+    private String nombreUsuario;
+    private String password;
     private String nombre;
     private String descripcion;
     private byte[] foto;
@@ -56,12 +56,19 @@ public class Usuario {
     public void setPreferencias(List<PreferenciaUsuario> preferencias) {
         this.preferencias = preferencias;
     }
-    
-    /*      ATRITBUTOS NO EDITABLES */
+   
 
     public Rol getRol() {
         return rol;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+    
+    
+            
+    /*      ATRITBUTOS NO EDITABLES */
 
     public String getNombreUsuario() {
         return nombreUsuario;
@@ -70,7 +77,14 @@ public class Usuario {
     public String getPassword() {
         return password;
     }
+
+    public Long getId() {
+        return id;
+    }
+    /*  cosntructor vacio para construir nuevamente el user en la */
+    public Usuario(){
     
+    }
     public Usuario(Long id,Rol rol, String nombreUsuario, String password, String nombre) {
     // CONSTRUCTOR 
         this.id = id;
