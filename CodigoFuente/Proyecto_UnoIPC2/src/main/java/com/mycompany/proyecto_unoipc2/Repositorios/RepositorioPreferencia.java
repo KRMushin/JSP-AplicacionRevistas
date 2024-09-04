@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.proyecto_unoipc2.ImplementacionesRepositorios;
+package com.mycompany.proyecto_unoipc2.Repositorios;
 
 import com.mycompany.proyecto_unoipc2.Modelos.PreferenciaUsuario;
 import com.mycompany.proyecto_unoipc2.Repositorios.RepositorioCRUD;

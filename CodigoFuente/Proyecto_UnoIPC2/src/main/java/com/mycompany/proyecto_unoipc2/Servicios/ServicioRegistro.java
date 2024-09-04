@@ -4,9 +4,9 @@
  */
 package com.mycompany.proyecto_unoipc2.Servicios;
 
-import com.mycompany.proyecto_unoipc2.ImplementacionesRepositorios.RepositorioCarteraDigital;
-import com.mycompany.proyecto_unoipc2.ImplementacionesRepositorios.RepositorioPreferencia;
-import com.mycompany.proyecto_unoipc2.ImplementacionesRepositorios.RepositorioUsuario;
+import com.mycompany.proyecto_unoipc2.Repositorios.RepositorioCarteraDigital;
+import com.mycompany.proyecto_unoipc2.Repositorios.RepositorioPreferencia;
+import com.mycompany.proyecto_unoipc2.Repositorios.RepositorioUsuario;
 import com.mycompany.proyecto_unoipc2.Modelos.CarteraDigital;
 import com.mycompany.proyecto_unoipc2.Modelos.PreferenciaUsuario;
 import com.mycompany.proyecto_unoipc2.Modelos.Usuario;
