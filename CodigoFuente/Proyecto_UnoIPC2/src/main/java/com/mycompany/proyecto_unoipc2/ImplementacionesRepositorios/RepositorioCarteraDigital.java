@@ -24,44 +24,62 @@ public class RepositorioCarteraDigital implements RepositorioLecturaEscritura<Ca
         this.conn = conn;
     }
     
-    
     @Override
-    public CarteraDigital guardar(CarteraDigital modelor) throws SQLException {
+    public CarteraDigital guardar(CarteraDigital modelo) throws SQLException {
         String insertQuery = "INSERT INTO carteras_digitales(id_usuario) values (?)";
         try(PreparedStatement stmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)){
-            stmt.setLong(1, modelor.getIdUsuario());
+            stmt.setLong(1, modelo.getIdUsuario());
             int filasAfectadas = stmt.executeUpdate();
             if (filasAfectadas > 0) {
                 try(ResultSet llave = stmt.getGeneratedKeys()){
                      if (llave.next()) {
-                         modelor.setIdCartera(llave.getLong(1));
+                         modelo.setIdCartera(llave.getLong(1));
                     }
                 }
-            }
-        
+            }       
         }
-        return modelor;
+        return modelo;
 
 
     }
 
     @Override
     public CarteraDigital actualizar(CarteraDigital modelo) throws SQLException {
-        String updateQuery = " UPDATE carteras_digitales SET saldo_dispoible WHERE id_usuario = ?";
+        String updateQuery = " UPDATE carteras_digitales SET saldo_disponible= ? WHERE id_usuario = ?";
         try(PreparedStatement stmt = conn.prepareStatement(updateQuery)){
-             stmt.setLong(1, modelo.getIdUsuario());
-             stmt.executeUpdate();
+            stmt.setDouble(1, modelo.getSaldoDisponible());
+            stmt.setLong(2, modelo.getIdUsuario());
+             int filasAfectadas = stmt.executeUpdate();
+             
+             if (filasAfectadas == 0) {
+                throw   new  SQLException("No se encontro un usuario para actualizar");
+            }
         }
         return modelo;
-        
-            
-
-
     }
 
     @Override
     public CarteraDigital obtenerPorId(Long id) throws SQLException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        CarteraDigital cartera = null;
+        String query = "SELECT * FROM carteras_digitales WHERE id_usuario = ?";
+        try(PreparedStatement stmt = conn.prepareStatement(query)){
+             stmt.setLong(1, id);
+             ResultSet resultSet = stmt.executeQuery();
+             
+             if (resultSet.next()) {
+                cartera = crearCartera(resultSet);
+            }
+        }
+        return cartera;
+
+    }
+
+    private CarteraDigital crearCartera(ResultSet resultSet) throws SQLException {
+            
+            Long idCartera = resultSet.getLong("id_cartera");
+            Double saldoDisponible = resultSet.getDouble("saldo_disponible");
+            Long idUsuario = resultSet.getLong("id_usuario");
+            return new CarteraDigital(idCartera,saldoDisponible,idUsuario);
     }
     
 }
