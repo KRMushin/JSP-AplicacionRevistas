@@ -5,7 +5,6 @@
 package com.mycompany.proyecto_unoipc2.Repositorios;
 
 import com.mycompany.proyecto_unoipc2.Modelos.PreferenciaUsuario;
-import com.mycompany.proyecto_unoipc2.Repositorios.RepositorioCRUD;
 import com.mycompany.proyecto_unoipc2.Utileria.TipoPreferencia;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,7 +18,7 @@ import java.util.List;
  *
  * @author kevin-mushin
  */
-public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuario> {
+public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuario, String, String> {
 
     private Connection conn;
 
@@ -30,12 +29,13 @@ public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuari
     
     
     @Override
-    public List<PreferenciaUsuario> listar(Long id) throws SQLException {
+    public List<PreferenciaUsuario> listar(String nombreUsuario, String parametro) throws SQLException {
 
         List<PreferenciaUsuario> preferencias = new ArrayList<>();
-        String insertQuery = " SELECT *FROM preferencias_usuario WHERE id_usuario = ? " ;
+        String insertQuery = " SELECT *FROM preferencias_usuario WHERE nombre_usuario = ? AND tipo_preferencia = ? " ;
         try(PreparedStatement stmt = conn.prepareStatement(insertQuery)){
-             stmt.setLong(1, id);
+             stmt.setString(1, nombreUsuario);
+             stmt.setString(2, parametro);
              ResultSet resultSet = stmt.executeQuery();
              
              while (resultSet.next()) {
@@ -46,26 +46,24 @@ public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuari
     }
 
     @Override
-    public PreferenciaUsuario guardar(PreferenciaUsuario modelo) throws SQLException {
+    public PreferenciaUsuario guardar(PreferenciaUsuario preferenciaUsuario) throws SQLException {
         
-        String insertQuery = " INSERT INTO preferencias_usuario(id_usuario,tipo_preferencia,valor_preferencia) values(?,?,?)";
+        String insertQuery = " INSERT INTO preferencias_usuario(nombre_usuario,tipo_preferencia,valor_preferencia) values(?,?,?)";
         try(PreparedStatement stmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)){
-            stmt.setLong(1, modelo.getIdUsuario());
-            stmt.setString(2, modelo.getTipoPreferencia().toString());
-            stmt.setString(3, modelo.getPreferencia());
+            stmt.setString(1, preferenciaUsuario.getNombreUsuario());
+            stmt.setString(2, preferenciaUsuario.getTipoPreferencia().toString());
+            stmt.setString(3, preferenciaUsuario.getPreferencia());
             int filasAfectadas = stmt.executeUpdate();
             
             if (filasAfectadas > 0) {
                 try(ResultSet llaves = stmt.getGeneratedKeys()){
                      if (llaves.next()) {
-                         modelo.setIdPreferencia(llaves.getLong(1));
+                         preferenciaUsuario.setIdPreferencia(llaves.getLong(1));
                     }
                 }
             }
         }
-        return modelo;
-
-
+        return preferenciaUsuario;
     }
 
     @Override
@@ -107,9 +105,9 @@ public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuari
 
     private PreferenciaUsuario crearPreferencia(ResultSet resultSet) throws SQLException {
         TipoPreferencia tipo = TipoPreferencia.valueOf(resultSet.getString("tipo_preferencia").toUpperCase());
-        Long idUsuario = resultSet.getLong("id_usuario");
+        String nombreUsuario = resultSet.getString("nombre_usuario");
         String preferencia = resultSet.getString("valor_Preferencia");
-        return new PreferenciaUsuario(preferencia,idUsuario,tipo);
+        return new PreferenciaUsuario(preferencia,nombreUsuario,tipo);
 
     }
 

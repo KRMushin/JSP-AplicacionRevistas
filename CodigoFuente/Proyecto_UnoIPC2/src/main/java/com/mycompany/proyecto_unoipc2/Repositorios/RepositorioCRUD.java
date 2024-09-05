@@ -11,18 +11,21 @@ import java.util.List;
  *
  * @author kevin-mushin
  * @param <T>
+ * @param <ID_USUARIO>
+ * @param <P>
+ * @param <ID_MODELO>
  */
-public interface RepositorioCRUD<T>{
+public interface RepositorioCRUD<T , ID, P>{
     
-    List<T> listar(Long id) throws SQLException;
+    List<T> listar(ID identificador, P parametro) throws SQLException;
     
     T guardar(T modelo) throws SQLException;
     
     T actualizar(T modelo) throws SQLException;
     
-    T obtenerPorId(Long id) throws SQLException;
+    T obtenerPorId(Long identificador) throws SQLException;
     
-    void eliminar(Long id) throws SQLException;
+    void eliminar(Long identificador) throws SQLException;
     
     
     

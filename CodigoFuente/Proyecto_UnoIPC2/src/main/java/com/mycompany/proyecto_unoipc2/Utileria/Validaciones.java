@@ -14,14 +14,12 @@ import java.util.List;
 public class Validaciones {
     UtileriaValidaciones utileria = new UtileriaValidaciones();
     
-    public boolean esRegistroValido(String nombreUsuario, String password, String nombrePila, String rol, List<PreferenciaUsuario> preferencias) {
+    public boolean esRegistroValido(String nombreUsuario,String nombrePila, String rol, List<PreferenciaUsuario> preferencias) {
         
         if (!utileria.noContieneEspacios(nombreUsuario)) {
             return false;
         }
-        if (!utileria.noContieneEspacios(password)) {
-            return false;
-        }
+
         if (!utileria.esFormatoNombre(nombrePila)) {
             return false;
         }

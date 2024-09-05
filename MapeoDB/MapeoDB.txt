@@ -2,10 +2,9 @@ create schema app_revistas;
 use app_revistas;
 
 CREATE TABLE usuarios (
-    id_usuario BIGINT AUTO_INCREMENT PRIMARY KEY,
-    rol_suario ENUM('COMPRADOR', 'SUSCRIPTOR', 'EDITOR', 'ADMINISTRADOR') NOT NULL,
-    nombre_Usuario VARCHAR(15) NOT NULL UNIQUE,
+    nombre_usuario VARCHAR(15) NOT NULL UNIQUE PRIMARY KEY,
     password_usuario VARCHAR(50) NOT NULL,
+    rol_usuario ENUM('COMPRADOR', 'SUSCRIPTOR', 'EDITOR', 'ADMINISTRADOR') NOT NULL,
     nombre_pila VARCHAR(100) NOT NULL,
     descripcion_usuario TEXT,
     foto BLOB
@@ -13,17 +12,16 @@ CREATE TABLE usuarios (
 
 CREATE TABLE preferencias_usuario (    
 	id_preferencia BIGINT AUTO_INCREMENT PRIMARY KEY,      
-	id_usuario BIGINT,      
+	nombre_usuario VARCHAR(15),
 	tipo_preferencia ENUM('HOBBIE', 'GUSTO', 'TEMA', 'PREFERENCIA') NOT NULL,      	 
 	valor_preferencia VARCHAR(20) NOT NULL,      
-	FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)  
+	FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario)  
 );
 
-CREATE TABLE carteras_digitales {
-	id_cartera BIGINT AUTO_INCREMENT PRIMARY KEY,
-	id_usuario BIGINT,
-	saldo_disponible Decimal (10,2 ) NOT NULL default 0.0,
-	FOREIGN KEY(id_usuario) REFERENCES usuarios(id_usuario)
-};
+CREATE TABLE carteras_digitales (
+    nombre_usuario VARCHAR(15) PRIMARY KEY, 
+    saldo_disponible DECIMAL(10,2) NOT NULL DEFAULT 0.0,
+    FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario)  
+);
 
 

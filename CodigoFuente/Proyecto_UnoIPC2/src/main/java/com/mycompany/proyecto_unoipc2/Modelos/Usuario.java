@@ -14,9 +14,8 @@ import java.util.List;
  */
 public class Usuario {
     
-    private Long id;
     private Rol rol;
-    private String nombreUsuario;
+    private String nombreUsuario; /* llaver primaria*/
     private String password;
     private String nombre;
     private String descripcion;
@@ -61,12 +60,6 @@ public class Usuario {
     public Rol getRol() {
         return rol;
     }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-    
-    
             
     /*      ATRITBUTOS NO EDITABLES */
 
@@ -77,33 +70,16 @@ public class Usuario {
     public String getPassword() {
         return password;
     }
-
-    public Long getId() {
-        return id;
-    }
     /*  cosntructor vacio para construir nuevamente el user en la */
     public Usuario(){
     
     }
-    public Usuario(Rol rol, String nombreUsuario, String password, String nombre) {
+    public Usuario(String nombreUsuario, String password,Rol rol, String nombrePila) {
     // CONSTRUCTOR PARA METODOS DE REGISTRO
         this.rol = rol;
         this.nombreUsuario = nombreUsuario;
         this.password = password;
-        this.nombre = nombre;
+        this.nombre = nombrePila;
         this.preferencias = new ArrayList<>();
-        
-    }
-    public Usuario(Long id,Rol rol, String nombreUsuario, String password, String nombre) {
-    // CONSTRUCTOR PARA METODOS DE DB
-        this.id = id;
-        this.rol = rol;
-        this.nombreUsuario = nombreUsuario;
-        this.password = password;
-        this.nombre = nombre;
-        this.preferencias = new ArrayList<>();
-        
-    }
-    
-    
+    }    
 }

@@ -13,6 +13,12 @@
     </properties>
     
     <dependencies>
+            <dependency>
+             <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-crypto</artifactId>
+            <version>5.8.2</version> <!-- Asegúrate de usar la versión más reciente -->
+    </dependency>
+
         <dependency>
             <groupId>jakarta.platform</groupId>
             <artifactId>jakarta.jakartaee-api</artifactId>

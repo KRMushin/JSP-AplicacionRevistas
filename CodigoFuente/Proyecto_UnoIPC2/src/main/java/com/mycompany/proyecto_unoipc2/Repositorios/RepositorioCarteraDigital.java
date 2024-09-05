@@ -5,7 +5,6 @@
 package com.mycompany.proyecto_unoipc2.Repositorios;
 
 import com.mycompany.proyecto_unoipc2.Modelos.CarteraDigital;
-import com.mycompany.proyecto_unoipc2.Repositorios.RepositorioLecturaEscritura;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -16,7 +15,7 @@ import java.sql.Statement;
  *
  * @author kevin-mushin
  */
-public class RepositorioCarteraDigital implements RepositorioLecturaEscritura<CarteraDigital> {
+public class RepositorioCarteraDigital implements RepositorioLecturaEscritura<CarteraDigital, String> {
 
     private Connection conn;
 
@@ -24,33 +23,26 @@ public class RepositorioCarteraDigital implements RepositorioLecturaEscritura<Ca
         this.conn = conn;
     }
 
-    
-
     @Override
     public CarteraDigital guardar(CarteraDigital modelo) throws SQLException {
-        String insertQuery = "INSERT INTO carteras_digitales(id_usuario) values (?)";
+
+        String insertQuery = "INSERT INTO carteras_digitales(usuario_representante) values (?)";
         try(PreparedStatement stmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)){
-            stmt.setLong(1, modelo.getIdUsuario());
-            int filasAfectadas = stmt.executeUpdate();
-            if (filasAfectadas > 0) {
-                try(ResultSet llave = stmt.getGeneratedKeys()){
-                     if (llave.next()) {
-                         modelo.setIdCartera(llave.getLong(1));
-                    }
-                }
-            }       
+            stmt.setString(1, modelo.getNombreRepresentante());
+            int filasAfectadas = stmt.executeUpdate();       
+            if (filasAfectadas == 0) {
+                throw   new  SQLException("No se contreto el ingreso de la cartera digital");
+            }
         }
         return modelo;
-
-
     }
 
     @Override
     public CarteraDigital actualizar(CarteraDigital modelo) throws SQLException {
-        String updateQuery = " UPDATE carteras_digitales SET saldo_disponible= ? WHERE id_usuario = ?";
+        String updateQuery = " UPDATE carteras_digitales SET saldo_disponible= ? WHERE usuario_representante = ?";
         try(PreparedStatement stmt = conn.prepareStatement(updateQuery)){
             stmt.setDouble(1, modelo.getSaldoDisponible());
-            stmt.setLong(2, modelo.getIdUsuario());
+            stmt.setString(2, modelo.getNombreRepresentante());
              int filasAfectadas = stmt.executeUpdate();
              
              if (filasAfectadas == 0) {
@@ -61,11 +53,11 @@ public class RepositorioCarteraDigital implements RepositorioLecturaEscritura<Ca
     }
 
     @Override
-    public CarteraDigital obtenerPorId(Long id) throws SQLException {
+    public CarteraDigital obtenerPorId(String usuarioRepresentante) throws SQLException {
         CarteraDigital cartera = null;
-        String query = "SELECT * FROM carteras_digitales WHERE id_usuario = ?";
+        String query = "SELECT * FROM carteras_digitales WHERE usuario_representante = ?";
         try(PreparedStatement stmt = conn.prepareStatement(query)){
-             stmt.setLong(1, id);
+             stmt.setString(1, usuarioRepresentante);
              ResultSet resultSet = stmt.executeQuery();
              
              if (resultSet.next()) {
@@ -73,15 +65,15 @@ public class RepositorioCarteraDigital implements RepositorioLecturaEscritura<Ca
             }
         }
         return cartera;
-
     }
 
     private CarteraDigital crearCartera(ResultSet resultSet) throws SQLException {
             
-            Long idCartera = resultSet.getLong("id_cartera");
-            Double saldoDisponible = resultSet.getDouble("saldo_disponible");
-            Long idUsuario = resultSet.getLong("id_usuario");
-            return new CarteraDigital(idCartera,saldoDisponible,idUsuario);
+        String representante = resultSet.getString("usuario_representante");
+        Double saldoDisponible = resultSet.getDouble("saldo_disponible");
+        
+        return new CarteraDigital(representante,saldoDisponible);
     }
+
     
 }

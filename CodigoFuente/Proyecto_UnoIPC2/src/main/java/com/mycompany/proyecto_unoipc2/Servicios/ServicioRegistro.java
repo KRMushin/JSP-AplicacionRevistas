@@ -10,7 +10,10 @@ import com.mycompany.proyecto_unoipc2.Repositorios.RepositorioUsuario;
 import com.mycompany.proyecto_unoipc2.Modelos.CarteraDigital;
 import com.mycompany.proyecto_unoipc2.Modelos.PreferenciaUsuario;
 import com.mycompany.proyecto_unoipc2.Modelos.Usuario;
+import com.mycompany.proyecto_unoipc2.Repositorios.RepositorioCRUD;
+import com.mycompany.proyecto_unoipc2.Repositorios.RepositorioLecturaEscritura;
 import com.mycompany.proyecto_unoipc2.Utileria.ConexionBaseDatos;
+import com.mycompany.proyecto_unoipc2.Utileria.Encriptador;
 import com.mycompany.proyecto_unoipc2.Utileria.Rol;
 import com.mycompany.proyecto_unoipc2.Utileria.Validaciones;
 import java.sql.Connection;
@@ -26,10 +29,11 @@ import java.util.Map;
 public class ServicioRegistro {
     
     private Connection conn;
-    private RepositorioUsuario usuarioRepositorio;
-    private RepositorioCarteraDigital carteraRepositorio;
-    private RepositorioPreferencia preferenciasRepositorio;
+    private RepositorioLecturaEscritura<Usuario, String> usuarioRepositorio;
+    private RepositorioLecturaEscritura<CarteraDigital, String> carteraRepositorio;
+    private RepositorioCRUD<PreferenciaUsuario, String, String> preferenciasRepositorio;
     private Validaciones validaciones;
+    private Encriptador encriptador;
 
     public ServicioRegistro() throws SQLException {
         
@@ -38,6 +42,7 @@ public class ServicioRegistro {
         this.carteraRepositorio = new RepositorioCarteraDigital(conn);
         this.preferenciasRepositorio = new RepositorioPreferencia(conn);
         this.validaciones = new Validaciones();
+        this.encriptador = new Encriptador();
     }
     
     public Map<String, String> validarYRegistrarUsuario(String nombreUsuario, String password, String nombrePila, Rol rol, 
@@ -45,18 +50,22 @@ public class ServicioRegistro {
         
          Map<String, String> errores = new HashMap<>();
          // validar que los datos sean acorrectos por seguridad
-         if (!validaciones.esRegistroValido(nombreUsuario,password,nombrePila,rol.toString(),preferencias)) {
+         if (!validaciones.esRegistroValido(nombreUsuario,nombrePila,rol.toString(),preferencias)) {
              errores.put("registro", "HA INGRESADO VALORES INVALIDOS PARA EL REGISTRO :) ");
              return errores;
           }
-         
+         // metodo para evaluar si el usuario ingresado ya existe
          Usuario usuario = obtenerUsuario(nombreUsuario);
          if (usuario != null) {
             errores.put("usuario existente", "Elija otro nombre de usuario porfavor este ya esta en uso");
             return errores;
         }
          
-         Usuario nuevoUsuario = new Usuario(rol,nombreUsuario,password,nombrePila);
+         //encriptar la contraseña
+         String contraseñaEncriptada = encriptador.encryptPassword(password);
+         
+         Usuario nuevoUsuario = new Usuario(nombreUsuario,contraseñaEncriptada,rol,nombrePila);
+         
          if (!preferencias.isEmpty()) {
             nuevoUsuario.setPreferencias(preferencias);
         }
@@ -78,13 +87,14 @@ public class ServicioRegistro {
 
             try {
                     conn.setAutoCommit(false);
+                    // guardar el usuario en la DB
                     Usuario usuarioRegistro = usuarioRepositorio.guardar(nuevoUsuario);
+                    
                     if (nuevoUsuario.getRol() != Rol.EDITOR) {
-                        carteraRepositorio.guardar(new CarteraDigital(0.0,usuarioRegistro.getId()));
+                        carteraRepositorio.guardar(new CarteraDigital(usuarioRegistro.getNombreUsuario(),0.0));
                    }
                     if (!preferencias.isEmpty()) {
-
-                         guardarPreferencias(preferencias,usuarioRegistro.getId());
+                         guardarPreferencias(preferencias,usuarioRegistro.getNombreUsuario());
                     }
 
                 conn.commit();
@@ -97,7 +107,7 @@ public class ServicioRegistro {
                     }
               respuesta= " Error en la transaccion de registro usuario ";
             }
-            // al ocurrir un error se reestablece el autocomit 
+            // ocurra o no ocurra error se reestablece el commit
             finally {
                     try {
                         conn.setAutoCommit(true);
@@ -111,7 +121,7 @@ public class ServicioRegistro {
     
     private Usuario obtenerUsuario(String nombreUsuario) {
             try {
-                return usuarioRepositorio.obtenerPorNombreUsuario(nombreUsuario);
+                return usuarioRepositorio.obtenerPorId(nombreUsuario);
             } catch (SQLException e) {
                 e.printStackTrace();
                 return null;
@@ -119,10 +129,10 @@ public class ServicioRegistro {
 }
 
 
-    private void guardarPreferencias(List<PreferenciaUsuario> preferencias, Long id) throws SQLException {
+    private void guardarPreferencias(List<PreferenciaUsuario> preferencias, String nombreUsuario) throws SQLException {
             for (int i = 0; i < preferencias.size(); i++) {
             PreferenciaUsuario pref = preferencias.get(i);
-             preferenciasRepositorio.guardar(new PreferenciaUsuario(pref.getPreferencia(),id,pref.getTipoPreferencia()));          
+             preferenciasRepositorio.guardar(new PreferenciaUsuario(pref.getPreferencia(),nombreUsuario,pref.getTipoPreferencia()));          
         }
     }   
 }

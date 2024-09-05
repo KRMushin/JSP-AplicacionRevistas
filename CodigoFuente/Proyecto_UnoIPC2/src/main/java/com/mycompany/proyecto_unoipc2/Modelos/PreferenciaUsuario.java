@@ -13,8 +13,8 @@ import com.mycompany.proyecto_unoipc2.Utileria.TipoPreferencia;
 public class PreferenciaUsuario {
     
         private  Long idPreferencia; 
-        private  Long idUsuario;
-        private  String preferencia;
+        private final  String nombreUsuario;
+        private final  String preferencia;
         private final TipoPreferencia tipoPreferencia;
 
             public String getPreferencia() {
@@ -24,8 +24,8 @@ public class PreferenciaUsuario {
                 return tipoPreferencia;
             }
 
-            public Long getIdUsuario() {
-                return idUsuario;
+            public String getNombreUsuario() {
+                return nombreUsuario;
             }
 
             public Long getIdPreferencia() {
@@ -37,9 +37,9 @@ public class PreferenciaUsuario {
             }
             
             // COSNTRUCTOR DE UNA PREFERENCIA DEL USUARIO
-    public PreferenciaUsuario(String preferencia, Long idUsuario, TipoPreferencia tipoPreferencia) {
+    public PreferenciaUsuario(String preferencia, String nombreUsuario, TipoPreferencia tipoPreferencia) {
         this.preferencia = preferencia;
-        this.idUsuario = idUsuario;
+        this.nombreUsuario = nombreUsuario;
         this.tipoPreferencia = tipoPreferencia;
     }
         

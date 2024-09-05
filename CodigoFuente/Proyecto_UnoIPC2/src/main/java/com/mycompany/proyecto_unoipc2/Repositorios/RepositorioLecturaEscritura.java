@@ -9,15 +9,17 @@ import java.sql.SQLException;
 /**
  *
  * @author kevin-mushin
+ * @param <T>
+ * @param <ID>
  */
-public interface RepositorioLecturaEscritura<T> {
+public interface RepositorioLecturaEscritura<T, ID> {
     
     
         T guardar(T modelo) throws SQLException;
     
         T actualizar(T modelo) throws SQLException;
     
-        T obtenerPorId(Long id) throws SQLException;
+        T obtenerPorId(ID identificador) throws SQLException;
     
     
 }

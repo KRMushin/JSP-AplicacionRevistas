@@ -10,16 +10,15 @@ package com.mycompany.proyecto_unoipc2.Modelos;
  */
 public class CarteraDigital {
     
-    private Long idCartera;
+    private String nombreRepresentante;
     private Double saldoDisponible;
-    private Long idUsuario;
 
-    public Long getIdCartera() {
-        return idCartera;
+    public String getNombreRepresentante() {
+        return nombreRepresentante;
     }
 
-    public void setIdCartera(Long idCartera) {
-        this.idCartera = idCartera;
+    public void setNombreRepresentante(String nombreRepresentante) {
+        this.nombreRepresentante = nombreRepresentante;
     }
 
     public Double getSaldoDisponible() {
@@ -30,25 +29,11 @@ public class CarteraDigital {
         this.saldoDisponible = saldoDisponible;
     }
 
-    public Long getIdUsuario() {
-        return idUsuario;
-    }
-
-    public void setIdUsuario(Long idUsuario) {
-        this.idUsuario = idUsuario;
-    }    
-    
-
-    /*  cosntructor para registrs*/
-    public CarteraDigital(Double saldoDisponible, Long idUsuario) {
+    /* constructor para carteras digitales */
+    public CarteraDigital(String nombreRepresentante, Double saldoDisponible) {
+        this.nombreRepresentante = nombreRepresentante;
         this.saldoDisponible = saldoDisponible;
-        this.idUsuario = idUsuario;
-    }
-    /* constructor para DB*/
-    public CarteraDigital(Long idCartera, Double saldoDisponible, Long idUsuario) {
-        this.idCartera = idCartera;
-        this.saldoDisponible = saldoDisponible;
-        this.idUsuario = idUsuario;
+
     }
     
     public void debitarSaldo(){}
