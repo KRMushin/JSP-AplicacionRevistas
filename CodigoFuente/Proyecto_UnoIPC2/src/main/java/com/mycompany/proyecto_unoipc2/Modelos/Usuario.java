@@ -81,5 +81,7 @@ public class Usuario {
         this.password = password;
         this.nombre = nombrePila;
         this.preferencias = new ArrayList<>();
+        this.foto = null;
+        this.descripcion = null;
     }    
 }

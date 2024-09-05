@@ -28,8 +28,7 @@ public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario, 
     public Usuario guardar(Usuario t) throws SQLException {
         
         String insertQuery = " INSERT INTO usuarios(nombre_usuario, password_usuario, rol_usuario, nombre_pila, descripcion_usuario, foto) "
-                + "values(?,?,?,?,?,?)";
-        
+                + "values(?,?,?,?,?,?);";
          /* devuelve el valor de llave primario generado ya que es autoincrementable*/
          try(PreparedStatement stmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)){
              

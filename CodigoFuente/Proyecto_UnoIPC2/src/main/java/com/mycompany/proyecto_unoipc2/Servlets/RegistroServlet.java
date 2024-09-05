@@ -48,8 +48,14 @@ public class RegistroServlet extends HttpServlet {
         Map<String , String > errores = servicioRegistro.validarYRegistrarUsuario(nombreUsuario, password, nombrePila, rolUsuario, null, null);
         
         if (!errores.isEmpty()) {
-            System.out.println("ERORRRR");
-        }
+    // Iterar sobre las entradas del mapa de errores
+    for (Map.Entry<String, String> entry : errores.entrySet()) {
+        String clave = entry.getKey(); // Clave del error
+        String mensajeError = entry.getValue(); // Mensaje de error
+        System.out.println("Error [" + clave + "]: " + mensajeError); // Imprimir el error
+    }
+}
+
     }
     
 

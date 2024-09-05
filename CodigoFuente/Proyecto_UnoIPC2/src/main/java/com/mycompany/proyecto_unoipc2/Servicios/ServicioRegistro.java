@@ -36,17 +36,19 @@ public class ServicioRegistro {
     private Encriptador encriptador;
 
     public ServicioRegistro() {
-        
-        this.conn = establecerConexion();
+    this.conn = establecerConexion(); // Establece la conexión
+
         this.usuarioRepositorio = new RepositorioUsuario(conn);
         this.carteraRepositorio = new RepositorioCarteraDigital(conn);
         this.preferenciasRepositorio = new RepositorioPreferencia(conn);
         this.validaciones = new Validaciones();
         this.encriptador = new Encriptador();
-    }
-    private Connection establecerConexion()  {
-        try {
-        Connection conn = ConexionBaseDatos.getInstance();
+}
+
+    private Connection establecerConexion() {
+    Connection conn = null; // Inicializa la conexión
+    try {
+        conn = ConexionBaseDatos.getInstance();
         if (conn != null && !conn.isClosed()) {
             System.out.println("Conexión a la base de datos exitosa.");
         } else {
@@ -56,8 +58,9 @@ public class ServicioRegistro {
         System.err.println("Error al probar la conexión: " + e.getMessage());
         e.printStackTrace();
     }
-        return conn;
-    }
+    return conn;
+}
+
     
     public Map<String, String> validarYRegistrarUsuario(String nombreUsuario, String password, String nombrePila, Rol rol, 
                                                                                             byte[] foto, List<PreferenciaUsuario> preferencias){
@@ -70,7 +73,7 @@ public class ServicioRegistro {
           }
          // metodo para evaluar si el usuario ingresado ya existe
          Usuario usuario = obtenerUsuario(nombreUsuario);
-         if (usuario == null) {
+         if (usuario != null) {
             errores.put("usuario existente", "Elija otro nombre de usuario porfavor este ya esta en uso");
             return errores;
         }
@@ -80,10 +83,10 @@ public class ServicioRegistro {
          
          Usuario nuevoUsuario = new Usuario(nombreUsuario,contraseñaEncriptada,rol,nombrePila);
          
-         if (!preferencias.isEmpty()) {
+         if (preferencias != null && !preferencias.isEmpty()) {
             nuevoUsuario.setPreferencias(preferencias);
         }
-         if (foto.length != 0) {
+         if (foto != null && foto.length != 0) {
             nuevoUsuario.setFoto(foto);
         }
          String respuestaTransaccion = transaccionRegistrarUsuario(nuevoUsuario, preferencias);
@@ -91,23 +94,22 @@ public class ServicioRegistro {
          if (respuestaTransaccion != null) {
             errores.put(" Error", respuestaTransaccion);
         }
-         
+        System.out.println("            REGISTRO EXITOSO");
          
          return errores;
     }
 
     private String transaccionRegistrarUsuario(Usuario nuevoUsuario, List<PreferenciaUsuario> preferencias)  {
         String respuesta = null;
-
             try {
                     conn.setAutoCommit(false);
                     // guardar el usuario en la DB
                     Usuario usuarioRegistro = usuarioRepositorio.guardar(nuevoUsuario);
-                    
+                    System.out.println(usuarioRegistro.getNombre() + usuarioRegistro.getRol().toString());
                     if (nuevoUsuario.getRol() != Rol.EDITOR) {
                         carteraRepositorio.guardar(new CarteraDigital(usuarioRegistro.getNombreUsuario(),0.0));
                    }
-                    if (!preferencias.isEmpty()) {
+                    if (preferencias != null && !preferencias.isEmpty()) {
                          guardarPreferencias(preferencias,usuarioRegistro.getNombreUsuario());
                     }
 

@@ -3,7 +3,7 @@ use app_revistas;
 
 CREATE TABLE usuarios (
     nombre_usuario VARCHAR(15) NOT NULL UNIQUE PRIMARY KEY,
-    password_usuario VARCHAR(50) NOT NULL,
+    password_usuario VARCHAR(200) NOT NULL,
     rol_usuario ENUM('COMPRADOR', 'SUSCRIPTOR', 'EDITOR', 'ADMINISTRADOR') NOT NULL,
     nombre_pila VARCHAR(100) NOT NULL,
     descripcion_usuario TEXT,
@@ -21,7 +21,7 @@ CREATE TABLE preferencias_usuario (
 CREATE TABLE carteras_digitales (
     usuario_representante VARCHAR(15) PRIMARY KEY, 
     saldo_disponible DECIMAL(10,2) NOT NULL DEFAULT 0.0,
-    FOREIGN KEY (usuario_representante) REFERENCES usuarios(usuario_representante)  
+    FOREIGN KEY (usuario_representante) REFERENCES usuarios(nombre_usuario)  
 );
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;

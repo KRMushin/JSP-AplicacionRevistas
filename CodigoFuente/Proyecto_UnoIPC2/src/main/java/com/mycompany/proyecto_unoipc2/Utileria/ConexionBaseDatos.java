@@ -25,6 +25,23 @@ public class ConexionBaseDatos {
     }
     //punto de acceso a la conexion
     public static Connection getInstance() throws SQLException {
+    if (connection == null || connection.isClosed()) {
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            connection = DriverManager.getConnection(URL_MYSQL, USER, PASSWORD);
+        } catch (ClassNotFoundException e) {
+            throw new SQLException("No se encontró el driver JDBC.", e);
+        } catch (SQLException e) {
+            throw e;
+        }
+    }
+    return connection;
+}
+
+   
+}
+/*
+     public static Connection getInstance() throws SQLException {
         // verifica si la conexion esta nula o cerrada , si si esta la crea
         if (connection == null || connection.isClosed()) {
             System.out.println("    CONEXION ESTABLECIDA");
@@ -33,5 +50,5 @@ public class ConexionBaseDatos {
         //rettorna la conexion global 
         return connection;
     }
- 
-}
+
+*/
