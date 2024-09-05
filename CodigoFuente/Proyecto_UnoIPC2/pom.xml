@@ -18,6 +18,20 @@
             <artifactId>spring-security-crypto</artifactId>
             <version>5.8.2</version> <!-- Asegúrate de usar la versión más reciente -->
     </dependency>
+    <dependency>
+        <groupId>commons-logging</groupId>
+        <artifactId>commons-logging</artifactId>
+        <version>1.2</version>
+    </dependency>
+
+    <dependency>
+        <groupId>mysql</groupId>
+        <artifactId>mysql-connector-java</artifactId>
+         <version>8.0.33</version> 
+      </dependency>
+
+
+
 
         <dependency>
             <groupId>jakarta.platform</groupId>
@@ -84,6 +98,13 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.3.2</version>
+                
+                <configuration>
+                <!-- Incluye todas las dependencias en el archivo WAR -->
+                <packagingExcludes>**/*.xml</packagingExcludes>
+                <failOnMissingWebXml>false</failOnMissingWebXml>
+            </configuration>
+                
             </plugin>
         </plugins>
     </build>

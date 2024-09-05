@@ -9,9 +9,21 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title> Editorial El Mosquito </title>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <header>
+        <div>
+            <div class="barra">
+                <nav>
+                    <a href="JSP/RegistroUsuario.jsp"> Registrarse</a>
+                    <a href="registro.html"> Ingresar</a>
+                    <a href="registro.html"> Comprar</a>
+                    <a href="registro.html">    Mania Marañon</a>
+
+                </nav>
+            </div>
+        </div>
+    </header>
     </body>
 </html>

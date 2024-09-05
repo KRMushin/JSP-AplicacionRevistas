@@ -27,6 +27,7 @@ public class ConexionBaseDatos {
     public static Connection getInstance() throws SQLException {
         // verifica si la conexion esta nula o cerrada , si si esta la crea
         if (connection == null || connection.isClosed()) {
+            System.out.println("    CONEXION ESTABLECIDA");
             connection = DriverManager.getConnection(URL_MYSQL, USER, PASSWORD);
         }
         //rettorna la conexion global 

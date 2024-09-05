@@ -66,7 +66,7 @@ public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario, 
         
         Usuario usuario = null;
         
-        String query = " SELECT *FROM usuarios Where nombre_usuario = ?";
+        String query = " SELECT * FROM usuarios Where nombre_usuario = ?";
         try(PreparedStatement stmt = conn.prepareStatement(query)){
             stmt.setString(1, nombreUsuario);
             ResultSet resultSet = stmt.executeQuery();

@@ -23,12 +23,14 @@ public class Validaciones {
         if (!utileria.esFormatoNombre(nombrePila)) {
             return false;
         }
-        if (!preferencias.isEmpty()) {
+        if (preferencias != null) {
             for (int i = 0; i < preferencias.size(); i++) {
                   if (utileria.preferenciaFormatoInvalido(preferencias.get(i))) {
                     return false;
                 }       
             }
+        }else{
+            return true;
         }
         return true;
         

@@ -19,9 +19,41 @@ CREATE TABLE preferencias_usuario (
 );
 
 CREATE TABLE carteras_digitales (
-    nombre_usuario VARCHAR(15) PRIMARY KEY, 
+    usuario_representante VARCHAR(15) PRIMARY KEY, 
     saldo_disponible DECIMAL(10,2) NOT NULL DEFAULT 0.0,
-    FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario)  
+    FOREIGN KEY (usuario_representante) REFERENCES usuarios(usuario_representante)  
 );
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+public class AuthService {
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    /**
+     * Verifica si la contraseña ingresada coincide con la contraseña almacenada.
+     *
+     * @param plainPassword  La contraseña ingresada por el usuario.
+     * @param storedPassword La contraseña encriptada almacenada en la base de datos.
+     * @return true si las contraseñas coinciden, false de lo contrario.
+     */
+    public static boolean verifyPassword(String plainPassword, String storedPassword) {
+        return passwordEncoder.matches(plainPassword, storedPassword);
+    }
+}
+
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+public class PasswordUtil {
+    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+    /**
+     * Encripta la contraseña del usuario utilizando BCrypt.
+     *
+     * @param plainPassword La contraseña ingresada por el usuario.
+     * @return La contraseña encriptada.
+     */
+    public static String encryptPassword(String plainPassword) {
+        return passwordEncoder.encode(plainPassword);
+    }
+}
 

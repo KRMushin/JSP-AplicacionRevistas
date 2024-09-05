@@ -35,14 +35,28 @@ public class ServicioRegistro {
     private Validaciones validaciones;
     private Encriptador encriptador;
 
-    public ServicioRegistro() throws SQLException {
+    public ServicioRegistro() {
         
-        this.conn = ConexionBaseDatos.getInstance();
+        this.conn = establecerConexion();
         this.usuarioRepositorio = new RepositorioUsuario(conn);
         this.carteraRepositorio = new RepositorioCarteraDigital(conn);
         this.preferenciasRepositorio = new RepositorioPreferencia(conn);
         this.validaciones = new Validaciones();
         this.encriptador = new Encriptador();
+    }
+    private Connection establecerConexion()  {
+        try {
+        Connection conn = ConexionBaseDatos.getInstance();
+        if (conn != null && !conn.isClosed()) {
+            System.out.println("Conexión a la base de datos exitosa.");
+        } else {
+            System.out.println("No se pudo establecer la conexión.");
+        }
+    } catch (SQLException e) {
+        System.err.println("Error al probar la conexión: " + e.getMessage());
+        e.printStackTrace();
+    }
+        return conn;
     }
     
     public Map<String, String> validarYRegistrarUsuario(String nombreUsuario, String password, String nombrePila, Rol rol, 
@@ -56,7 +70,7 @@ public class ServicioRegistro {
           }
          // metodo para evaluar si el usuario ingresado ya existe
          Usuario usuario = obtenerUsuario(nombreUsuario);
-         if (usuario != null) {
+         if (usuario == null) {
             errores.put("usuario existente", "Elija otro nombre de usuario porfavor este ya esta en uso");
             return errores;
         }
