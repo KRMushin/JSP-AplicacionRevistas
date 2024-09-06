@@ -38,16 +38,13 @@ public class RegistroServlet extends HttpServlet {
                 ServicioRegistro servicioRegistro = new ServicioRegistro();
                 Usuario usuarioCreado = servicioRegistro.RegistrarUsuario(req);
                 req.setAttribute("mensaje", "Usuario creado exitosamente: " + usuarioCreado.getNombreUsuario());
+                req.getSession().setAttribute("mensaje", "Usuario creado exitosamente: " + usuarioCreado.getNombreUsuario());
+                resp.sendRedirect(req.getContextPath() +"/JSP/RegistroExitoso.jsp");
 
-        } catch (DatosInvalidosRegistro e) {
-                req.setAttribute("mensajeError", "Error: " + e.getMessage());
+        } catch (DatosInvalidosRegistro | TransaccionFallidaException | SQLException e) {
+            req.setAttribute("Error_datos_invalidos", e.getMessage().toString());
+            getServletContext().getRequestDispatcher("/JSP/RegistroUsuario.jsp").forward(req, resp);
 
-        } catch (TransaccionFallidaException | SQLException ex) {
-               req.setAttribute("mensajeError", "Error en la transacción: " + ex.getMessage());
         }
-        RequestDispatcher dispatcher = req.getRequestDispatcher("/JSP/ResultadoFormulario.jsp");
-dispatcher.forward(req, resp);
-
-
     }
 }

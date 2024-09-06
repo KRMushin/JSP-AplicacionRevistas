@@ -29,10 +29,12 @@ public class Usuario {
     
     }
     // usuario con campos obligatorios
-    public boolean esValido(){
-        
-    return rol != null && nombreUsuario != null && password != null && nombre != null;
-    }
+    public boolean esValido() {
+    return rol != null &&
+           nombreUsuario != null && !nombreUsuario.trim().isEmpty() &&
+           password != null && !password.trim().isEmpty() &&
+           nombre != null && !nombre.trim().isEmpty();
+}
     
     /*              AREA SETTERS Y  GETTERS                                 */
     public Rol getRol() {
