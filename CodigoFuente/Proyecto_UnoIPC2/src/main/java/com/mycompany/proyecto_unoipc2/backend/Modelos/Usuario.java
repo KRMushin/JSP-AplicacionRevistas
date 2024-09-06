@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.proyecto_unoipc2.Modelos;
+package com.mycompany.proyecto_unoipc2.backend.Modelos;
 
-import com.mycompany.proyecto_unoipc2.Utileria.Rol;
+import com.mycompany.proyecto_unoipc2.backend.Utileria.Rol;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,10 +20,44 @@ public class Usuario {
     private String password;
     private String nombre;
     private String descripcion;
-    private byte[] foto;
+    private InputStream foto;
     private List<PreferenciaUsuario> preferencias;
     
-    /*  AREA SETTERS Y GETTERS*/
+    /*  cosntructor vacio para construir nuevamente el user en la */
+    public Usuario(){
+        this.preferencias = new ArrayList<>();
+    
+    }
+    // usuario con campos obligatorios
+    public boolean esValido(){
+        
+    return rol != null && nombreUsuario != null && password != null && nombre != null;
+    }
+    
+    /*              AREA SETTERS Y  GETTERS                                 */
+    public Rol getRol() {
+        return rol;
+    }
+
+    public void setRol(Rol rol) {
+        this.rol = rol;
+    }
+
+    public String getNombreUsuario() {
+        return nombreUsuario;
+    }
+
+    public void setNombreUsuario(String nombreUsuario) {
+        this.nombreUsuario = nombreUsuario;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public String getNombre() {
         return nombre;
@@ -40,11 +75,11 @@ public class Usuario {
         this.descripcion = descripcion;
     }
 
-    public byte[] getFoto() {
+    public InputStream getFoto() {
         return foto;
     }
 
-    public void setFoto(byte[] foto) {
+    public void setFoto(InputStream foto) {
         this.foto = foto;
     }
 
@@ -56,32 +91,4 @@ public class Usuario {
         this.preferencias = preferencias;
     }
    
-
-    public Rol getRol() {
-        return rol;
-    }
-            
-    /*      ATRITBUTOS NO EDITABLES */
-
-    public String getNombreUsuario() {
-        return nombreUsuario;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-    /*  cosntructor vacio para construir nuevamente el user en la */
-    public Usuario(){
-    
-    }
-    public Usuario(String nombreUsuario, String password,Rol rol, String nombrePila) {
-    // CONSTRUCTOR PARA METODOS DE REGISTRO
-        this.rol = rol;
-        this.nombreUsuario = nombreUsuario;
-        this.password = password;
-        this.nombre = nombrePila;
-        this.preferencias = new ArrayList<>();
-        this.foto = null;
-        this.descripcion = null;
-    }    
 }

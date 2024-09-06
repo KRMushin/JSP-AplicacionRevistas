@@ -2,10 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.proyecto_unoipc2.Repositorios;
+package com.mycompany.proyecto_unoipc2.backend.Repositorios;
 
-import com.mycompany.proyecto_unoipc2.Modelos.PreferenciaUsuario;
-import com.mycompany.proyecto_unoipc2.Utileria.TipoPreferencia;
+import com.mycompany.proyecto_unoipc2.backend.Modelos.PreferenciaUsuario;
+import com.mycompany.proyecto_unoipc2.backend.Utileria.TipoPreferencia;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -24,9 +24,7 @@ public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuari
 
     public RepositorioPreferencia(Connection conn) {
         this.conn = conn;
-    }
-
-    
+    } 
     
     @Override
     public List<PreferenciaUsuario> listar(String nombreUsuario, String parametro) throws SQLException {

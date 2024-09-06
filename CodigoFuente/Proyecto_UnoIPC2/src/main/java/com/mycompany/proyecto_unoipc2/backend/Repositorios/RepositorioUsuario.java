@@ -2,15 +2,18 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.proyecto_unoipc2.Repositorios;
+package com.mycompany.proyecto_unoipc2.backend.Repositorios;
 
-import com.mycompany.proyecto_unoipc2.Modelos.Usuario;
-import com.mycompany.proyecto_unoipc2.Utileria.Rol;
+import com.mycompany.proyecto_unoipc2.backend.Modelos.Usuario;
+import com.mycompany.proyecto_unoipc2.backend.Utileria.Rol;
+import java.io.InputStream;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 
 /**
  *  repositorio que implementa escritura lectura , se conecta con la database
@@ -37,7 +40,12 @@ public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario, 
              stmt.setString(3, t.getRol().toString());
              stmt.setString(4, t.getNombre());
              stmt.setString(5, t.getDescripcion());
-             stmt.setBytes(6, t.getFoto());
+            if (t.getFoto() != null) {
+                    stmt.setBlob(6, t.getFoto());
+            } else {
+                    stmt.setNull(6, Types.BLOB);
+            }
+             
              int filasAfectadas = stmt.executeUpdate();
              if (filasAfectadas == 0) {
                 throw   new  SQLException("No se inserto al usuario en la Base de datos :(");
@@ -54,7 +62,13 @@ public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario, 
         try(PreparedStatement stmt = conn.prepareStatement(updateQuery)){
              stmt.setString(1, t.getNombre());
              stmt.setString(2, t.getDescripcion());
-             stmt.setBytes(3, t.getFoto());
+             if (t.getFoto() != null) {
+                stmt.setBlob(3, t.getFoto());
+            } else {
+                stmt.setNull(3, Types.BLOB);
+            }
+            stmt.setString(4, t.getNombreUsuario());
+
              stmt.executeUpdate();
         }
         return t;
@@ -70,7 +84,7 @@ public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario, 
             stmt.setString(1, nombreUsuario);
             ResultSet resultSet = stmt.executeQuery();
             
-            while (resultSet.next()) {
+           if (resultSet.next()) {
                   usuario = crearUsuario(resultSet);
             }
         }
@@ -79,20 +93,21 @@ public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario, 
     
     private Usuario crearUsuario(ResultSet rs) throws SQLException{
          
-         String nombreUsuario = rs.getString("nombre_usuario");
-         String password = rs.getString("password_usuario");
-         Rol rol = Rol.valueOf(rs.getString("rol_usuario"));
-         String nombrePila = rs.getString("nombre_pila");
+         Usuario usuario = new Usuario();
+         usuario.setNombreUsuario(rs.getString("nombre_usuario"));
+         usuario.setPassword(rs.getString("password_usuario"));
+         usuario.setRol(Rol.valueOf(rs.getString("rol_usuario")));
+         usuario.setNombre(rs.getString("nombre_pila"));
          String descripcion = rs.getString("descripcion_usuario");
-         
-         Usuario usuario = new Usuario(nombreUsuario,password,rol,nombrePila);
-         if (descripcion != null) {
-             usuario.setDescripcion(rs.getString("descripcion_usuario"));
-        }
 
-         byte[] foto = rs.getBytes("foto");
+         if (descripcion != null) {
+             usuario.setDescripcion(descripcion);
+        }         
+        
+         Blob foto = rs.getBlob("foto");
         if (foto != null) {
-            usuario.setFoto(foto);
+            InputStream fotoStream = foto.getBinaryStream();
+            usuario.setFoto(fotoStream);
         }
         return usuario;
     }

@@ -2,9 +2,9 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.proyecto_unoipc2.Modelos;
+package com.mycompany.proyecto_unoipc2.backend.Modelos;
 
-import com.mycompany.proyecto_unoipc2.Utileria.TipoPreferencia;
+import com.mycompany.proyecto_unoipc2.backend.Utileria.TipoPreferencia;
 
 /**
  *
@@ -42,6 +42,14 @@ public class PreferenciaUsuario {
         this.nombreUsuario = nombreUsuario;
         this.tipoPreferencia = tipoPreferencia;
     }
+    /* AREA DE SETTERS Y GETTERS */
+
+    @Override
+    public String toString() {
+        return "PreferenciaUsuario{" + "idPreferencia=" + idPreferencia + ", nombreUsuario=" + nombreUsuario + ", preferencia=" + preferencia + ", tipoPreferencia=" + tipoPreferencia + '}';
+    }
+    
+    
         
         
         
