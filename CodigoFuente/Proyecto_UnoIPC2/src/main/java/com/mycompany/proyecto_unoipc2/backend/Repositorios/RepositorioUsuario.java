@@ -6,14 +6,11 @@ package com.mycompany.proyecto_unoipc2.backend.Repositorios;
 
 import com.mycompany.proyecto_unoipc2.backend.Modelos.Usuario;
 import com.mycompany.proyecto_unoipc2.backend.Utileria.Rol;
-import java.io.InputStream;
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Types;
 
 /**
  *  repositorio que implementa escritura lectura , se conecta con la database
@@ -30,8 +27,8 @@ public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario, 
     @Override
     public Usuario guardar(Usuario t) throws SQLException {
         
-        String insertQuery = " INSERT INTO usuarios(nombre_usuario, password_usuario, rol_usuario, nombre_pila, descripcion_usuario, foto) "
-                + "values(?,?,?,?,?,?);";
+        String insertQuery = " INSERT INTO usuarios(nombre_usuario, password_usuario, rol_usuario, nombre_pila, descripcion_usuario) "
+                + "values(?,?,?,?,?);";
          /* devuelve el valor de llave primario generado ya que es autoincrementable*/
          try(PreparedStatement stmt = conn.prepareStatement(insertQuery, Statement.RETURN_GENERATED_KEYS)){
              
@@ -40,11 +37,6 @@ public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario, 
              stmt.setString(3, t.getRol().toString());
              stmt.setString(4, t.getNombre());
              stmt.setString(5, t.getDescripcion());
-            if (t.getFoto() != null) {
-                    stmt.setBlob(6, t.getFoto());
-            } else {
-                    stmt.setNull(6, Types.BLOB);
-            }
              
              int filasAfectadas = stmt.executeUpdate();
              if (filasAfectadas == 0) {
@@ -58,17 +50,19 @@ public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario, 
     
     public Usuario actualizar(Usuario t) throws SQLException {
         
-        String updateQuery = "UPDATE usuarios SET nombre_pila = ?, descripcion_usuario = ? , foto = ? WHERE nombre_usuario = ?";
+        String updateQuery = "UPDATE usuarios SET nombre_pila = ?, descripcion_usuario = ? , id_foto = ? WHERE nombre_usuario = ?";
         try(PreparedStatement stmt = conn.prepareStatement(updateQuery)){
              stmt.setString(1, t.getNombre());
              stmt.setString(2, t.getDescripcion());
-             if (t.getFoto() != null) {
-                stmt.setBlob(3, t.getFoto());
+             
+             if (t.getFoto() != null && t.getFoto().getIdFoto() != null) {
+                stmt.setLong(3, t.getFoto().getIdFoto());
             } else {
-                stmt.setNull(3, Types.BLOB);
+                stmt.setNull(3, java.sql.Types.BIGINT);
             }
-            stmt.setString(4, t.getNombreUsuario());
 
+             stmt.setString(4, t.getNombreUsuario());
+             
              stmt.executeUpdate();
         }
         return t;
@@ -99,15 +93,12 @@ public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario, 
          usuario.setRol(Rol.valueOf(rs.getString("rol_usuario")));
          usuario.setNombre(rs.getString("nombre_pila"));
          String descripcion = rs.getString("descripcion_usuario");
-
+         Long idFoto = rs.getLong("id_foto");
          if (descripcion != null) {
              usuario.setDescripcion(descripcion);
-        }         
-        
-         Blob foto = rs.getBlob("foto");
-        if (foto != null) {
-            InputStream fotoStream = foto.getBinaryStream();
-            usuario.setFoto(fotoStream);
+         }
+         if (idFoto > 0) {
+            usuario.getFoto().setIdFoto(idFoto);
         }
         return usuario;
     }

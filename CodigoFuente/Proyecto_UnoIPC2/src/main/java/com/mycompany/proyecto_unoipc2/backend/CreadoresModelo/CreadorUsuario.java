@@ -7,6 +7,7 @@ package com.mycompany.proyecto_unoipc2.backend.CreadoresModelo;
 import com.mycompany.proyecto_unoipc2.backend.Excepciones.DatosInvalidosRegistro;
 import com.mycompany.proyecto_unoipc2.backend.Modelos.PreferenciaUsuario;
 import com.mycompany.proyecto_unoipc2.backend.Modelos.Usuario;
+import com.mycompany.proyecto_unoipc2.backend.Utileria.Encriptador;
 import com.mycompany.proyecto_unoipc2.backend.Utileria.Rol;
 import com.mycompany.proyecto_unoipc2.backend.Utileria.TipoPreferencia;
 import jakarta.servlet.ServletException;
@@ -23,9 +24,13 @@ import java.util.List;
  * @author kevin-mushin
  */
 public class CreadorUsuario {
+    
+    Encriptador encriptador = new Encriptador();
 
     public Usuario crearUsuario(HttpServletRequest req) throws DatosInvalidosRegistro{
         Usuario nuevoUsuario = extraerYValidar(req);
+        nuevoUsuario.setPassword(encriptador.encryptPassword(nuevoUsuario.getPassword()));
+        
         manejarCamposOpcionales(req, nuevoUsuario);
         
         if (!nuevoUsuario.esValido()) {
@@ -54,17 +59,9 @@ public class CreadorUsuario {
             List<PreferenciaUsuario> pref = crearPreferencias(preferencias, TipoPreferencia.TEMA_PREFERENCIA, nuevoUsuario.getNombreUsuario());
             nuevoUsuario.setPreferencias(pref);
         }
-        
-        if (req.getPart("foto") != null && req.getPart("foto").getSize() > 0) { 
-            InputStream fot = req.getPart("foto").getInputStream();
-            nuevoUsuario.setFoto(fot);
-        }
-
     } catch (DatosInvalidosRegistro e) {
         throw new DatosInvalidosRegistro(" Los campos opcionales no contienen el formato indicado ");
-    } catch (IOException | ServletException e) {
-        throw new DatosInvalidosRegistro("Error al manejar la carga de archivos");
-    }
+    } 
 }
 
     private List<PreferenciaUsuario> crearPreferencias(String[] preferencias, TipoPreferencia tipoPreferencia, String nombreUsuario) throws DatosInvalidosRegistro{

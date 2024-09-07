@@ -5,7 +5,6 @@
 package com.mycompany.proyecto_unoipc2.backend.Modelos;
 
 import com.mycompany.proyecto_unoipc2.backend.Utileria.Rol;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,21 +19,23 @@ public class Usuario {
     private String password;
     private String nombre;
     private String descripcion;
-    private InputStream foto;
     private List<PreferenciaUsuario> preferencias;
-    
+    private FotoUsuario foto;
     /*  cosntructor vacio para construir nuevamente el user en la */
     public Usuario(){
         this.preferencias = new ArrayList<>();
-    
+        this.foto = new FotoUsuario();
     }
-    // usuario con campos obligatorios
     public boolean esValido() {
-    return rol != null &&
-           nombreUsuario != null && !nombreUsuario.trim().isEmpty() &&
-           password != null && !password.trim().isEmpty() &&
-           nombre != null && !nombre.trim().isEmpty();
-}
+        return rol != null &&
+               nombreUsuario != null && !nombreUsuario.trim().isEmpty() &&
+               nombreUsuario.length() <= 15 && !nombreUsuario.contains(" ") &&
+               password != null && !password.trim().isEmpty() &&
+               nombre != null && !nombre.trim().isEmpty() && 
+                //letras o espacios permitidos xd
+               nombre.matches("^[a-zA-Z ]+$"); 
+    }
+    
     
     /*              AREA SETTERS Y  GETTERS                                 */
     public Rol getRol() {
@@ -77,14 +78,6 @@ public class Usuario {
         this.descripcion = descripcion;
     }
 
-    public InputStream getFoto() {
-        return foto;
-    }
-
-    public void setFoto(InputStream foto) {
-        this.foto = foto;
-    }
-
     public List<PreferenciaUsuario> getPreferencias() {
         return preferencias;
     }
@@ -92,5 +85,16 @@ public class Usuario {
     public void setPreferencias(List<PreferenciaUsuario> preferencias) {
         this.preferencias = preferencias;
     }
+
+    public FotoUsuario getFoto() {
+        return foto;
+    }
+
+    public void setFoto(FotoUsuario foto) {
+        this.foto = foto;
+    }
+    
+    
+    
    
 }

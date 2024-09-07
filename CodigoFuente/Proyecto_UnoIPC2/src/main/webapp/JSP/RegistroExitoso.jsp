@@ -10,8 +10,16 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>JSP Page</title>
+        <link rel="stylesheet" href="Styles.css">
     </head>
     <body>
-        <h1>        REGISTRO EXITOSO </h1>
+        <div class="text-center">
+            <h1>        REGISTRO EXITOSO </h1>
+            
+            <p> Muchas gracias por formar parte de esta comunidad de revistas</p>
+            <p><Strong>${nombrePila} </strong>></p>
+            <a href="index.html">volver</a>
+            <p> Puedes ingresar en la seccion de login con el nombre de usuario:<strong>${nombreUsuario}</strong>> y la contraseña que proporcionaste</p>
+        </div>
     </body>
 </html>

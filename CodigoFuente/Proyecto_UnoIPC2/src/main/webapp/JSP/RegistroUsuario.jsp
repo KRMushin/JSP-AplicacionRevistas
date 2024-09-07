@@ -12,6 +12,8 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
             <title>Formulario de Registro</title>
             <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Styles.css">
+            <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+
     </head>
     <body>
         
@@ -21,7 +23,7 @@
             String error = (String) request.getAttribute("Error_datos_invalidos");
             if (error != null) {
         %>
-            <div class="error-message">
+            <div class="mensaje-error">
                 <p><strong>Error:</strong> <%= error %></p>
             </div>
         <%
@@ -31,7 +33,11 @@
         <div class="container">
             <form action="${pageContext.request.contextPath}/RegistroServlet" method="post" enctype="multipart/form-data">
                 
-                <label for="nombreUsuario">Nombre de Usuario:</label>
+                <label for="nombreUsuario">Nombre de Usuario:
+                    <span class="informacion" title="Debe ser menor a 15 caracteres y sin espacios">
+                                <i class="bi bi-info-circle"></i>
+                    </span>
+                </label>
                 <input type="text" id="nombreUsuario" name="nombreUsuario" required>
                 <br><br>
 
@@ -39,10 +45,12 @@
                 <input type="password" id="password" name="password" required>
                 <br><br>
 
-                <label for="nombrePila">Nombre de Pila:</label>
+                <label for="nombrePila">Nombre Completo:
+                     <span class="informacion" title=" Nombre completo sin espacios">
+                                <i class="bi bi-info-circle"></i>
+                    </span>
+                </label>
                 <input type="text" id="nombrePila" name="nombrePila" required>
-                <br><br>
-
                 
                 <p>Seleccione el tipo de usuario:</p>
                 <input type="radio" id="suscriptor" name="rolEscogido" value="SUSCRIPTOR" required>
@@ -54,14 +62,7 @@
                 <input type="radio" id="editor" name="rolEscogido" value="EDITOR" required>
                 <label for="editor">Editor</label><br><br>
 
-                <button type="button" onclick="toggleOptionalSection()">Personaliza tu perfil (opcional)</button>
-                
-                <button type="submit">Registrarse</button>
-            </form>
-            
-
-
-            <div id="optional-section">
+                <div id="seccion-opcional">
                 <h3>Información Adicional</h3>
                 
                 <p>Cuéntanos más sobre tus intereses...:</p>
@@ -82,14 +83,18 @@
                 <input type="checkbox" id="musica" name="preferencias" value="musica">
                 <label for="musica">Música</label><br><br>
 
-                <label for="foto">Sube tu foto para tu perfil (PNG, JPG):</label>
-                <input type="file" id="foto" name="foto" accept=".png, .jpg, .jpeg">
-                <br><br>
             </div>
+                <button type="button" onclick="toggleOptionalSection()">Personaliza tu perfil (opcional)</button>
+                
+                <button type="submit">Registrarse</button>
+            
+                
+                
+            </form>
         </div>
     </div>
 
     <script src="${pageContext.request.contextPath}/JS/Script.js"></script>
-    <a href="../index.jsp" class=" main-container">Volver</a>
+    <a href="../index.jsp" class=" main-container"> Volver Inicio</a>
     </body>
 </html>

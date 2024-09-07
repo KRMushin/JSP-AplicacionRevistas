@@ -23,6 +23,13 @@
     background-color: #fff;
 }
 
+.mensaje-error{
+    
+    text-align: center;
+    color: red;
+}
+
+
 button {
     margin-top: 10px;
 }
@@ -31,3 +38,15 @@ button {
     text-align: center;
     margin-bottom: 20px;
 }
+.informacion {
+    font-size: 14px;
+    color: blue;
+    cursor: help;
+}
+
+.restricciones {
+    font-size: 12px;
+    color: gray; 
+}
+
+

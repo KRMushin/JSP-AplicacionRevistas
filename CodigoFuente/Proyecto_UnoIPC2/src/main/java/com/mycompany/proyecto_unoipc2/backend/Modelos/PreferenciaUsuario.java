@@ -17,7 +17,22 @@ public class PreferenciaUsuario {
         private final  String preferencia;
         private final TipoPreferencia tipoPreferencia;
 
-            public String getPreferencia() {
+
+            
+            // COSNTRUCTOR DE UNA PREFERENCIA DEL USUARIO
+    public PreferenciaUsuario(String preferencia, String nombreUsuario, TipoPreferencia tipoPreferencia) {
+        this.preferencia = preferencia;
+        this.nombreUsuario = nombreUsuario;
+        this.tipoPreferencia = tipoPreferencia;
+    }
+    
+    public boolean esValida() {
+        return preferencia != null && preferencia.matches("^[a-zA-Z ]+$");
+    }
+
+    /* AREA DE SETTERS Y GETTERS */
+
+                public String getPreferencia() {
                 return preferencia;
             }
             public TipoPreferencia getTipoPreferencia() {
@@ -35,19 +50,6 @@ public class PreferenciaUsuario {
             public void setIdPreferencia(Long idPreferencia) {
                 this.idPreferencia = idPreferencia;
             }
-            
-            // COSNTRUCTOR DE UNA PREFERENCIA DEL USUARIO
-    public PreferenciaUsuario(String preferencia, String nombreUsuario, TipoPreferencia tipoPreferencia) {
-        this.preferencia = preferencia;
-        this.nombreUsuario = nombreUsuario;
-        this.tipoPreferencia = tipoPreferencia;
-    }
-    /* AREA DE SETTERS Y GETTERS */
-
-    @Override
-    public String toString() {
-        return "PreferenciaUsuario{" + "idPreferencia=" + idPreferencia + ", nombreUsuario=" + nombreUsuario + ", preferencia=" + preferencia + ", tipoPreferencia=" + tipoPreferencia + '}';
-    }
     
     
         

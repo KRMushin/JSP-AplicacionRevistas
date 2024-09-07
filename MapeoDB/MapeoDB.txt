@@ -1,19 +1,25 @@
 create schema app_revistas;
 use app_revistas;
 
+CREATE TABLE fotos_usuario (
+    id_foto BIGINT AUTO_INCREMENT PRIMARY KEY, 
+    foto_usuario VARCHAR(15), 
+    foto BLOB
+);
 CREATE TABLE usuarios (
     nombre_usuario VARCHAR(15) NOT NULL UNIQUE PRIMARY KEY,
     password_usuario VARCHAR(200) NOT NULL,
     rol_usuario ENUM('COMPRADOR', 'SUSCRIPTOR', 'EDITOR', 'ADMINISTRADOR') NOT NULL,
     nombre_pila VARCHAR(100) NOT NULL,
     descripcion_usuario TEXT,
-    foto BLOB
+    id_foto BIGINT,
+    FOREIGN KEY (id_foto) REFERENCES fotos_usuario(id_foto) ON DELETE SET NULL
 );
 
 CREATE TABLE preferencias_usuario (    
 	id_preferencia BIGINT AUTO_INCREMENT PRIMARY KEY,      
 	nombre_usuario VARCHAR(15),
-	tipo_preferencia ENUM('HOBBIE', 'GUSTO', 'TEMA', 'PREFERENCIA') NOT NULL,      	 
+	tipo_preferencia ENUM('HOBBIE', 'GUSTO', 'TEMA_PREFERENCIA') NOT NULL,      	 
 	valor_preferencia VARCHAR(20) NOT NULL,      
 	FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario)  
 );
@@ -23,6 +29,32 @@ CREATE TABLE carteras_digitales (
     saldo_disponible DECIMAL(10,2) NOT NULL DEFAULT 0.0,
     FOREIGN KEY (usuario_representante) REFERENCES usuarios(nombre_usuario)  
 );
+
+
+
+
+
+
+
+/*					PARTES ELIMINIADAS DE HTML 	FOTOS */
+
+                <label for="foto">Sube tu foto para tu perfil (PNG, JPG):</label>
+                <input type="file" id="foto" name="foto" accept=".png, .jpg, .jpeg">
+                <br><br>
+                
+                        if (req.getPart("foto") != null && req.getPart("foto").getSize() > 0) { 
+            InputStream fot = req.getPart("foto").getInputStream();
+            nuevoUsuario.setFoto(fot);
+        }
+
+
+
+
+
+
+
+
+
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

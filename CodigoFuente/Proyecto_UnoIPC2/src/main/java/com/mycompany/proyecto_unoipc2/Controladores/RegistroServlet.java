@@ -37,8 +37,8 @@ public class RegistroServlet extends HttpServlet {
         try {
                 ServicioRegistro servicioRegistro = new ServicioRegistro();
                 Usuario usuarioCreado = servicioRegistro.RegistrarUsuario(req);
-                req.setAttribute("mensaje", "Usuario creado exitosamente: " + usuarioCreado.getNombreUsuario());
-                req.getSession().setAttribute("mensaje", "Usuario creado exitosamente: " + usuarioCreado.getNombreUsuario());
+                req.setAttribute("nombreUsuario", usuarioCreado.getNombreUsuario());
+                req.getSession().setAttribute("nombrePila", usuarioCreado.getNombre());
                 resp.sendRedirect(req.getContextPath() +"/JSP/RegistroExitoso.jsp");
 
         } catch (DatosInvalidosRegistro | TransaccionFallidaException | SQLException e) {
