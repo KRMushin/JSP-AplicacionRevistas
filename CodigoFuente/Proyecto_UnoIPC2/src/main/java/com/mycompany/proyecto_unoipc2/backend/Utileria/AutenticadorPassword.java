@@ -10,11 +10,11 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  *
  * @author kevin-mushin
  */
-public class AutenticadorLogin {
+public class AutenticadorPassword {
     
        private final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     
-        public  boolean autenticacionCorrecta(String passwordEntrada, String passwordEncriptaodo) {
-        return passwordEncoder.matches(passwordEntrada, passwordEncriptaodo);
+        public  boolean contraseñaCorrecta(String passwordEntrada, String passwordDesencriptado) {
+        return passwordEncoder.matches(passwordEntrada, passwordDesencriptado);
         }
 }

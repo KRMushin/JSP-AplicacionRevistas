@@ -8,8 +8,6 @@ import com.mycompany.proyecto_unoipc2.backend.Excepciones.DatosInvalidosRegistro
 import com.mycompany.proyecto_unoipc2.backend.Excepciones.TransaccionFallidaException;
 import com.mycompany.proyecto_unoipc2.backend.Modelos.Usuario;
 import com.mycompany.proyecto_unoipc2.backend.Servicios.ServicioRegistro;
-import com.mycompany.proyecto_unoipc2.backend.Utileria.Rol;
-import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -17,11 +15,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.servlet.http.Part;
-import java.io.InputStream;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -37,12 +31,13 @@ public class RegistroServlet extends HttpServlet {
         try {
                 ServicioRegistro servicioRegistro = new ServicioRegistro();
                 Usuario usuarioCreado = servicioRegistro.RegistrarUsuario(req);
+                
                 req.setAttribute("nombreUsuario", usuarioCreado.getNombreUsuario());
                 req.getSession().setAttribute("nombrePila", usuarioCreado.getNombre());
                 resp.sendRedirect(req.getContextPath() +"/JSP/RegistroExitoso.jsp");
 
         } catch (DatosInvalidosRegistro | TransaccionFallidaException | SQLException e) {
-            req.setAttribute("Error_datos_invalidos", e.getMessage().toString());
+            req.setAttribute("Error_datos_invalidos", e.getMessage());
             getServletContext().getRequestDispatcher("/JSP/RegistroUsuario.jsp").forward(req, resp);
 
         }

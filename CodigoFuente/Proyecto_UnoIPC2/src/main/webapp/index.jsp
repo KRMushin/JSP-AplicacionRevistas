@@ -17,7 +17,7 @@
             <div class="barra">
                 <nav>
                     <a href="JSP/RegistroUsuario.jsp"> Registrarse</a>
-                    <a href="registro.html"> Ingresar</a>
+                    <a href="JSP/LoginUsuario.jsp"> Iniciar Sesion</a>
                     <a href="registro.html"> Comprar</a>
                     <a href="registro.html">    Mania Marañon</a>
 
