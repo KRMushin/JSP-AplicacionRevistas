@@ -31,7 +31,7 @@ public class AutenticadorServlet extends HttpServlet {
             req.setAttribute("nombreUsuario", usuario.getNombre());
             req.setAttribute("rol", usuario.getRol().toString());
             resp.sendRedirect(req.getContextPath() + "JSP/Editores/PaginaEditor.jsp");
-            System.out.println("VALIDODDDDDDDDDDDDDDDD");
+
         } catch (SQLException ex) {
             req.setAttribute("errorDB", ex.getMessage());
             getServletContext().getRequestDispatcher("/JSP/LoginUsuario.jsp").forward(req, resp);
