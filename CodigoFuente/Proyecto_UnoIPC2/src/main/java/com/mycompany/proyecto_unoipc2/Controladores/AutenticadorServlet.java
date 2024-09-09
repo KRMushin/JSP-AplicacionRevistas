@@ -5,15 +5,22 @@
 package com.mycompany.proyecto_unoipc2.Controladores;
 
 import com.mycompany.proyecto_unoipc2.backend.Excepciones.LoginInvalido;
+import com.mycompany.proyecto_unoipc2.backend.Excepciones.TransaccionFallidaException;
+import com.mycompany.proyecto_unoipc2.backend.Modelos.PreferenciaUsuario;
 import com.mycompany.proyecto_unoipc2.backend.Modelos.Usuario;
 import com.mycompany.proyecto_unoipc2.backend.Servicios.ServicioAutenticadorUsuario;
+import com.mycompany.proyecto_unoipc2.backend.Utileria.OpcionesUsuario;
+import com.mycompany.proyecto_unoipc2.backend.Utileria.TipoOpciones;
+import jakarta.servlet.RequestDispatcher;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
@@ -28,11 +35,26 @@ public class AutenticadorServlet extends HttpServlet {
         try {
             ServicioAutenticadorUsuario servicioAutenticador = new ServicioAutenticadorUsuario();
             Usuario usuario = servicioAutenticador.autenticarUsuario(req);
-            req.setAttribute("nombreUsuario", usuario.getNombre());
-            req.setAttribute("rol", usuario.getRol().toString());
-            resp.sendRedirect(req.getContextPath() + "JSP/Editores/PaginaEditor.jsp");
+            List<OpcionesUsuario> opcionesMenu = TipoOpciones.valueOf(usuario.getRol().toString()).obtenerOpcionesRol();
+           
+           List<PreferenciaUsuario> preferencias = usuario.getPreferencias();
+            System.out.println("    EN AUTENITICADOR");
+           for (int i = 0; i < preferencias.size(); i++) {
 
-        } catch (SQLException ex) {
+                        if (preferencias.get(i) != null) {
+                            System.out.println(preferencias.get(i).getPreferencia() + preferencias.get(i).getIdPreferencia() + preferencias.get(i).getTipoPreferencia());
+                        }
+                   }
+            
+            HttpSession session = req.getSession();
+            session.setAttribute("usuario", usuario);
+            session.setAttribute("menuOpciones", opcionesMenu);
+
+            // Reenviar al JSP `PaginaPrincipal.jsp`
+            RequestDispatcher dispatcher = req.getRequestDispatcher("/JSP/PaginaPrincipal.jsp");
+            dispatcher.forward(req, resp);
+            
+        } catch (SQLException | TransaccionFallidaException ex) {
             req.setAttribute("errorDB", ex.getMessage());
             getServletContext().getRequestDispatcher("/JSP/LoginUsuario.jsp").forward(req, resp);
 

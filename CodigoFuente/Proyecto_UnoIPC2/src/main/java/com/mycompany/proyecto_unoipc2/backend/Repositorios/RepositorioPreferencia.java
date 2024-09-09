@@ -27,13 +27,12 @@ public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuari
     } 
     
     @Override
-    public List<PreferenciaUsuario> listar(String nombreUsuario, String parametro) throws SQLException {
+    public List<PreferenciaUsuario> listar(String nombreUsuario) throws SQLException {
 
         List<PreferenciaUsuario> preferencias = new ArrayList<>();
-        String insertQuery = " SELECT *FROM preferencias_usuario WHERE nombre_usuario = ? AND tipo_preferencia = ? " ;
+        String insertQuery = " SELECT * FROM preferencias_usuario WHERE nombre_usuario = ?" ;
         try(PreparedStatement stmt = conn.prepareStatement(insertQuery)){
              stmt.setString(1, nombreUsuario);
-             stmt.setString(2, parametro);
              ResultSet resultSet = stmt.executeQuery();
              
              while (resultSet.next()) {
@@ -102,10 +101,13 @@ public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuari
     }
 
     private PreferenciaUsuario crearPreferencia(ResultSet resultSet) throws SQLException {
+        
         TipoPreferencia tipo = TipoPreferencia.valueOf(resultSet.getString("tipo_preferencia").toUpperCase());
         String nombreUsuario = resultSet.getString("nombre_usuario");
         String preferencia = resultSet.getString("valor_Preferencia");
-        return new PreferenciaUsuario(preferencia,nombreUsuario,tipo);
+        PreferenciaUsuario p = new PreferenciaUsuario(preferencia,nombreUsuario,tipo);
+        p.setIdPreferencia(resultSet.getLong("id_preferencia"));
+        return p;
 
     }
 

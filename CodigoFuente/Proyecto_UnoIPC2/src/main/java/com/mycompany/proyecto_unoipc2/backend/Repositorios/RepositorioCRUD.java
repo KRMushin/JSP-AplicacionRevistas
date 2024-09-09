@@ -17,7 +17,7 @@ import java.util.List;
  */
 public interface RepositorioCRUD<T , ID, P>{
     
-    List<T> listar(ID identificador, P parametro) throws SQLException;
+    List<T> listar(ID identificador) throws SQLException;
     
     T guardar(T modelo) throws SQLException;
     

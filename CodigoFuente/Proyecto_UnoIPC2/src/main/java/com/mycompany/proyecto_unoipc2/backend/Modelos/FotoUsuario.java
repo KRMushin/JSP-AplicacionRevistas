@@ -4,7 +4,10 @@
  */
 package com.mycompany.proyecto_unoipc2.backend.Modelos;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
+import java.util.Base64;
 
 /**
  *
@@ -41,6 +44,38 @@ public class FotoUsuario {
 
     public void setFoto(InputStream foto) {
         this.foto = foto;
+    }
+     public String getFotoBase64() {
+        if (this.foto == null) {
+            return null;
+        }
+
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            byte[] buffer = new byte[4096];
+            int bytesRead;
+
+            // Leer el InputStream y escribirlo en el OutputStream
+            while ((bytesRead = foto.read(buffer)) != -1) {
+                outputStream.write(buffer, 0, bytesRead);
+            }
+
+            // Convertir a Base64
+            byte[] imageBytes = outputStream.toByteArray();
+            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
+
+            // Añadir el prefijo para Data URL (asumiendo que es una imagen PNG)
+            return "data:image/png;base64," + base64Image;
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    // Método para establecer una nueva imagen desde un archivo subido
+    public void setFotoFromBytes(byte[] imageBytes) {
+        this.foto = new java.io.ByteArrayInputStream(imageBytes);
     }
 
   

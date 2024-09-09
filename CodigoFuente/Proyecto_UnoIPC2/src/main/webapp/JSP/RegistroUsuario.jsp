@@ -13,6 +13,7 @@
             <title>Formulario de Registro</title>
             <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Styles.css">
             <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" rel="stylesheet">
+            <script src="${pageContext.request.contextPath}/JS/Script.js"></script>
 
     </head>
     <body>
@@ -62,7 +63,7 @@
                 <input type="radio" id="editor" name="rolEscogido" value="EDITOR" required>
                 <label for="editor">Editor</label><br><br>
 
-                <div id="seccion-opcional">
+                <div id="seccion-dinamica">
                 <h3>Información Adicional</h3>
                 
                 <p>Cuéntanos más sobre tus intereses...:</p>
@@ -84,7 +85,7 @@
                 <label for="musica">Música</label><br><br>
 
             </div>
-                <button type="button" onclick="toggleOptionalSection()">Personaliza tu perfil (opcional)</button>
+                <button type="button" onclick="ocultarSeccion()">Personaliza tu perfil (opcional)</button>
                 
                 <button type="submit">Registrarse</button>
             
@@ -94,7 +95,6 @@
         </div>
     </div>
 
-    <script src="${pageContext.request.contextPath}/JS/Script.js"></script>
     <a href="../index.jsp" class=" main-container"> Volver Inicio</a>
     </body>
 </html>

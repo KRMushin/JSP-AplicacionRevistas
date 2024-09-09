@@ -48,5 +48,8 @@ button {
     font-size: 12px;
     color: gray; 
 }
+.oculto {
+     display: none;
+}
 
 

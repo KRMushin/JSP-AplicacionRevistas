@@ -13,9 +13,12 @@ public class OpcionesUsuario {
     private String opcionNombre;
     private String opcionAccion;
 
-    public OpcionesUsuario() {
+    public OpcionesUsuario(String opcionNombre, String opcionAccion) {
+        this.opcionNombre = opcionNombre;
+        this.opcionAccion = opcionAccion;
     }
 
+    
     public String getOpcionNombre() {
         return opcionNombre;
     }
