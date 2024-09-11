@@ -34,46 +34,53 @@ CREATE TABLE carteras_digitales (
 
 
 /*				EN FASE  DE ANALISIS						*/ 
--- Tabla para almacenar archivos de revistas
+
 CREATE TABLE ARCHIVOS_REVISTA (
-    id_archivo INT AUTO_INCREMENT PRIMARY KEY,
-    archivo BLOB -- Para almacenar el archivo PDF
+    id_archivo BIGINT AUTO_INCREMENT PRIMARY KEY,
+    archivo MEDIUMBLOB 
+
+);
+CREATE TABLE categorias (
+    id_categoria BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre_categoria VARCHAR(50)UNIQUE NOT NULL  
 );
 
--- Tabla para almacenar las revistas
+
 CREATE TABLE revistas (
-    id_revista INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_revista VARCHAR(255) NOT NULL, -- Nombre de la revista
-    nombre_autor VARCHAR(255), -- Columna para almacenar el nombre del autor
-    comentarios TEXT, -- Para almacenar comentarios adicionales
-    numero_likes INT DEFAULT 0, -- Para almacenar el número de likes
-    estado_revista ENUM('ACEPTADA', 'EN ESPERA', 'CANCELADA'), -- Define los estados permitidos
-    numero_archivo INT, -- Referencia al id de archivo en ARCHIVOS_REVISTA
-    precio DECIMAL(10, 2) NOT NULL, -- Precio de la revista para la suscripción
-    FOREIGN KEY (numero_archivo) REFERENCES ARCHIVOS_REVISTA(id_archivo) -- Llave foránea para referenciar la tabla ARCHIVOS_REVISTA
+    id_revista BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_archivo BIGINT NOT NULL,
+    id_categoria BIGINT NOT NULL,    
+    titulo_revista VARCHAR(50) NOT NULL, 
+    nombre_autor VARCHAR(20),
+    descripcion VARCHAR(100), 
+    fechaCreacion DATE NOT NULL,
+    costo_mantenimiento DECIMAL(10,2)  NOT NULL,
+     precio_suscripcion DECIMAL(10, 2)NOT NULL,
+    
+    estado_revista ENUM('ACTIVA','INACTIVA','EN_ESPERA') NOT NULL,
+    revista_comentable TINYINT(1) NOT NULL,
+    revista_likeable TINYINT(1) NOT NULL,
+    
+    FOREIGN KEY (id_archivo) REFERENCES ARCHIVOS_REVISTA(id_archivo),
+    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+    
 );
+ 
 
 -- Tabla para almacenar comentarios de revistas
 CREATE TABLE comentarios (
-    id_comentario INT AUTO_INCREMENT PRIMARY KEY,
-    comentario TEXT, -- Columna para almacenar el comentario
-    nombre_usuario VARCHAR(255), -- Llave foránea a la tabla usuarios
-    id_revista INT, -- Llave foránea a la tabla revistas
-    fecha_comentario DATETIME DEFAULT CURRENT_TIMESTAMP, -- Fecha y hora del comentario
-    FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario), -- Llave foránea a la tabla usuarios
-    FOREIGN KEY (id_revista) REFERENCES revistas(id_revista) -- Define la llave foránea correctamente
+    id_comentario BIGINT AUTO_INCREMENT PRIMARY KEY,
+    comentario TEXT, 
+    nombre_usuario VARCHAR(20),
+    id_revista BIGINT, 
+    FOREIGN KEY (id_revista) REFERENCES revistas(id_revista)
 );
 
--- Tabla para almacenar categorías
-CREATE TABLE categorias (
-    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_categoria VARCHAR(100) UNIQUE NOT NULL -- Nombre de la categoría, debe ser único
-);
 
 -- Tabla intermedia para la relación muchos a muchos entre revistas y categorías
 CREATE TABLE revista_categoria (
-    id_revista INT, -- Llave foránea para la tabla revistas
-    id_categoria INT, -- Llave foránea para la tabla categorias
+    id_revista BIGINT,
+    id_categoria BIGINT,
     PRIMARY KEY (id_revista, id_categoria),
     FOREIGN KEY (id_revista) REFERENCES revistas(id_revista),
     FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
@@ -81,27 +88,31 @@ CREATE TABLE revista_categoria (
 
 -- Tabla para almacenar etiquetas
 CREATE TABLE etiquetas (
-    id_etiqueta INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_etiqueta VARCHAR(100) UNIQUE NOT NULL -- Nombre de la etiqueta, debe ser único
+    id_etiqueta BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre_etiqueta VARCHAR(100) UNIQUE NOT NULL 
 );
 
 -- Tabla intermedia para la relación muchos a muchos entre revistas y etiquetas
 CREATE TABLE revista_etiqueta (
-    id_revista INT, -- Llave foránea para la tabla revistas
-    id_etiqueta INT, -- Llave foránea para la tabla etiquetas
+    id_revista BIGINT, 
+    id_etiqueta BIGINT, 
     PRIMARY KEY (id_revista, id_etiqueta),
     FOREIGN KEY (id_revista) REFERENCES revistas(id_revista),
     FOREIGN KEY (id_etiqueta) REFERENCES etiquetas(id_etiqueta)
 );
 
--- Tabla para almacenar usuarios, utilizando el nombre de usuario como llave primaria
-CREATE TABLE usuarios (
-    nombre_usuario VARCHAR(255) PRIMARY KEY, -- Nombre de usuario como llave primaria
-    email VARCHAR(255) UNIQUE NOT NULL, -- Email, debe ser único
-    rol ENUM('EDITOR', 'LECTOR') DEFAULT 'LECTOR' -- Rol del usuario, puede ser EDITOR o LECTOR
+
+CREATE TABLE likes_revistas (
+
+    id_revista BIGINT, -- Llave foránea a la tabla revistas
+    numero_likes INT DEFAULT 0,
+    nombre_usuario VARCHAR(20),
+
+    PRIMARY KEY (id_revista),
+    FOREIGN KEY (id_revista) REFERENCES revistas(id_revista)
 );
 
--- Tabla para almacenar suscripciones de revistas
+
 CREATE TABLE suscripciones (
     id_suscripcion INT AUTO_INCREMENT PRIMARY KEY,
     nombre_usuario VARCHAR(255), -- Llave foránea para la tabla usuarios
@@ -115,12 +126,12 @@ CREATE TABLE suscripciones (
 
 -- Tabla para almacenar el historial de likes de revistas
 CREATE TABLE likes_revistas (
-    id_like INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_usuario VARCHAR(255), -- Llave foránea a la tabla usuarios
-    id_revista INT, -- Llave foránea a la tabla revistas
-    fecha_like DATETIME DEFAULT CURRENT_TIMESTAMP, -- Fecha y hora del like
-    UNIQUE (nombre_usuario, id_revista), -- Restricción para evitar múltiples likes del mismo usuario en la misma revista
-    FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario),
+
+    id_revista BIGINT, -- Llave foránea a la tabla revistas
+    numero_likes INT DEFAULT 0,
+
+    PRIMARY KEY (id_revista),
     FOREIGN KEY (id_revista) REFERENCES revistas(id_revista)
 );
+
 
