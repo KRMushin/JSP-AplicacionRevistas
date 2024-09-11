@@ -2,6 +2,19 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/JavaScript.js to edit this template
  */
+window.onload = function() {
+    var actualizacionExitosaElement = document.getElementById("actualizacionExitosa");
+    var contextPath = document.getElementById("contextPath").value;
+
+    if (actualizacionExitosaElement && actualizacionExitosaElement.value === 'true') {
+        alert("Perfil actualizado exitosamente.");
+        window.location.href = contextPath + '/JSP/PaginaPrincipal.jsp'; // Redirige a la página principal usando el contextPath
+    }
+};
+
+
+
+
  function agregarTemaPreferencia() {
             const nuevoTextoPreferencia = document.getElementById('nuevaPreferencia').value.trim();
             const tipoNuevaPreferencia = document.getElementById('tipoNuevaPreferencia').value;
@@ -14,7 +27,14 @@
 
                 const nuevoCheckbox = document.createElement('input');
                 nuevoCheckbox.type = 'checkbox';
-                nuevoCheckbox.name = 'preferencias';
+
+                    if (tipoNuevaPreferencia === 'temas_preferencia') {
+                nuevoCheckbox.name = 'preferenciasTemas';
+                } else if (tipoNuevaPreferencia === 'hobbies') {
+                    nuevoCheckbox.name = 'preferenciasHobbies';
+                } else if (tipoNuevaPreferencia === 'gustos') {
+                    nuevoCheckbox.name = 'preferenciasGustos';
+                }
                 nuevoCheckbox.value = nuevoTextoPreferencia;
                 nuevoCheckbox.id = `pref_${Date.now()}`;
 

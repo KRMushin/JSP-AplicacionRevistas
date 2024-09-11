@@ -33,59 +33,94 @@ CREATE TABLE carteras_digitales (
 
 
 
+/*				EN FASE  DE ANALISIS						*/ 
+-- Tabla para almacenar archivos de revistas
+CREATE TABLE ARCHIVOS_REVISTA (
+    id_archivo INT AUTO_INCREMENT PRIMARY KEY,
+    archivo BLOB -- Para almacenar el archivo PDF
+);
 
+-- Tabla para almacenar las revistas
+CREATE TABLE revistas (
+    id_revista INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_revista VARCHAR(255) NOT NULL, -- Nombre de la revista
+    nombre_autor VARCHAR(255), -- Columna para almacenar el nombre del autor
+    comentarios TEXT, -- Para almacenar comentarios adicionales
+    numero_likes INT DEFAULT 0, -- Para almacenar el número de likes
+    estado_revista ENUM('ACEPTADA', 'EN ESPERA', 'CANCELADA'), -- Define los estados permitidos
+    numero_archivo INT, -- Referencia al id de archivo en ARCHIVOS_REVISTA
+    precio DECIMAL(10, 2) NOT NULL, -- Precio de la revista para la suscripción
+    FOREIGN KEY (numero_archivo) REFERENCES ARCHIVOS_REVISTA(id_archivo) -- Llave foránea para referenciar la tabla ARCHIVOS_REVISTA
+);
 
+-- Tabla para almacenar comentarios de revistas
+CREATE TABLE comentarios (
+    id_comentario INT AUTO_INCREMENT PRIMARY KEY,
+    comentario TEXT, -- Columna para almacenar el comentario
+    nombre_usuario VARCHAR(255), -- Llave foránea a la tabla usuarios
+    id_revista INT, -- Llave foránea a la tabla revistas
+    fecha_comentario DATETIME DEFAULT CURRENT_TIMESTAMP, -- Fecha y hora del comentario
+    FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario), -- Llave foránea a la tabla usuarios
+    FOREIGN KEY (id_revista) REFERENCES revistas(id_revista) -- Define la llave foránea correctamente
+);
 
-/*					PARTES ELIMINIADAS DE HTML 	FOTOS */
+-- Tabla para almacenar categorías
+CREATE TABLE categorias (
+    id_categoria INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_categoria VARCHAR(100) UNIQUE NOT NULL -- Nombre de la categoría, debe ser único
+);
 
-                <label for="foto">Sube tu foto para tu perfil (PNG, JPG):</label>
-                <input type="file" id="foto" name="foto" accept=".png, .jpg, .jpeg">
-                <br><br>
-                
-                        if (req.getPart("foto") != null && req.getPart("foto").getSize() > 0) { 
-            InputStream fot = req.getPart("foto").getInputStream();
-            nuevoUsuario.setFoto(fot);
-        }
+-- Tabla intermedia para la relación muchos a muchos entre revistas y categorías
+CREATE TABLE revista_categoria (
+    id_revista INT, -- Llave foránea para la tabla revistas
+    id_categoria INT, -- Llave foránea para la tabla categorias
+    PRIMARY KEY (id_revista, id_categoria),
+    FOREIGN KEY (id_revista) REFERENCES revistas(id_revista),
+    FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+);
 
+-- Tabla para almacenar etiquetas
+CREATE TABLE etiquetas (
+    id_etiqueta INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_etiqueta VARCHAR(100) UNIQUE NOT NULL -- Nombre de la etiqueta, debe ser único
+);
 
+-- Tabla intermedia para la relación muchos a muchos entre revistas y etiquetas
+CREATE TABLE revista_etiqueta (
+    id_revista INT, -- Llave foránea para la tabla revistas
+    id_etiqueta INT, -- Llave foránea para la tabla etiquetas
+    PRIMARY KEY (id_revista, id_etiqueta),
+    FOREIGN KEY (id_revista) REFERENCES revistas(id_revista),
+    FOREIGN KEY (id_etiqueta) REFERENCES etiquetas(id_etiqueta)
+);
 
+-- Tabla para almacenar usuarios, utilizando el nombre de usuario como llave primaria
+CREATE TABLE usuarios (
+    nombre_usuario VARCHAR(255) PRIMARY KEY, -- Nombre de usuario como llave primaria
+    email VARCHAR(255) UNIQUE NOT NULL, -- Email, debe ser único
+    rol ENUM('EDITOR', 'LECTOR') DEFAULT 'LECTOR' -- Rol del usuario, puede ser EDITOR o LECTOR
+);
 
+-- Tabla para almacenar suscripciones de revistas
+CREATE TABLE suscripciones (
+    id_suscripcion INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_usuario VARCHAR(255), -- Llave foránea para la tabla usuarios
+    id_revista INT, -- Llave foránea para la tabla revistas
+    fecha_inicio DATE NOT NULL, -- Fecha de inicio de la suscripción
+    fecha_vencimiento DATE, -- Fecha de vencimiento de la suscripción
+    estado_pago ENUM('COMPLETADO') DEFAULT 'COMPLETADO', -- Estado del pago, siempre COMPLETADO si el usuario paga
+    FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario),
+    FOREIGN KEY (id_revista) REFERENCES revistas(id_revista)
+);
 
-
-
-
-
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-public class AuthService {
-    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    /**
-     * Verifica si la contraseña ingresada coincide con la contraseña almacenada.
-     *
-     * @param plainPassword  La contraseña ingresada por el usuario.
-     * @param storedPassword La contraseña encriptada almacenada en la base de datos.
-     * @return true si las contraseñas coinciden, false de lo contrario.
-     */
-    public static boolean verifyPassword(String plainPassword, String storedPassword) {
-        return passwordEncoder.matches(plainPassword, storedPassword);
-    }
-}
-
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-
-public class PasswordUtil {
-    private static final BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-
-    /**
-     * Encripta la contraseña del usuario utilizando BCrypt.
-     *
-     * @param plainPassword La contraseña ingresada por el usuario.
-     * @return La contraseña encriptada.
-     */
-    public static String encryptPassword(String plainPassword) {
-        return passwordEncoder.encode(plainPassword);
-    }
-}
+-- Tabla para almacenar el historial de likes de revistas
+CREATE TABLE likes_revistas (
+    id_like INT AUTO_INCREMENT PRIMARY KEY,
+    nombre_usuario VARCHAR(255), -- Llave foránea a la tabla usuarios
+    id_revista INT, -- Llave foránea a la tabla revistas
+    fecha_like DATETIME DEFAULT CURRENT_TIMESTAMP, -- Fecha y hora del like
+    UNIQUE (nombre_usuario, id_revista), -- Restricción para evitar múltiples likes del mismo usuario en la misma revista
+    FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario),
+    FOREIGN KEY (id_revista) REFERENCES revistas(id_revista)
+);
 

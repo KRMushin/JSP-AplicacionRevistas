@@ -8,9 +8,9 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <%
-response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
-response.setHeader("Pragma", "no-cache");
-response.setDateHeader("Expires", 0);
+//response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+//response.setHeader("Pragma", "no-cache");
+//response.setDateHeader("Expires", 0);
 
 // Verificar si hay una sesión activa
 if (session == null || session.getAttribute("usuario") == null) {

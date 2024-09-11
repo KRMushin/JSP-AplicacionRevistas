@@ -22,6 +22,13 @@ public class FotoUsuario {
     public FotoUsuario() {
     }
 
+    public FotoUsuario(Long idFoto, String nombreUsuario, InputStream foto) {
+        this.idFoto = idFoto;
+        this.nombreUsuario = nombreUsuario;
+        this.foto = foto;
+    }
+
+    
     public Long getIdFoto() {
         return idFoto;
     }
@@ -44,33 +51,6 @@ public class FotoUsuario {
 
     public void setFoto(InputStream foto) {
         this.foto = foto;
-    }
-     public String getFotoBase64() {
-        if (this.foto == null) {
-            return null;
-        }
-
-        try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            byte[] buffer = new byte[4096];
-            int bytesRead;
-
-            // Leer el InputStream y escribirlo en el OutputStream
-            while ((bytesRead = foto.read(buffer)) != -1) {
-                outputStream.write(buffer, 0, bytesRead);
-            }
-
-            // Convertir a Base64
-            byte[] imageBytes = outputStream.toByteArray();
-            String base64Image = Base64.getEncoder().encodeToString(imageBytes);
-
-            // Añadir el prefijo para Data URL (asumiendo que es una imagen PNG)
-            return "data:image/png;base64," + base64Image;
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 
     // Método para establecer una nueva imagen desde un archivo subido

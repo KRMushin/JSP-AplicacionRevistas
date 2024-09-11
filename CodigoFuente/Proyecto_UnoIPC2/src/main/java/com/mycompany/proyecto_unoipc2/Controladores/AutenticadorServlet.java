@@ -38,15 +38,8 @@ public class AutenticadorServlet extends HttpServlet {
             List<OpcionesUsuario> opcionesMenu = TipoOpciones.valueOf(usuario.getRol().toString()).obtenerOpcionesRol();
            
            List<PreferenciaUsuario> preferencias = usuario.getPreferencias();
-            System.out.println("    EN AUTENITICADOR");
-           for (int i = 0; i < preferencias.size(); i++) {
-
-                        if (preferencias.get(i) != null) {
-                            System.out.println(preferencias.get(i).getPreferencia() + preferencias.get(i).getIdPreferencia() + preferencias.get(i).getTipoPreferencia());
-                        }
-                   }
-            
             HttpSession session = req.getSession();
+
             session.setAttribute("usuario", usuario);
             session.setAttribute("menuOpciones", opcionesMenu);
 

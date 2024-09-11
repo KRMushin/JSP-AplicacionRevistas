@@ -9,14 +9,7 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
 Usuario usuario = (Usuario) session.getAttribute("usuario");
-    FotoUsuario fotoUsuario = usuario.getFoto();
-    String fotoBase64 = null;
-
-    if (fotoUsuario != null && fotoUsuario.getFoto() != null && fotoUsuario.getIdFoto() > 0) {
-        fotoBase64 = fotoUsuario.getFotoBase64();
-    } else {
-        fotoBase64 = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAxElEQVQ4T2NkYGBg6AX4nzUw4tILoAEyMxF8hBAohUsGwX3BVEr8D8RRaxEhAEFqMEUBB2hMB+ADUC0zAACJmAdIBNJmCTMgGgrW+IElLKwWgAWIMrjNQCZAApBvYTmCNDMAhGNV1FJiCVZCJUABUzq8AKGYmDpMQYjFejEKsKGYkznoHljoQAKZhsAMzOYBZCc4DWZYD5FEegSBFkJmEIgFTDRBP5rFx5ktwEyVSPDQAAAABJRU5ErkJggg==";
-    }
+FotoUsuario fotoUsuario = usuario.getFoto();
 %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
@@ -32,13 +25,28 @@ Usuario usuario = (Usuario) session.getAttribute("usuario");
       <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Styles.css">
 </head>
 <body>
+            <input type="hidden" id="actualizacionExitosa" value="${actualizacionExitosa}" />
+            <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
+        <!-- Mostrar mensaje  error -->
+        <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
+<script>
+    console.log('Context Path:', document.getElementById("contextPath").value);
+</script>
+
+            <c:if test="${not empty mensaje}">
+                <div class="${tipoMensaje == 'success' ? 'alert alert-success' : 'alert alert-danger'}">
+                    <c:out value="${mensaje}" />
+                </div>
+            </c:if>
+        <button type="button" onclick="history.back()">Regresar</button>
+
            <!-- seccion de foto usuario  -->
            <h2>Perfil de: <strong>${usuario.nombreUsuario}</strong></h2>
-
             <div class="foto-perfil">
                 <c:choose>
                     <c:when test="${usuario.foto != null and usuario.foto.idFoto > 0}">
-                        <img src="PerfilUsuarioServlet?action=mostrarImagen&idFoto=${usuario.foto.idFoto}" alt="Foto de Perfil" />
+                        <p>${usuario.foto != null and usuario.foto.idFoto > 0}</p>
+                        <img src="${pageContext.request.contextPath}/PerfilUsuarioServlet?action=mostrarImagen&idFoto=${usuario.foto.idFoto}" alt="Foto de Perfil" />
                     </c:when>
                     <c:otherwise>
                         <p>Sin foto disponible</p>
@@ -50,41 +58,105 @@ Usuario usuario = (Usuario) session.getAttribute("usuario");
         <div class="alert alert-info" role="alert">
             Usuario: <strong>${usuario.nombreUsuario}</strong> | Rol: <strong>${usuario.rol} </strong>
             <br></br>
-            Nombre: <strong> ${usuario.nombre}</strong>
         </div>
        <!-- seccion de preferencias -->
+            
 
    <c:set var="ListaPreferencias" value="${usuario.preferencias}"></c:set>
 
     <!-- fformulario para recoger todas las preferencias -->
-    <form action="ruta_a_tu_servlet" method="post" enctype="multipart/form-data">
+    <form action="${pageContext.request.contextPath}/PerfilUsuarioServlet" method="post" enctype="multipart/form-data">
         <div>
+            
+           <input type="hidden" name="nombreUsuario" value="${usuario.nombreUsuario}">
+           <input type="hidden" name="nombrePila" value="${usuario.nombre}">
+           <input type="hidden" name="idFoto" value="${usuario.foto.idFoto}">
+
             <!-- bton para habilitar edicion -->
             <button type="button" onclick="mostrarEdicion()">Editar Perfil</button>
-            
+                
                 <p>Actualizar Foto Perfil </p> 
-                <input type="file" name="foto" accept="image/*" required>
-
-            <!-- contenendores de prefrencias -->
+                <input type="file" name="foto" accept="image/*">
+                <p> Descripcion</p>
+               <c:choose>
+                    <c:when test="${usuario.descripcion != null && !usuario.descripcion.isEmpty()}">
+                        <textarea name="descripcion">${usuario.descripcion}</textarea>
+                    </c:when>
+                    <c:otherwise>
+                        <p>Sin descripción</p>
+                        <textarea name="descripcion" placeholder="Agrega una descripción..."></textarea>
+                    </c:otherwise>
+               </c:choose> 
+                        <div>
+                            <p> Nombre: </p>
+                            <input type="text" id="nombreUsuarioInput" name="nombre" value="${usuario.nombre}" />
+                            </div>         
+                        <!-- contenendores de prefrencias -->
             <div id="temas_preferencia">
                 <h3>Temas de Preferencia</h3>
-                <c:forEach var="preferencia" items="${ListaPreferencias}">
-                    <c:if test="${preferencia.tipoPreferencia == 'TEMA_PREFERENCIA'}">
-                        <div class="item-preferencia">
-                            <input type="checkbox" id="temas_preferencia_${preferencia.nombreUsuario}" name="preferencias" value="${preferencia.preferencia}" checked="checked" />
-                            <label for="temas_preferencia_${preferencia.nombreUsuario}">${preferencia.preferencia}</label>
-                            <button type="button" class="boton-eliminar oculto" onclick="eliminarPreferencia(this)">Eliminar</button>            
-                        </div>
-                    </c:if>
+                                <!-- Definimos los temas de preferencia estáticos -->
+                   <c:set var="preferenciasEstaticas">
+                       <c:out value="Terror,Arte,Ciencia,tecnologia" />
+                   </c:set>
+
+                   <!-- Bucle para los temas de preferencia estáticos -->
+                   <c:forEach var="tema" items="${fn:split(preferenciasEstaticas, ',')}">
+                       <!-- Definir variable de marcado como 'false' por defecto -->
+                       <c:set var="checked" value="false" />
+
+                       <!-- Comprobar si el tema ya está en la lista de preferencias del usuario -->
+                       <c:forEach var="preferencia" items="${ListaPreferencias}">
+                           <c:if test="${preferencia.tipoPreferencia == 'TEMA_PREFERENCIA' && preferencia.preferencia == tema}">
+                               <c:set var="checked" value="true" />
+                           </c:if>
+                       </c:forEach>
+        
+                    <!-- Mostrar el checkbox con el estado de marcado dinámico -->
+                    <input type="checkbox" id="${tema}" name="preferenciasTemas" value="${tema}" 
+                           <c:if test="${checked == 'true'}">checked="checked"</c:if> />
+                    <label for="${tema}">${tema}</label>
                 </c:forEach>
-            </div>
+                    
+                            <c:forEach var="preferencia" items="${ListaPreferencias}">
+                                <c:if test="${preferencia.tipoPreferencia == 'TEMA_PREFERENCIA' && !fn:contains(preferenciasEstaticas, preferencia.preferencia)}">
+
+                                    <div class="item-preferencia">
+                                        <input type="checkbox" id="${preferencia.preferencia}" name="preferenciasTemas" value="${preferencia.preferencia}" checked="checked" />
+                                        <label for="${preferencia.preferencia}">${preferencia.preferencia}</label>
+                                        <button type="button" class="boton-eliminar oculto" onclick="eliminarPreferencia(this)">Eliminar</button>            
+                                    </div>
+                                </c:if>
+                            </c:forEach>
+                        </div>
 
             <div id="hobbies">
                 <h3>Hobbies</h3>
+                
+                  <!-- Definimos los hobbies fijos -->
+    <c:set var="hobbiesFijos" value="Deportes, Lectura, Música" />
+    
+                <!-- Bucle para los hobbies fijos -->
+                <c:forEach var="hobby" items="${hobbiesFijos}">
+                    <!-- Definir variable de marcado como 'false' por defecto -->
+                    <c:set var="checked" value="false" />
+
+                    <!-- Comprobar si el hobby ya está en la lista de preferencias del usuario -->
+                    <c:forEach var="preferencia" items="${ListaPreferencias}">
+                        <c:if test="${preferencia.tipoPreferencia == 'HOBBIE' && preferencia.preferencia == hobby}">
+                            <c:set var="checked" value="true" />
+                        </c:if>
+                    </c:forEach>
+
+                    <!-- Mostrar el checkbox de hobby con el estado de marcado dinámico -->
+                    <input type="checkbox" id="hobbies_${hobby}" name="preferenciasHobbies" value="${hobby}" 
+                           <c:if test="${checked == 'true'}">checked="checked"</c:if> />
+                    <label for="hobbies_${hobby}">${hobby}</label>
+                </c:forEach>
+                
                 <c:forEach var="preferencia" items="${ListaPreferencias}">
-                    <c:if test="${preferencia.tipoPreferencia == 'HOBBIE'}">
+                    <c:if test="${preferencia.tipoPreferencia == 'HOBBIE' && !fn:contains(hobbiesFijos, preferencia.preferencia)}">
                         <div class="item-preferencia">
-                            <input type="checkbox" id="hobbies_${preferencia.nombreUsuario}" name="preferencias" value="${preferencia.preferencia}" checked="checked" />
+                            <input type="checkbox" id="hobbies_${preferencia.nombreUsuario}" name="preferenciasHobbies" value="${preferencia.preferencia}" checked="checked" />
                             <label for="hobbies_${preferencia.nombreUsuario}">${preferencia.preferencia}</label>
                             <button type="button" class="boton-eliminar oculto" onclick="eliminarPreferencia(this)">Eliminar</button>
                         </div>
@@ -94,10 +166,27 @@ Usuario usuario = (Usuario) session.getAttribute("usuario");
 
             <div id="gustos">
                 <h3>Gustos</h3>
+    <c:set var="gustosFijos" value="Cine, Viajar, Cocina" />
+    
+            <c:forEach var="gusto" items="${gustosFijos}">
+                <c:set var="checked" value="false" />
+
                 <c:forEach var="preferencia" items="${ListaPreferencias}">
-                    <c:if test="${preferencia.tipoPreferencia == 'GUSTO'}">
+                    <c:if test="${preferencia.tipoPreferencia == 'GUSTO' && preferencia.preferencia == gusto}">
+                        <c:set var="checked" value="true" />
+                    </c:if>
+                </c:forEach>
+
+                <input type="checkbox" id="gustos_${gusto}" name="preferenciasGustos" value="${gusto}" 
+                       <c:if test="${checked == 'true'}">checked="checked"</c:if> />
+                <label for="gustos_${gusto}">${gusto}</label>
+            </c:forEach>
+
+        
+                <c:forEach var="preferencia" items="${ListaPreferencias}">
+                    <c:if test="${preferencia.tipoPreferencia == 'GUSTO' && !fn:contains(gustosFijos, preferencia.preferencia)}">
                         <div class="item-preferencia">
-                            <input type="checkbox" id="gustos_${preferencia.nombreUsuario}" name="preferencias" value="${preferencia.preferencia}" checked="checked" />
+                            <input type="checkbox" id="gustos_${preferencia.nombreUsuario}" name="preferenciasGustos" value="${preferencia.preferencia}" checked="checked" />
                             <label for="gustos_${preferencia.nombreUsuario}">${preferencia.preferencia}</label>
                             <button type="button" class="boton-eliminar oculto" onclick="eliminarPreferencia(this)">Eliminar</button>
                         </div>
@@ -119,5 +208,8 @@ Usuario usuario = (Usuario) session.getAttribute("usuario");
             <button type="submit">  Actualizar Perfil</button>
         </div>
     </form>
+    <button type="button" onclick="history.back()">Regresar</button>
+    
+    <script src="${pageContext.request.contextPath}/JS/PerfilUsuario.js"></script>
 </body>
 </html>

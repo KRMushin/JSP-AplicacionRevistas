@@ -25,7 +25,7 @@ public interface RepositorioCRUD<T , ID, P>{
     
     T obtenerPorId(Long identificador) throws SQLException;
     
-    void eliminar(Long identificador) throws SQLException;
+    void eliminar(ID identificador) throws SQLException;
     
     
     

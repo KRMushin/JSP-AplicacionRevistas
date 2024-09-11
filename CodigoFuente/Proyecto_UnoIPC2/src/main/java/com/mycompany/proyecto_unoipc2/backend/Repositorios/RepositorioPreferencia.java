@@ -92,10 +92,10 @@ public class RepositorioPreferencia implements RepositorioCRUD<PreferenciaUsuari
         return preferenciaUsuario;
     }
     @Override
-    public void eliminar(Long id) throws SQLException {
-        String deleteQuery = "DELETE FROM preferencias_usuario WHERE id_preferencia = ?";
+    public void eliminar(String nombreUsuario) throws SQLException {
+        String deleteQuery = "DELETE FROM preferencias_usuario WHERE nombre_usuario = ?";
         try (PreparedStatement stmt = conn.prepareStatement(deleteQuery)) {
-            stmt.setLong(1, id);
+            stmt.setString(1, nombreUsuario);
             stmt.executeUpdate();
         }
     }
