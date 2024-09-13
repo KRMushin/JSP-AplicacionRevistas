@@ -2,9 +2,10 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.mycompany.proyecto_unoipc2.backend.Repositorios;
+package com.mycompany.proyecto_unoipc2.backend.Repositorios.Implementaciones;
 
 import com.mycompany.proyecto_unoipc2.backend.Modelos.Usuario;
+import com.mycompany.proyecto_unoipc2.backend.Repositorios.RepositorioLecturaEscritura;
 import com.mycompany.proyecto_unoipc2.backend.Utileria.Rol;
 import java.sql.Connection;
 import java.sql.PreparedStatement;

@@ -11,10 +11,10 @@ import com.mycompany.proyecto_unoipc2.backend.Modelos.FotoUsuario;
 import com.mycompany.proyecto_unoipc2.backend.Modelos.PreferenciaUsuario;
 import com.mycompany.proyecto_unoipc2.backend.Modelos.Usuario;
 import com.mycompany.proyecto_unoipc2.backend.Repositorios.RepositorioCRUD;
-import com.mycompany.proyecto_unoipc2.backend.Repositorios.RepositorioFotosUsuario;
+import com.mycompany.proyecto_unoipc2.backend.Repositorios.Implementaciones.RepositorioFotosUsuario;
 import com.mycompany.proyecto_unoipc2.backend.Repositorios.RepositorioLecturaEscritura;
-import com.mycompany.proyecto_unoipc2.backend.Repositorios.RepositorioPreferencia;
-import com.mycompany.proyecto_unoipc2.backend.Repositorios.RepositorioUsuario;
+import com.mycompany.proyecto_unoipc2.backend.Repositorios.Implementaciones.RepositorioPreferencia;
+import com.mycompany.proyecto_unoipc2.backend.Repositorios.Implementaciones.RepositorioUsuario;
 import com.mycompany.proyecto_unoipc2.backend.Utileria.ConexionBaseDatos;
 import com.mycompany.proyecto_unoipc2.backend.Utileria.TipoPreferencia;
 import jakarta.servlet.ServletException;
@@ -36,7 +36,7 @@ public class ServicioUsuario {
         
     private RepositorioLecturaEscritura<Usuario, String> repositorioUsuario;
     private RepositorioLecturaEscritura<FotoUsuario,Long> repositorioFotosUsuario;
-    private RepositorioCRUD<PreferenciaUsuario,String, String> repositorioPreferenciasUsuario;
+    private RepositorioCRUD<PreferenciaUsuario,String> repositorioPreferenciasUsuario;
     private Connection conn;
 
     public ServicioUsuario() throws SQLException {
@@ -47,6 +47,7 @@ public class ServicioUsuario {
         
     }
 
+    /*      METODOS QUE SE CARAGAN EL PERFIL DEL USUARIO */
     public Usuario obtenerUsuario(String nombreUsuario) throws TransaccionFallidaException {
        try {
               conn.setAutoCommit(false);
@@ -99,7 +100,7 @@ public class ServicioUsuario {
         }
         return fotoUsuario;
     }
-
+    /*          METODOS PARA ACTUALIZAR AL USUARIO*/
     public Usuario actualizarUsuario(HttpServletRequest req) throws DatosInvalidosRegistro, SQLException, IOException, ServletException, TransaccionFallidaException{
             
             Usuario usuario = extraerDatosYvalidar(req);
@@ -142,20 +143,18 @@ public class ServicioUsuario {
         return usuario;
 
     }
+   
     private Usuario  transaccionActualizarUsuario(Usuario usuario) throws SQLException , TransaccionFallidaException{
         
-        System.out.println("                DEPURACIONES FOTO " + usuario.getFoto().getIdFoto());
         try {
             conn.setAutoCommit(false);
             
              if (usuario.getFoto() != null && usuario.getFoto().getIdFoto() != null) {
                usuario.setFoto(repositorioFotosUsuario.actualizar(usuario.getFoto()));
-                 System.out.println("   DEP: se actulizo la foto");
             
              }else if (usuario.getFoto() != null && usuario.getFoto().getIdFoto() == null) {
                 FotoUsuario fotoNueva = repositorioFotosUsuario.guardar(usuario.getFoto());
                 usuario.getFoto().setIdFoto(fotoNueva.getIdFoto());
-                 System.out.println("   DEP: se creo nueva foto");
             }
         
             repositorioUsuario.actualizar(usuario);
@@ -169,13 +168,13 @@ public class ServicioUsuario {
         }
             conn.commit();
             return usuario;
+            
         } catch (SQLException e) {
                     try {
                             conn.rollback();
                     } catch (SQLException rollbackEx) {
                             e.addSuppressed(rollbackEx); 
                     }
-                    System.out.println(e.getCause() + e.getMessage());
             throw new TransaccionFallidaException(" Fallo la transaccion de registro de usuario ");
             }
             finally {

@@ -11,11 +11,10 @@ import java.util.List;
  *
  * @author kevin-mushin
  * @param <T>
- * @param <ID_USUARIO>
+ * @param <ID>
  * @param <P>
- * @param <ID_MODELO>
  */
-public interface RepositorioCRUD<T , ID, P>{
+public interface RepositorioCRUD<T , ID>{
     
     List<T> listar(ID identificador) throws SQLException;
     

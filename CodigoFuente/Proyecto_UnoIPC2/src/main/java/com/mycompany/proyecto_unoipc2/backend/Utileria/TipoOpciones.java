@@ -19,7 +19,7 @@ public enum TipoOpciones {
             List<OpcionesUsuario> opciones = new ArrayList<>();
             opciones.add(new OpcionesUsuario(" Ver Perfil","JSP/PerfilUsuario.jsp"));
 
-            opciones.add(new OpcionesUsuario("Publicar revista","ir a perfil.jsp"));
+            opciones.add(new OpcionesUsuario("Publicar revista","CategoriaEtiquetaServlet?accion=obtenerCategorias"));
             opciones.add(new OpcionesUsuario("Editar Revistas","ir a perfil.jsp"));
             /*  REPORTES QUE PODRAN VER LOS EDITORES*/
             opciones.add(new OpcionesUsuario("Comentarios","ir a perfil.jsp"));

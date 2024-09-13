@@ -36,7 +36,7 @@ CREATE TABLE carteras_digitales (
 /*				EN FASE  DE ANALISIS						*/ 
 
 CREATE TABLE ARCHIVOS_REVISTA (
-    id_archivo BIGINT AUTO_INCREMENT PRIMARY KEY,
+    id_archivo BIGINT  	AUTO_INCREMENT PRIMARY KEY,
     archivo MEDIUMBLOB 
 
 );
@@ -51,11 +51,10 @@ CREATE TABLE revistas (
     id_archivo BIGINT NOT NULL,
     id_categoria BIGINT NOT NULL,    
     titulo_revista VARCHAR(50) NOT NULL, 
-    nombre_autor VARCHAR(20),
+    nombre_autor VARCHAR(20) NOT NULL,
     descripcion VARCHAR(100), 
-    fechaCreacion DATE NOT NULL,
+    fecha_creacion DATE NOT NULL,
     costo_mantenimiento DECIMAL(10,2)  NOT NULL,
-     precio_suscripcion DECIMAL(10, 2)NOT NULL,
     
     estado_revista ENUM('ACTIVA','INACTIVA','EN_ESPERA') NOT NULL,
     revista_comentable TINYINT(1) NOT NULL,
@@ -134,4 +133,144 @@ CREATE TABLE likes_revistas (
     FOREIGN KEY (id_revista) REFERENCES revistas(id_revista)
 );
 
+/*		INICIALIZAR LAS CATEGORIAS Y ETIQUETAS   				*/
+INSERT INTO categorias (nombre_categoria) VALUES ('ciencia');
+INSERT INTO categorias (nombre_categoria) VALUES ('tecnología');
+INSERT INTO categorias (nombre_categoria) VALUES ('salud y bienestar');
+INSERT INTO categorias (nombre_categoria) VALUES ('arte y cultura');
+INSERT INTO categorias (nombre_categoria) VALUES ('estilo de vida');
+INSERT INTO categorias (nombre_categoria) VALUES ('negocios y finanzas');
+INSERT INTO categorias (nombre_categoria) VALUES ('deportes');
+INSERT INTO categorias (nombre_categoria) VALUES ('historia y sociedad');
+INSERT INTO categorias (nombre_categoria) VALUES ('educación');
+INSERT INTO categorias (nombre_categoria) VALUES ('hobbies y entretenimiento');
+INSERT INTO categorias (nombre_categoria) VALUES ('medio ambiente');
+INSERT INTO categorias (nombre_categoria) VALUES ('política y actualidad');
+INSERT INTO categorias (nombre_categoria) VALUES ('automotriz');
+INSERT INTO categorias (nombre_categoria) VALUES ('arquitectura y diseño');
+INSERT INTO categorias (nombre_categoria) VALUES ('cultura pop');
+
+
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('investigación');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('avances científicos');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('experimentos');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('innovación');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('gadgets');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('programación');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('fitness');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('nutrición');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('psicología');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('literatura');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('cine y teatro');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('pintura');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('moda');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('viajes');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('cocina');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('inversiones');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('emprendimiento');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('marketing');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('fútbol');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('atletismo');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('ciclismo');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('antropología');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('historia mundial');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('derechos humanos');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('métodos de enseñanza');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('aprendizaje en línea');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('pedagogía');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('videojuegos');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('manualidades');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('películas');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('sostenibilidad');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('conservación');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('energías renovables');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('análisis político');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('geopolítica');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('opinión');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('coches eléctricos');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('noticias de automovilismo');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('innovación en motores');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('diseño de interiores');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('arquitectura moderna');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('proyectos sostenibles');
+
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('celebridades');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('tendencias');
+INSERT INTO etiquetas (nombre_etiqueta) VALUES ('redes sociales');
+
+
+/*************relaciones
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (1, 1);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (1, 2);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (1, 3);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (2, 4);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (2, 5);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (2, 6);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (3, 7);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (3, 8);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (3, 9);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (4, 10);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (4, 11);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (4, 12);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (5, 13);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (5, 14);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (5, 15);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (6, 16);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (6, 17);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (6, 18);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (7, 19);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (7, 20);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (7, 21);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (8, 22);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (8, 23);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (8, 24);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (9, 25);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (9, 26);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (9, 27);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (10, 28);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (10, 29);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (10, 30);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (11, 31);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (11, 32);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (11, 33);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (12, 34);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (12, 35);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (12, 36);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (13, 37);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (13, 38);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (13, 39);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (14, 40);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (14, 41);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (14, 42);
+
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (15, 43);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (15, 44);
+INSERT INTO categoria_etiqueta (id_categoria, id_etiqueta) VALUES (15, 45);
 

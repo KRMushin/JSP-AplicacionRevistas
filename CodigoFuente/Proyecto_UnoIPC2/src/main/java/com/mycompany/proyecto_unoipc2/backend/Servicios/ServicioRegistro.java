@@ -14,9 +14,9 @@ import com.mycompany.proyecto_unoipc2.backend.Utileria.Rol;
 import com.mycompany.proyecto_unoipc2.backend.CreadoresModelo.CreadorUsuario;
 import com.mycompany.proyecto_unoipc2.backend.Excepciones.DatosInvalidosRegistro;
 import com.mycompany.proyecto_unoipc2.backend.Excepciones.TransaccionFallidaException;
-import com.mycompany.proyecto_unoipc2.backend.Repositorios.RepositorioCarteraDigital;
-import com.mycompany.proyecto_unoipc2.backend.Repositorios.RepositorioPreferencia;
-import com.mycompany.proyecto_unoipc2.backend.Repositorios.RepositorioUsuario;
+import com.mycompany.proyecto_unoipc2.backend.Repositorios.Implementaciones.RepositorioCarteraDigital;
+import com.mycompany.proyecto_unoipc2.backend.Repositorios.Implementaciones.RepositorioPreferencia;
+import com.mycompany.proyecto_unoipc2.backend.Repositorios.Implementaciones.RepositorioUsuario;
 import jakarta.servlet.http.HttpServletRequest;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -30,7 +30,7 @@ public class ServicioRegistro {
     private Connection conn;
     private RepositorioLecturaEscritura<Usuario, String> usuarioRepositorio;
     private RepositorioLecturaEscritura<CarteraDigital, String> carteraRepositorio;
-    private RepositorioCRUD<PreferenciaUsuario, String, String> preferenciasRepositorio;
+    private final RepositorioCRUD<PreferenciaUsuario, String> preferenciasRepositorio;
     private CreadorUsuario creadorUsuario;
 
     public ServicioRegistro() throws SQLException {
@@ -62,7 +62,7 @@ public class ServicioRegistro {
                                 throw new TransaccionFallidaException("El nuevo usuario no pudo ser creado.");
 
                 }
-                    if (nuevoUsuario.getRol() != Rol.EDITOR) {
+                    if (nuevoUsuario.getRol() == Rol.COMPRADOR) {
                         carteraRepositorio.guardar(new CarteraDigital(usuarioRegistro.getNombreUsuario(),0.0));
                    }
 

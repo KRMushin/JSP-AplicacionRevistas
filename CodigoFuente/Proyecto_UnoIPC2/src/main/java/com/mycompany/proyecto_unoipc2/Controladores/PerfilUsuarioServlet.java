@@ -46,7 +46,6 @@ public class PerfilUsuarioServlet extends HttpServlet {
                 String idStrFoto = req.getParameter("idFoto");
                 Long idFoto = Long.valueOf(idStrFoto);
                 
-                System.out.println(idStrFoto + idFoto);
                 response.setContentType("image/jpeg");
                 
                 OutputStream outPut = response.getOutputStream();
@@ -69,7 +68,7 @@ public class PerfilUsuarioServlet extends HttpServlet {
                 ServicioUsuario servicioUsuario = new ServicioUsuario();
                 Usuario usuario = servicioUsuario.actualizarUsuario(req);
                 HttpSession session = req.getSession();
-                session.setAttribute("usuario", usuario);  // Guarda el usuario actualizado en la sesión
+                session.setAttribute("usuario", usuario); 
 
                  req.setAttribute("actualizacionExitosa", true);  
                  req.getRequestDispatcher("JSP/PerfilUsuario.jsp").forward(req, response);
