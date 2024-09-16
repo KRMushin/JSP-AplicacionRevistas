@@ -15,7 +15,6 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%
     Revista revistaActualizar = (Revista) request.getAttribute("revistaVisualizar");
-    
 %>
 
 

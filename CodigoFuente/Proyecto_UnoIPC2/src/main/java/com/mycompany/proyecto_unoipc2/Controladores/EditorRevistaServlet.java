@@ -44,7 +44,7 @@ public class EditorRevistaServlet extends HttpServlet {
                             session.setAttribute("revistasAsociadas", revistasAsociadas);
                             getServletContext().getRequestDispatcher("/JSP/VisualizarRevistas.jsp").forward(request, response);
 
-                        }else if (accion.equalsIgnoreCase("actualizarRevista")) {
+                        }else if (accion.equalsIgnoreCase("visualizarRevista")) {
 
                             Revista revistaActualizar = servicioEditores.obtenerPorId(request);
                             request.setAttribute("revistaVisualizar", revistaActualizar);

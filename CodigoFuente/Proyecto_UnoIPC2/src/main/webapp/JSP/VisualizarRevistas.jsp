@@ -17,7 +17,7 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
           <jsp:include page="/includes/resources.jsp"/>
 
-        <title> Revistas asociadas a usuario </title>
+        <title> Revistas </title>
     </head>
 <body>
     <c:if test="${empty revistasAsociadas}">
@@ -32,9 +32,15 @@
             </div>
             <br>
             
-            <h2 class="text-center"> Tus publicaciones de revistas </h2>
             <c:if test="${not empty revistasAsociadas}">
-                <h4 class="text-center"> Numero de publicaciones: <c:out value="${fn: length(revistasAsociadas)}" /> </h4>
+                <c:if test="${usuario.rol == 'EDITOR'}">
+                    <h2 class="text-center"> Tus publicaciones de revistas </h2>
+                    <h4 class="text-center"> Numero de publicaciones: <c:out value="${fn: length(revistasAsociadas)}" /> </h4>
+                </c:if>
+                    
+                <c:if test="${usuario.rol == 'SUSCRIPTOR'}">
+                    <h2 class="text-center"> REVISTA</h2>
+                </c:if>
             </c:if>
                 
             <div id="revistaCarrusel" class="carousel slide" data-ride="carousel" data-interval="false">
@@ -64,7 +70,7 @@
                 <span class="carousel-control-next-icon" aria-hidden="true" style="background-color: blue"></span>
             </a>
  
-                <jsp:include page="/includes/OpcionesRevistasRol.jsp"/>
+             <jsp:include page="/includes/OpcionesRevistasRol.jsp"/>
           </div>
         </div>
                 

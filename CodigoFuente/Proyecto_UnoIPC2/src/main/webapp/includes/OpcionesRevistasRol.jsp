@@ -23,7 +23,7 @@
             <div class="btn-group" role="group" aria-label="Opciones de Revista">
                    <c:if test="${usuario.rol == 'EDITOR'}">
                        <a href="#" class="btn btn-outline-primary" onclick="ejecutarAccion('verRevista')">Ver Revista</a>
-                      <a href="#" class="btn btn-outline-secondary" onclick="ejecutarAccion('actualizarRevista')"> Editar Revista </a> <!-- un suscriptor ve los detalles, para un suscriptor es la previsualizacion -->
+                      <a href="#" class="btn btn-outline-secondary" onclick="ejecutarAccion('visualizarRevista')"> Editar Revista </a> <!-- un suscriptor ve los detalles, para un suscriptor es la previsualizacion -->
                    
                       
 
@@ -91,11 +91,11 @@
                 if (idRevistaActual !== ' ') {
                     alert("Acción: " + accion + " | ID de Revista: " + idRevistaActual);
                     if (accion === 'verRevista') {
-                        
                             var url = 'ArchivosPdfServlet?idRevista=' + idRevistaActual + '&nombreRevista=' + encodeURIComponent(nombreRevista);
                            window.open(url, '_blank');
-                    }else if (accion === 'actualizarRevista') {
-                        var url = 'EditorRevistaServlet?accion=actualizarRevista&idRevistaActualizar=' + idRevistaActual;
+
+                    }else if (accion === 'visualizarRevista') {
+                        var url = 'EditorRevistaServlet?accion=visualizarRevista&idRevistaActualizar=' + idRevistaActual;
                         window.location.href = url;
                     }
                     } else {
