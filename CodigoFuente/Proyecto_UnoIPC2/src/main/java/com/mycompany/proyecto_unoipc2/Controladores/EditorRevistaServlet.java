@@ -33,6 +33,7 @@ public class EditorRevistaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
+        System.out.println(accion + " esta es la eccco");
 
             try {
                     ServicioEditores servicioEditores = new ServicioEditores();

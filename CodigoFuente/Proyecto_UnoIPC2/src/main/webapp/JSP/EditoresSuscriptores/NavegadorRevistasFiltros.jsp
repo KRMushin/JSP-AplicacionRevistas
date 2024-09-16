@@ -67,8 +67,10 @@
 
                                     <p class="card-text">Autor: ${revista.nombreAutor}</p>
                                     <p class="card-text">ID: ${revista.idRevista}</p>
-
-                                    <form action="action">
+                                    
+                                    <form action="${pageContext.request.contextPath}/EditorRevistaServlet" method="get">
+                                         <input type="hidden" name="accion" value="visualizarRevista">
+                                        <input type="hidden" name="idRevistaActualizar" value="${revista.idRevista}">
                                         <button type="submit" class="btn btn-primary w-100"> Previsualizar</button>
                                     </form>
                                     <br>
