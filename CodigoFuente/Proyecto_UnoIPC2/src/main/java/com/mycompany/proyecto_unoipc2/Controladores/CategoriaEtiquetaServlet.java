@@ -31,22 +31,13 @@ public class CategoriaEtiquetaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
             String accion = request.getParameter("accion");
-        try {
-            
-            if (accion.equalsIgnoreCase("obtenerCategorias")) {
-                ServicioCategoriaEtiqueta cat = new ServicioCategoriaEtiqueta();
-                List<Categoria> categorias = cat.obtenerCategorias();
-                
-                HttpSession session = request.getSession();
-                session.setAttribute("categorias", categorias);
-                
-                request.setAttribute("categorias", categorias);
-                getServletContext().getRequestDispatcher("/JSP/Editores/PublicarRevista.jsp").forward(request, response);
+            HttpSession session = request.getSession();
+            List<Categoria> categorias = (List<Categoria>) session.getAttribute("categorias");
+            if (categorias.isEmpty()) {
+                return;
             }
-        } catch (SQLException ex) {
-            request.setAttribute("errorCategorias", ex);
             getServletContext().getRequestDispatcher("/JSP/Editores/PublicarRevista.jsp").forward(request, response);
-        }
+            
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
@@ -70,3 +61,21 @@ public class CategoriaEtiquetaServlet extends HttpServlet {
 //            }
 //        }
 //    }
+    
+    
+    
+    
+    /*              verificar*/
+//            if (accion.equalsIgnoreCase("obtenerCategorias")) {
+//                ServicioCategoriaEtiqueta cat = new ServicioCategoriaEtiqueta();
+//                List<Categoria> categorias = cat.obtenerCategorias();
+//                
+//                HttpSession session = request.getSession();
+//                session.setAttribute("categorias", categorias);
+//                
+//                request.setAttribute("categorias", categorias);
+//            }
+//        } catch (SQLException ex) {
+//            request.setAttribute("errorCategorias", ex);
+//            getServletContext().getRequestDispatcher("/JSP/Editores/PublicarRevista.jsp").forward(request, response);
+//        }

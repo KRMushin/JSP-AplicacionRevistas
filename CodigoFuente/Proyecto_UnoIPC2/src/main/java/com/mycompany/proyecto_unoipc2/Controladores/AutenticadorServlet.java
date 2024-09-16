@@ -6,9 +6,11 @@ package com.mycompany.proyecto_unoipc2.Controladores;
 
 import com.mycompany.proyecto_unoipc2.backend.Excepciones.LoginInvalido;
 import com.mycompany.proyecto_unoipc2.backend.Excepciones.TransaccionFallidaException;
+import com.mycompany.proyecto_unoipc2.backend.Modelos.Categoria;
 import com.mycompany.proyecto_unoipc2.backend.Modelos.PreferenciaUsuario;
 import com.mycompany.proyecto_unoipc2.backend.Modelos.Usuario;
 import com.mycompany.proyecto_unoipc2.backend.Servicios.ServicioAutenticadorUsuario;
+import com.mycompany.proyecto_unoipc2.backend.Servicios.ServicioCategoriaEtiqueta;
 import com.mycompany.proyecto_unoipc2.backend.Utileria.OpcionesUsuario;
 import com.mycompany.proyecto_unoipc2.backend.Utileria.TipoOpciones;
 import jakarta.servlet.RequestDispatcher;
@@ -35,13 +37,16 @@ public class AutenticadorServlet extends HttpServlet {
         try {
             ServicioAutenticadorUsuario servicioAutenticador = new ServicioAutenticadorUsuario();
             Usuario usuario = servicioAutenticador.autenticarUsuario(req);
+            ServicioCategoriaEtiqueta cat = new ServicioCategoriaEtiqueta();
             List<OpcionesUsuario> opcionesMenu = TipoOpciones.valueOf(usuario.getRol().toString()).obtenerOpcionesRol();
            
-           List<PreferenciaUsuario> preferencias = usuario.getPreferencias();
+            List<PreferenciaUsuario> preferencias = usuario.getPreferencias();
+            List<Categoria> categorias = cat.obtenerCategorias();
             HttpSession session = req.getSession();
 
             session.setAttribute("usuario", usuario);
             session.setAttribute("menuOpciones", opcionesMenu);
+            session.setAttribute("categorias", categorias);
 
             // Reenviar al JSP `PaginaPrincipal.jsp`
             RequestDispatcher dispatcher = req.getRequestDispatcher("/JSP/PaginaPrincipal.jsp");

@@ -4,12 +4,12 @@
  */
 package com.mycompany.proyecto_unoipc2.backend.Servicios;
 
+import com.mycompany.proyecto_unoipc2.ActualizadoresModelos.ActualizadorRevista;
 import com.mycompany.proyecto_unoipc2.backend.CreadoresModelo.CreadorRevista;
 import com.mycompany.proyecto_unoipc2.backend.Excepciones.DatosInvalidosRevista;
 import com.mycompany.proyecto_unoipc2.backend.Modelos.Revista;
 import com.mycompany.proyecto_unoipc2.backend.Repositorios.Implementaciones.RepositorioRevistas;
 import com.mycompany.proyecto_unoipc2.backend.Repositorios.RepositorioArchivosPDF;
-import com.mycompany.proyecto_unoipc2.backend.Repositorios.RepositorioCRUD;
 import com.mycompany.proyecto_unoipc2.backend.Repositorios.RevistaRelacionRepositorio;
 import com.mycompany.proyecto_unoipc2.backend.Utileria.ConexionBaseDatos;
 import jakarta.servlet.ServletException;
@@ -18,20 +18,19 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  *
  * @author kevin-mushin
  */
 public class ServicioEditores {
-    
-    
-    private RepositorioCRUD<Revista, String> repositorioRevistas;
+    private RepositorioRevistas repositorioRevistas;
     private RepositorioArchivosPDF repositorioPDF;
     private RevistaRelacionRepositorio relacionesRevista;
     private CreadorRevista creadorRevista;
+    private ActualizadorRevista actualizadorRevista;
     private Connection conn;
-
     public ServicioEditores() throws SQLException {
         
         this.conn = ConexionBaseDatos.getInstance();
@@ -39,36 +38,31 @@ public class ServicioEditores {
         this.repositorioRevistas = new RepositorioRevistas(conn);
         this.relacionesRevista = new RevistaRelacionRepositorio(conn);
         this.creadorRevista = new CreadorRevista();
+        this.actualizadorRevista = new ActualizadorRevista();
     }
-    public Revista guardarRevista(HttpServletRequest req, String operacion) throws DatosInvalidosRevista, IOException, ServletException, SQLException{
+    public Revista guardarRevista(HttpServletRequest req) throws DatosInvalidosRevista, IOException, ServletException, SQLException{
 
-        Revista revistaOperacion = creadorRevista.crearRevista(req, operacion);
+        Revista revistaOperacion = creadorRevista.crearRevista(req);
         InputStream inputStream = creadorRevista.obtenerPDFStream(req);
-        
-        if (operacion.equalsIgnoreCase("publicacion")) {
             
-            String[] etiquetas = req.getParameterValues("idEtiqueta");
-            Long idCategoria = Long.valueOf(req.getParameter("idCategoria"));
-            revistaOperacion.setIdCategoria(idCategoria);
+        String[] etiquetas = req.getParameterValues("idEtiqueta");
+        Long idCategoria = Long.valueOf(req.getParameter("idCategoria"));
+        revistaOperacion.setIdCategoria(idCategoria);
             
-            if (etiquetas == null || etiquetas.length <= 0 ||  idCategoria <= 0) {
-            throw new DatosInvalidosRevista("La publicación debe tener una categoría válida y al menos una etiqueta.");
-            }
-
-            return publicarRevista(revistaOperacion, inputStream, idCategoria, etiquetas);
+        if (etiquetas == null || etiquetas.length <= 0 ||  idCategoria <= 0) {
+        throw new DatosInvalidosRevista("La publicación debe tener una categoría válida y al menos una etiqueta.");
         }
-        return actualizarRevista(revistaOperacion);
+
+         return publicarRevista(revistaOperacion, inputStream, idCategoria, etiquetas);
     }
 
     private Revista publicarRevista(Revista revistaOperacion, InputStream archivoPdf, Long idcategoria,String[] etiquetas) throws DatosInvalidosRevista, SQLException{
         try {
-
               conn.setAutoCommit(false);
-               
+              
               if (!revistaOperacion.esValida() || archivoPdf == null ) {
                   throw new DatosInvalidosRevista(" Los datos de la revista o el pdf son invalidos");
-                  
-            }
+              }
               
               Long idPdf = repositorioPDF.guardarArchivoPDF(archivoPdf);
               revistaOperacion.setIdArchivoRevisa(idPdf);
@@ -110,14 +104,41 @@ public class ServicioEditores {
         }
     }
 
-    private Revista actualizarRevista(Revista revistaOperacion) throws DatosInvalidosRevista, SQLException{
-        if (!revistaOperacion.esValida() || revistaOperacion.getIdRevista() <= 0) {
-               throw new DatosInvalidosRevista("ID de etiqueta inválido ");
+    public Revista actualizarRevista(HttpServletRequest req) throws DatosInvalidosRevista, SQLException{
+        
+        String operacionActualizacion = req.getParameter("operacionActualizacion");
+        String idRevista = req.getParameter("idRevista");
+        if (operacionActualizacion.isEmpty() || idRevista.isEmpty()) {
+               throw new DatosInvalidosRevista("Error con las instrucciones ");
         }
-        Revista rev = repositorioRevistas.actualizar(revistaOperacion);
-        if (rev == null) {
-               throw new SQLException(" No se actualizo la revista correctamente");
+        
+            switch (operacionActualizacion) {
+                case "actualizarEstados":
+                    Revista modelo = actualizadorRevista.validarYExtraerEstadosNuevos(req);
+                    return repositorioRevistas.actualizar(modelo);
+                case "actualizarLikes":
+
+                    break;
+                case "actualizarCostoMantenimiento":
+
+                    break;
+                default:
+                     throw new DatosInvalidosRevista("La instruccion proporcionada no es valida o existe un error de servidor");
+            }
+        return null;
+    }
+    
+    public List<Revista> obtenerRevistasAsociadas(String nombreAutor) throws SQLException{
+        return repositorioRevistas.listar(nombreAutor);
+    }
+    
+    public Revista obtenerPorId(HttpServletRequest request) throws SQLException, DatosInvalidosRevista{
+        try {
+            Long id = Long.valueOf(request.getParameter("idRevistaActualizar"));
+            return repositorioRevistas.obtenerPorId(id);
+            
+        } catch (NumberFormatException | SQLException e) {
+            throw new DatosInvalidosRevista(" El ide de la revista es invalido");
         }
-        return rev;
     }
 }

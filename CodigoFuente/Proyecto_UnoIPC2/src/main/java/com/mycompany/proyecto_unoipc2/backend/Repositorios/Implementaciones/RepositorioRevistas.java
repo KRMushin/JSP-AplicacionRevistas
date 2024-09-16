@@ -82,14 +82,12 @@ public class RepositorioRevistas implements RepositorioCRUD<Revista,String>{
     @Override
     public Revista actualizar(Revista modelo) throws SQLException {
         
-        String updateQuery = "UPDATE revistas SET descripcion = ?, costo_mantenimiento = ?,estado_revista = ?, revista_comentable = ? , revista_likeable = ?  WHERE id_revista = ?";
+        /*          METODO PARA ACTUALIZAR LOS ESTADOS DE LA REVISTA */
+        String updateQuery = "UPDATE revistas SET revista_comentable = ? , revista_likeable = ?  WHERE id_revista = ?";
         try(PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
-             stmt.setString(1, modelo.getDescripcion());
-             stmt.setDouble(2, modelo.getCostoMantenimiento());
-             stmt.setString(3, modelo.getEstadoRevista());
-             stmt.setBoolean(4, modelo.isRevistaComentable());
-             stmt.setBoolean(5, modelo.isRevistaLikeable());
-             stmt.setLong(6, modelo.getIdRevista());
+             stmt.setBoolean(1, modelo.isRevistaComentable());
+             stmt.setBoolean(2, modelo.isRevistaLikeable());
+             stmt.setLong(3, modelo.getIdRevista());
              
              int affectedRows = stmt.executeUpdate();
              if (affectedRows <= 0) {
@@ -131,7 +129,12 @@ public class RepositorioRevistas implements RepositorioCRUD<Revista,String>{
             }
         } 
     }
-
+    
+    public void actualizarEstadosRevista(Revista revista){
+        String updateState = "UPDATE revistas SET revista_comentable = ? , revista_likeable = ?  WHERE id_revista = ?";
+        
+    
+    }
     private Revista crearRevista(ResultSet rs) throws SQLException {
         Revista revista = new Revista();
         revista.setIdRevista(rs.getLong("id_revista"));
@@ -145,6 +148,7 @@ public class RepositorioRevistas implements RepositorioCRUD<Revista,String>{
         revista.setRevistaComentable(rs.getBoolean("revista_comentable"));
         revista.setRevistaLikeable(rs.getBoolean("revista_likeable"));
         revista.setEstadoRevista(rs.getString("estado_revista"));
+        revista.setNumeroLikes(rs.getInt("numero_likes"));
         return revista;
 
     }

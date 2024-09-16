@@ -27,6 +27,7 @@ public class Revista {
     private String estadoRevista;
     private boolean revistaComentable;
     private boolean revistaLikeable;
+    private int numeroLikes;
 
     public Revista() {
     }
@@ -157,6 +158,15 @@ public class Revista {
     public void setRevistaLikeable(boolean revistaLikeable) {
         this.revistaLikeable = revistaLikeable;
     }
+
+    public int getNumeroLikes() {
+        return numeroLikes;
+    }
+
+    public void setNumeroLikes(int numeroLikes) {
+        this.numeroLikes = numeroLikes;
+    }
+    
     
     public boolean esValida() {
         this.toString();

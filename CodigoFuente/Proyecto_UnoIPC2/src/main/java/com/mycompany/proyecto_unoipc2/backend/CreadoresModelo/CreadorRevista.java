@@ -24,25 +24,18 @@ public class CreadorRevista {
 //    public static final Double TASA_MANTENIMIENTOKB = ;
     
     
-    public Revista crearRevista(HttpServletRequest req, String accion) throws DatosInvalidosRevista, IOException, ServletException{
-    
-        if (accion.equalsIgnoreCase("publicacion")) {
+    public Revista crearRevista(HttpServletRequest req) throws DatosInvalidosRevista, IOException, ServletException{
 
-            Revista revista = extraerYValidarRevista(req);
-            
-             Part pdf = req.getPart("revistaPDF");
-             Long tamaño = pdf.getSize();
-             
-            revista.setCostoMantenimiento(sugerirCostoMantenimiento(tamaño));
-            revista.setFechaCreacion(validarFechaCreacion(req));
-            revista.setEstadoRevista("ACTIVA");
-            
-            
-            return revista;
-        }
         Revista revista = extraerYValidarRevista(req);
-        validarCostos(revista, req);
+
+         Part pdf = req.getPart("revistaPDF");
+         Long tamaño = pdf.getSize();
+
+        revista.setCostoMantenimiento(sugerirCostoMantenimiento(tamaño));
+        revista.setFechaCreacion(validarFechaCreacion(req));
+        revista.setEstadoRevista("ACTIVA");
         return revista;
+    
     }
     private Revista extraerYValidarRevista(HttpServletRequest req) throws DatosInvalidosRevista{
         Revista revista = new Revista();
@@ -75,7 +68,7 @@ public class CreadorRevista {
 
 
     /* ESTE METODO ES USADO PARA CUANDO EL ADMINISTRADOR DECIDE CAMBIAR EL PRECIO DE LOS COSTOS*/
-    private void validarCostos(Revista revista, HttpServletRequest req) throws DatosInvalidosRevista {
+    public void validarCostos(Revista revista, HttpServletRequest req) throws DatosInvalidosRevista {
         try {
               revista.setCostoMantenimiento(Double.valueOf(req.getParameter("nuevoCostoMantenimiento")));
         } catch (NumberFormatException e) {

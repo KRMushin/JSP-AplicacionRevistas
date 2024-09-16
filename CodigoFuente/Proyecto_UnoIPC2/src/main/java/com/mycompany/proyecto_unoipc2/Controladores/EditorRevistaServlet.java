@@ -5,16 +5,19 @@
 package com.mycompany.proyecto_unoipc2.Controladores;
 
 import com.mycompany.proyecto_unoipc2.backend.Excepciones.DatosInvalidosRevista;
+import com.mycompany.proyecto_unoipc2.backend.Modelos.Revista;
+import com.mycompany.proyecto_unoipc2.backend.Modelos.Usuario;
 import com.mycompany.proyecto_unoipc2.backend.Servicios.ServicioEditores;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -29,33 +32,69 @@ public class EditorRevistaServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-    }
+        String accion = request.getParameter("accion");
+
+            try {
+                    ServicioEditores servicioEditores = new ServicioEditores();
+                        if (accion.equalsIgnoreCase("obtenerRevistas")) {
+                            HttpSession session = request.getSession();
+                            Usuario usuario = (Usuario) session.getAttribute("usuario");
+                            List<Revista> revistasAsociadas = servicioEditores.obtenerRevistasAsociadas(usuario.getNombreUsuario());
+
+                            session.setAttribute("revistasAsociadas", revistasAsociadas);
+                            getServletContext().getRequestDispatcher("/JSP/VisualizarRevistas.jsp").forward(request, response);
+
+                        }else if (accion.equalsIgnoreCase("actualizarRevista")) {
+
+                            Revista revistaActualizar = servicioEditores.obtenerPorId(request);
+                            request.setAttribute("revistaVisualizar", revistaActualizar);
+                            getServletContext().getRequestDispatcher("/JSP/EditoresSuscriptores/VisualizadorDetallesRevista.jsp").forward(request, response);
+                }
+            } catch (SQLException | DatosInvalidosRevista ex) {
+                Logger.getLogger(EditorRevistaServlet.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String accion = request.getParameter("accion");
-        try {
-            ServicioEditores servicioEditores = new ServicioEditores();
-            if (!accion.trim().isEmpty()) {
-                
-                servicioEditores.guardarRevista(request, accion);
-            }
+            String accion = request.getParameter("accion");
             
-                request.setAttribute("mensajeExito", "La publicacion de su revista ha sido un exito");
-                request.getRequestDispatcher("JSP/Editores/PublicarRevista.jsp").forward(request, response);
+            if (accion != null) {
+                    if (accion.equalsIgnoreCase("publicacion")) {
+                        publicarRevista(request, response);
+                    } else if (accion.equalsIgnoreCase("actualizarRevista")) {
+                        actualizarRevista(request, response);
+                    }
+            } else {
+                    request.setAttribute("mensaje", "Acción no especificada");
+                    request.getRequestDispatcher("JSP/Editores/PublicarRevista.jsp").forward(request, response);
+            }
+    }
+        private void publicarRevista(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                try {
+                    ServicioEditores servicioEditores = new ServicioEditores();
 
+                    servicioEditores.guardarRevista(request);
+                    request.setAttribute("mensajeExito", "La publicación de su revista ha sido un éxito");
+                    request.getRequestDispatcher("JSP/Editores/PublicarRevista.jsp").forward(request, response);
+                } catch (SQLException | DatosInvalidosRevista ex) {
+                    request.setAttribute("mensaje", "No se pudo publicar la revista debido a: " + ex.getMessage());
+                    request.getRequestDispatcher("JSP/Editores/PublicarRevista.jsp").forward(request, response);
+                }
+        }
 
-        } catch (SQLException | DatosInvalidosRevista ex) {
-  
-            request.setAttribute("mensaje","No se inserto o actualizo la revista debido a que" + ex.getMessage());
-            request.getRequestDispatcher("JSP/Editores/PublicarRevista.jsp").forward(request, response);
+        private void actualizarRevista(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+                    try {
+                        ServicioEditores servicioEditores = new ServicioEditores();
+
+                        servicioEditores.actualizarRevista(request);
+                        request.setAttribute("mensajeResultado", "La actualización de su revista ha sido un éxito");
+                        request.getRequestDispatcher("JSP/EditoresSuscriptores/VisualizadorDetallesRevista.jsp").forward(request, response);
+
+                    } catch (SQLException | DatosInvalidosRevista ex) {
+                        request.setAttribute("mensajeResultado", "No se pudo actualizar la revista debido a: " + ex.getMessage());
+                        request.getRequestDispatcher("JSP/EditoresSuscriptores/VisualizadorDetallesRevistajsp").forward(request, response);
+                    }
         }
     }
-    
-    
-
-
-
-
-}
