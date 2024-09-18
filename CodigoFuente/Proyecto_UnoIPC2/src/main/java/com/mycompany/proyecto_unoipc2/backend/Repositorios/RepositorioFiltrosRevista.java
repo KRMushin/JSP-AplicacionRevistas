@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -36,22 +37,52 @@ public class RepositorioFiltrosRevista {
         }
         return revistas;
     }
-    public List<Revista> obtenerRevistasPorEtiquetas(List<Long> identificadores) throws SQLException {
-           List<Revista> revs = new ArrayList<>();
-                for (Long id : identificadores) {
-                    Revista revista = obtenerPorId(id);
-                    if (revista != null) {
-                        revs.add(revista);
-                    }
-                }
-        return revs;
+    public List<Revista> obtenerRevistasPorEtiquetas(List<Long> etiquetasSeleccionadas,String nombreUsuario) throws SQLException {
+        List<Revista> revistas = new ArrayList<>();
+
+        if (etiquetasSeleccionadas == null || etiquetasSeleccionadas.isEmpty()) {
+            return revistas;
+        }
+
+        StringBuilder selectQuery = new StringBuilder("SELECT DISTINCT r.id_revista, r.titulo_revista, r.nombre_autor ");
+        selectQuery.append("FROM revistas r ");
+        selectQuery.append("JOIN revista_etiqueta re ON r.id_revista = re.id_revista ");
+        selectQuery.append("LEFT JOIN suscripciones s ON r.id_revista = s.id_revista AND s.nombre_usuario = ? ");
+        selectQuery.append("WHERE re.id_etiqueta IN (");
+
+        for (int i = 0; i < etiquetasSeleccionadas.size(); i++) {
+            selectQuery.append("?");
+            if (i < etiquetasSeleccionadas.size() - 1) {
+                selectQuery.append(", ");
+            }
+        }
+        selectQuery.append(") AND r.estado_revista = 'ACTIVA' AND s.id_revista IS NULL");
+
+        try (PreparedStatement stmt = conn.prepareStatement(selectQuery.toString())) {
+            stmt.setString(1, nombreUsuario);
+
+            for (int i = 0; i < etiquetasSeleccionadas.size(); i++) {
+                stmt.setLong(i + 2, etiquetasSeleccionadas.get(i)); 
+            }
+
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                revistas.add(crearResumenRevista(rs));        }
+        }
+
+    return revistas;
     }
     
-    public List<Revista> obtenerRevistasPorCategoria(Long idCategoria) throws SQLException {
+    public List<Revista> obtenerRevistasPorCategoria(Long idCategoria, String nombreUsuario) throws SQLException {
                 List<Revista> revistas = new ArrayList<>();
-                String selectQuery = "SELECT * FROM revistas WHERE id_categoria = ? AND estado_revista = 'ACTIVA'";
+
+                String selectQuery = "SELECT r.* FROM revistas r " +
+                         "LEFT JOIN suscripciones s ON r.id_revista = s.id_revista AND s.nombre_usuario = ? " +
+                         "WHERE r.id_categoria = ? AND r.estado_revista = 'ACTIVA' AND s.id_revista IS NULL";
+                
                 try (PreparedStatement stmt = conn.prepareStatement(selectQuery)) {
-                    stmt.setLong(1, idCategoria);
+                    stmt.setString(1, nombreUsuario);
+                    stmt.setLong(2, idCategoria);
                     ResultSet rs = stmt.executeQuery();
                     while (rs.next()) {
                         revistas.add(crearResumenRevista(rs));
@@ -59,11 +90,13 @@ public class RepositorioFiltrosRevista {
                 }
                 return revistas;
     }
+
     private Revista crearResumenRevista(ResultSet rs) throws SQLException {
             Revista r = new Revista();
             r.setIdRevista(rs.getLong("id_revista"));
             r.setTituloRevista(rs.getString("titulo_revista"));
             r.setNombreAutor(rs.getString("nombre_autor"));
+            r.setAceptaSuscripciones(rs.getBoolean("acepta_suscripciones"));
             return r;
     }
 
@@ -77,7 +110,11 @@ public class RepositorioFiltrosRevista {
                     }
                 }
         return null;
+    }
 
+    public List<Revista> obtenerRevistasPorCategoriaEtiquetas(Long idCategoria, String[] etiquetas, String nombreUsuario) throws SQLException {
+        List<Revista> revistas = new ArrayList<>();
+        return revistas;
     }
 
 }

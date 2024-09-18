@@ -72,6 +72,16 @@
                                 </c:forEach>
                             </ul>
                         </c:if>
+                         <c:if test="${not empty mostrarBoton}">
+                                    <c:if test="${revistaVisualizar.likeable == true}">
+                                            <form action="${pageContext.request.contextPath}/LikesRevistaServlet" method="get">
+                                                <button class="btn btn-success">Dar Me Gusta</button>
+                                            </form>
+                                    </c:if>
+                                    <c:if test="${revistaVisualizar.likeable == false}">
+                                            <p class="text-danger">Actualmente esta revista no acepta likes</p>
+                                    </c:if>
+                        </c:if>
 
                         <c:if test="${not empty usuario}">
                             <c:if test="${usuario.rol == 'EDITOR'}">

@@ -7,7 +7,7 @@ package com.mycompany.proyecto_unoipc2.Controladores;
 import com.mycompany.proyecto_unoipc2.backend.Excepciones.DatosInvalidosRevista;
 import com.mycompany.proyecto_unoipc2.backend.Modelos.Revista;
 import com.mycompany.proyecto_unoipc2.backend.Modelos.Usuario;
-import com.mycompany.proyecto_unoipc2.backend.Servicios.ServicioEditores;
+import com.mycompany.proyecto_unoipc2.backend.Servicios.ServicioRevistas;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -33,10 +33,9 @@ public class EditorRevistaServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String accion = request.getParameter("accion");
-        System.out.println(accion + " esta es la eccco");
 
             try {
-                    ServicioEditores servicioEditores = new ServicioEditores();
+                    ServicioRevistas servicioEditores = new ServicioRevistas();
                         if (accion.equalsIgnoreCase("obtenerRevistas")) {
                             HttpSession session = request.getSession();
                             Usuario usuario = (Usuario) session.getAttribute("usuario");
@@ -74,7 +73,7 @@ public class EditorRevistaServlet extends HttpServlet {
     }
         private void publicarRevista(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
                 try {
-                    ServicioEditores servicioEditores = new ServicioEditores();
+                    ServicioRevistas servicioEditores = new ServicioRevistas();
 
                     servicioEditores.guardarRevista(request);
                     request.setAttribute("mensajeExito", "La publicación de su revista ha sido un éxito");
@@ -87,7 +86,7 @@ public class EditorRevistaServlet extends HttpServlet {
 
         private void actualizarRevista(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
                     try {
-                        ServicioEditores servicioEditores = new ServicioEditores();
+                        ServicioRevistas servicioEditores = new ServicioRevistas();
 
                         servicioEditores.actualizarRevista(request);
                         request.setAttribute("mensajeResultado", "La actualización de su revista ha sido un éxito");

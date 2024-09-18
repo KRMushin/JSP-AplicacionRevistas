@@ -24,15 +24,13 @@
                    <c:if test="${usuario.rol == 'EDITOR'}">
                        <a href="#" class="btn btn-outline-primary" onclick="ejecutarAccion('verRevista')">Ver Revista</a>
                       <a href="#" class="btn btn-outline-secondary" onclick="ejecutarAccion('visualizarRevista')"> Editar Revista </a> <!-- un suscriptor ve los detalles, para un suscriptor es la previsualizacion -->
-                   
-                      
-
                    </c:if>
                  <c:if test="${usuario.rol == 'SUSCRIPTOR'}">
                      
-                     <a href="#" class="btn btn-outline-secondary"> Like</a>
-                    <a href="#" class="btn btn-outline-secondary"> Comentar</a>
-                    <a href="#" class="btn btn-outline-secondary"> Detalles Revista</a> <!-- es lo mismo que editar revista solo que restringido -->
+                       <a href="#" class="btn btn-outline-primary" onclick="ejecutarAccion('verRevista')">Ver Revista</a>
+                      <a href="#" class="btn btn-outline-secondary" onclick="ejecutarAccion('visualizarRevista')"> Detalles Revista </a> <!-- un suscriptor ve los detalles, para un suscriptor es la previsualizacion -->
+                      <a href="#" class="btn btn-outline-secondary" onclick="ejecutarAccion('darLikeRevista')"> Dar Like</a>
+                      <a href="#" class="btn btn-outline-secondary"> Comentar</a>
                     <a href="#" class="btn btn-outline-secondary"> Mas sobre Autor </a>
                     
                  </c:if>
@@ -63,10 +61,10 @@
             </c:if>
 
         </div>
-            
+
         <script>
-            var idRevistaActual = ''; 
-            var nombreRevista = '';
+            var idRevistaActual = ' '; 
+            var nombreRevista = ' ';
 
             $(document).ready(function(){
                 
@@ -78,13 +76,10 @@
             });
             
             function actualizarDatosSeleccion(){
-                   
                 idRevistaActual = $('.carousel-item.active').attr('id');
                 nombreRevista = $('.carousel-item.active').data('nombre');
-                
                 console.log("ID de la revista actual: " + idRevistaActual); // Debug: para verificar que se actualice
                 console.log("Nombre de la revista actual: " + nombreRevista); // Debug: para verificar que se actualice
-                
            }
 
             function ejecutarAccion(accion){
@@ -97,6 +92,19 @@
                     }else if (accion === 'visualizarRevista') {
                         var url = 'EditorRevistaServlet?accion=visualizarRevista&idRevistaActualizar=' + idRevistaActual;
                         window.location.href = url;
+                    
+                    }else if (accion === 'darLikeRevista') {
+                            $.ajax({
+                            url: 'LikesRevistaServlet',
+                            type: 'GET',
+                            data: { idRevista: idRevistaActual },
+                            success: function(response) {
+                                $('#likeMessage').html(response); // Mostrar el mensaje de respuesta
+                            },
+                            error: function(xhr, status, error) {
+                                $('#likeMessage').html("Error al dar like. Inténtalo de nuevo.");
+                            }
+                        });
                     }
                     } else {
                         alert("Ninguna revista seleccionada.");

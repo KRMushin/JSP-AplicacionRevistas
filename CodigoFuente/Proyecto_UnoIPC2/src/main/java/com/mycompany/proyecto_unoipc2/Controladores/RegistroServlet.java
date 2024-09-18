@@ -7,7 +7,7 @@ package com.mycompany.proyecto_unoipc2.Controladores;
 import com.mycompany.proyecto_unoipc2.backend.Excepciones.DatosInvalidosRegistro;
 import com.mycompany.proyecto_unoipc2.backend.Excepciones.TransaccionFallidaException;
 import com.mycompany.proyecto_unoipc2.backend.Modelos.Usuario;
-import com.mycompany.proyecto_unoipc2.backend.Servicios.ServicioRegistro;
+import com.mycompany.proyecto_unoipc2.backend.Servicios.ServicioRegistroUsuarios;
 import java.io.IOException;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
@@ -29,7 +29,7 @@ public class RegistroServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         try {
-                ServicioRegistro servicioRegistro = new ServicioRegistro();
+                ServicioRegistroUsuarios servicioRegistro = new ServicioRegistroUsuarios();
                 Usuario usuarioCreado = servicioRegistro.RegistrarUsuario(req);
                 
                 req.setAttribute("nombreUsuario", usuarioCreado.getNombreUsuario());

@@ -40,11 +40,9 @@ public class AutenticadorServlet extends HttpServlet {
             ServicioCategoriaEtiqueta cat = new ServicioCategoriaEtiqueta();
             List<OpcionesUsuario> opcionesMenu = TipoOpciones.valueOf(usuario.getRol().toString()).obtenerOpcionesRol();
            
-            List<PreferenciaUsuario> preferencias = usuario.getPreferencias();
             List<Categoria> categorias = cat.obtenerCategorias();
             HttpSession session = req.getSession();
             
-            System.out.println(categorias.size());
             session.setAttribute("usuario", usuario);
             session.setAttribute("menuOpciones", opcionesMenu);
             session.setAttribute("categorias", categorias);

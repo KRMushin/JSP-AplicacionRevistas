@@ -24,14 +24,14 @@ import java.util.List;
  *
  * @author kevin-mushin
  */
-public class ServicioEditores {
+public class ServicioRevistas {
     private RepositorioRevistas repositorioRevistas;
     private RepositorioArchivosPDF repositorioPDF;
     private RevistaRelacionRepositorio relacionesRevista;
     private CreadorRevista creadorRevista;
     private ActualizadorRevista actualizadorRevista;
     private Connection conn;
-    public ServicioEditores() throws SQLException {
+    public ServicioRevistas() throws SQLException {
         
         this.conn = ConexionBaseDatos.getInstance();
         this.repositorioPDF = new RepositorioArchivosPDF(conn);

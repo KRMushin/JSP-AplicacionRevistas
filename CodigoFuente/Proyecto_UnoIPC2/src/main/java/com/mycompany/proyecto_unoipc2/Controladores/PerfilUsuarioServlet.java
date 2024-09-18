@@ -34,13 +34,11 @@ public class PerfilUsuarioServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse response)
             throws ServletException, IOException {
-        System.out.println(req.getParameter("idFoto"));
-        
         try {
             HttpSession session = req.getSession();
             ServicioUsuario servicio = new ServicioUsuario();
             String accion = req.getParameter("action");
-            System.out.println(req.getParameter("idFoto"));
+
             if (accion != null && accion.equalsIgnoreCase("mostrarImagen")) {
                 
                 String idStrFoto = req.getParameter("idFoto");

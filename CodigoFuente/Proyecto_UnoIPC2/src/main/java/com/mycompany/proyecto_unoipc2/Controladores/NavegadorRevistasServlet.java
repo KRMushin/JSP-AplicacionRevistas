@@ -51,13 +51,3 @@ public class NavegadorRevistasServlet extends HttpServlet {
         
     }
 }
-
-//            if (!revistasEncontradas.isEmpty()) {
-//                for (int i = 0; i < revistasEncontradas.size(); i++) {
-//                    Revista revista = revistasEncontradas.get(i);
-//                    if (revista != null) {
-//                        System.out.println(revista.getTituloRevista() + "id" + revista.getIdRevista());
-//                    }
-//                    
-//                }
-//            }

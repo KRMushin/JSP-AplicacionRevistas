@@ -27,6 +27,7 @@ public class Revista {
     private String estadoRevista;
     private boolean revistaComentable;
     private boolean revistaLikeable;
+    private boolean aceptaSuscripciones;
     private int numeroLikes;
 
     public Revista() {
@@ -166,6 +167,16 @@ public class Revista {
     public void setNumeroLikes(int numeroLikes) {
         this.numeroLikes = numeroLikes;
     }
+
+    public boolean isAceptaSuscripciones() {
+        return aceptaSuscripciones;
+    }
+
+    public void setAceptaSuscripciones(boolean aceptaSuscripciones) {
+        this.aceptaSuscripciones = aceptaSuscripciones;
+    }
+    
+    
     
     
     public boolean esValida() {

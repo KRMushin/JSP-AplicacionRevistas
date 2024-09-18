@@ -44,38 +44,4 @@ public class CategoriaEtiquetaServlet extends HttpServlet {
             throws ServletException, IOException {
     }
 
-
 }
-
-//                for (Categoria categoria : categorias) {
-//}
-//    if (categoria.getIdCategoria() == 1) {
-//        System.out.println(categoria.getNombreCategoria() + "id"+categoria.getIdCategoria());
-//
-//        List<Etiqueta> etiquetas = categoria.getEtiquetas();
-//        if (etiquetas != null) {
-//            for (Etiqueta etiqueta : etiquetas) {
-//                if (etiqueta != null) {
-//                    System.out.println(etiqueta.getEtiqueta() + "id"+etiqueta.getIdEtiqueta());
-//                }
-//            }
-//        }
-//    }
-    
-    
-    
-    
-    /*              verificar*/
-//            if (accion.equalsIgnoreCase("obtenerCategorias")) {
-//                ServicioCategoriaEtiqueta cat = new ServicioCategoriaEtiqueta();
-//                List<Categoria> categorias = cat.obtenerCategorias();
-//                
-//                HttpSession session = request.getSession();
-//                session.setAttribute("categorias", categorias);
-//                
-//                request.setAttribute("categorias", categorias);
-//            }
-//        } catch (SQLException ex) {
-//            request.setAttribute("errorCategorias", ex);
-//            getServletContext().getRequestDispatcher("/JSP/Editores/PublicarRevista.jsp").forward(request, response);
-//        }

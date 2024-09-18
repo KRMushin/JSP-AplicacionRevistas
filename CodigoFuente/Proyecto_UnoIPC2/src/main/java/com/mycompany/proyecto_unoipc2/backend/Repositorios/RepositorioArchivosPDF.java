@@ -43,8 +43,6 @@ public class RepositorioArchivosPDF {
             }
         }
     }
-
-
     public InputStream obtenerArchivoPorId(Long idArchivoPDF) throws SQLException {
         
         String query = "SELECT archivo FROM ARCHIVOS_REVISTA WHERE id_archivo = ?";

@@ -40,6 +40,45 @@ public class RevistaRelacionRepositorio {
             ps.executeUpdate();
         }
     }
+    
+    public boolean esRevistaLikeable(Long idRevista) throws SQLException {
+    String getValue = "SELECT revista_likeable FROM revistas WHERE id_revista = ?";
+    
+    try (PreparedStatement stmt = conn.prepareStatement(getValue)) {
+        stmt.setLong(1, idRevista);
+
+        try (ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+
+                return rs.getBoolean("revista_likeable");
+                
+            } else {
+                    throw new SQLException("Revista no encontrada con el ID: " + idRevista);
+                }
+            }
+        }
+    }
+    
+    public boolean esRevistaComentable(Long idRevista) throws SQLException {
+    String getValue = "SELECT revista_comentable FROM revistas WHERE id_revista = ?";
+    
+    try (PreparedStatement stmt = conn.prepareStatement(getValue)) {
+        stmt.setLong(1, idRevista);
+
+        try (ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+
+                return rs.getBoolean("revista_comentable");
+                
+            } else {
+                    throw new SQLException("Revista no encontrada con el ID: " + idRevista);
+                }
+            }
+        }
+    }
+
     public void insertarCuadroLikes(Revista revista) throws SQLException{
                 String insertLikes = "INSERT INTO likes_revistas(id_revista) values(?)";
                 try(PreparedStatement ps = conn.prepareStatement(insertLikes)){

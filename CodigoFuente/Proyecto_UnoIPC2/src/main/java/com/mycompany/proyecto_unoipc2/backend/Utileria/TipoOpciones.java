@@ -39,7 +39,7 @@ public enum TipoOpciones {
             opciones.add(new OpcionesUsuario(" Ver Perfil","JSP/PerfilUsuario.jsp"));
             
             opciones.add(new OpcionesUsuario(" Navegar ","JSP/EditoresSuscriptores/NavegadorRevistasFiltros.jsp"));
-            opciones.add(new OpcionesUsuario(" Suscripciones ","ir a perfil.jsp"));
+            opciones.add(new OpcionesUsuario(" Suscripciones","SuscripcionesServlet"));
             opciones.add(new OpcionesUsuario("  Cartera DIgital ","ir a perfil.jsp"));
 
             opciones.add(new OpcionesUsuario("Cerrar Sesion ","ir a perfil.jsp"));

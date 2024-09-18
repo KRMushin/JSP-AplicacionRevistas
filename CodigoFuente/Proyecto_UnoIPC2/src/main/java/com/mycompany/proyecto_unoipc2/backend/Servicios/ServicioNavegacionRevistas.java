@@ -34,18 +34,19 @@ public class ServicioNavegacionRevistas {
         List<Revista> revistasEncontradas = new ArrayList<>();
         String[] idEtiquetas = request.getParameterValues("etiquetasEscogidas");
         String idCategoria = request.getParameter("idCategoriaEscogida");
+        String nombreUsuario = request.getParameter("nombreUsuario");
         
         if ((idEtiquetas == null || idEtiquetas.length <= 0) && (idCategoria == null || idCategoria.isEmpty())) {
              revistasEncontradas = obtenerTodasLasRevistas();
 
         } else if ((idEtiquetas != null && idEtiquetas.length > 0) && (idCategoria == null || idCategoria.isEmpty())) {
-            revistasEncontradas = obtenerRevistasPorEtiquetas(idEtiquetas);
+            revistasEncontradas = obtenerRevistasPorEtiquetas(idEtiquetas,nombreUsuario);
 
         } else if ((idEtiquetas == null || idEtiquetas.length == 0) && (idCategoria != null && !idCategoria.isEmpty())) {
-            revistasEncontradas = obtenerRevistasPorCategoria(idCategoria);
+            revistasEncontradas = obtenerRevistasPorCategoria(idCategoria,nombreUsuario);
 
         } else if ((idEtiquetas != null && idEtiquetas.length > 0) && (idCategoria != null && !idCategoria.isEmpty())) {
-//            revistasEncontradas = obtenerPorEtiquetaYCategoria(idCategoria,idEtiquetas);
+         revistasEncontradas = obtenerPorEtiquetaYCategoria(idCategoria,idEtiquetas,nombreUsuario);
 
         }
         return revistasEncontradas;
@@ -57,20 +58,20 @@ public class ServicioNavegacionRevistas {
 
     }
 
-    private List<Revista> obtenerRevistasPorEtiquetas(String[] idEtiquetas) throws FiltrosInvalidosBusqueda, SQLException {
+    private List<Revista> obtenerRevistasPorEtiquetas(String[] idEtiquetas,String nombreUsuario) throws FiltrosInvalidosBusqueda, SQLException {
         List<Long> identificadores = obtenerIdentificadorees(idEtiquetas);
-        return repositorioFiltrado.obtenerRevistasPorEtiquetas(identificadores);
+        return repositorioFiltrado.obtenerRevistasPorEtiquetas(identificadores,nombreUsuario);
 
     }
 
-    private List<Revista> obtenerRevistasPorCategoria(String idCategoria) throws SQLException {
-        return repositorioFiltrado.obtenerRevistasPorCategoria(Long.valueOf(idCategoria));
+    private List<Revista> obtenerRevistasPorCategoria(String idCategoria, String nombreUsuario) throws SQLException {
+        return repositorioFiltrado.obtenerRevistasPorCategoria(Long.valueOf(idCategoria),nombreUsuario);
 
     }
 
-//    private List<Revista> obtenerPorEtiquetaYCategoria(String idCategoria, String[] idEtiquetas) {
-//        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
-//    }
+    private List<Revista> obtenerPorEtiquetaYCategoria(String idCategoria, String[] idEtiquetas, String nombreUsuario) throws FiltrosInvalidosBusqueda, SQLException {
+        return repositorioFiltrado.obtenerRevistasPorCategoriaEtiquetas(obtenerLong(idCategoria), idEtiquetas, nombreUsuario);
+    }
     
 
     private List<Long> obtenerIdentificadorees(String[] idEtiquetas) throws FiltrosInvalidosBusqueda {

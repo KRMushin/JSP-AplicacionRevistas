@@ -113,12 +113,10 @@ CREATE TABLE likes_revistas (
 
 
 CREATE TABLE suscripciones (
-    id_suscripcion INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_usuario VARCHAR(255), -- Llave foránea para la tabla usuarios
-    id_revista INT, -- Llave foránea para la tabla revistas
-    fecha_inicio DATE NOT NULL, -- Fecha de inicio de la suscripción
-    fecha_vencimiento DATE, -- Fecha de vencimiento de la suscripción
-    estado_pago ENUM('COMPLETADO') DEFAULT 'COMPLETADO', -- Estado del pago, siempre COMPLETADO si el usuario paga
+    id_suscripcion BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre_usuario VARCHAR(20), 
+    id_revista BIGINT,
+    fecha_suscripcion DATE NOT NULL, 
     FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario),
     FOREIGN KEY (id_revista) REFERENCES revistas(id_revista)
 );

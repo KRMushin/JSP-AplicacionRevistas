@@ -14,12 +14,9 @@ import java.sql.SQLException;
  */
 public interface RepositorioLecturaEscritura<T, ID> {
     
-    
         T guardar(T modelo) throws SQLException;
     
         T actualizar(T modelo) throws SQLException;
     
         T obtenerPorId(ID identificador) throws SQLException;
-    
-    
 }

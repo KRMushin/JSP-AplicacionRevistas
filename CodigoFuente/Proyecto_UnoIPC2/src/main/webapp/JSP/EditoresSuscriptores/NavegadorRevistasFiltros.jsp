@@ -14,7 +14,19 @@
             <jsp:include page="/includes/resources.jsp"/>
     </head>
 <body>
-        <div class="container mt-5">
+           <c:if test="${not empty mensajeServicio}">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    ${mensajeServicio}
+                    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+        </c:if>
+            <div class="d-grid">
+                <button type="button" class="btn btn-primary" onclick="history.back()">Regresar</button>
+            </div>
+
+    <div class="container mt-5">
             <h1 class="mb-4">Navega por Categorías y Etiquetas</h1>
                     <p>Utiliza los filtros a continuación para encontrar contenido específico. Puedes seleccionar una categoría, múltiples etiquetas, o ambos para refinar tu búsqueda.</p>
 
@@ -49,6 +61,7 @@
                         </c:if>
 
                         <div class="form-group mt-4">
+                            <input type="hidden" name="nombreUsuario" value="${usuario.nombreUsuario}">
                             <button type="submit" class="btn btn-primary">Buscar</button>
                         </div>
                     </form>
@@ -74,9 +87,15 @@
                                         <button type="submit" class="btn btn-primary w-100"> Previsualizar</button>
                                     </form>
                                     <br>
-                                    <form action="action">
-                                        <button type="submit" class="btn btn-primary w-100"> Suscribirse </button>
+                                    <c:if test="${revista.aceptaSuscripciones == 'True'}">
+                                    <form action="${pageContext.request.contextPath}/JSP/Suscriptores/SuscripcionRevista.jsp">
+                                            <input type="hidden" name="tituloRevista" value="${revista.tituloRevista}">
+                                            <input type="hidden" name="idRevista" value="${revista.idRevista}">
+                                            <input type="hidden" name="nombreUsuario" value="${usuario.nombreUsuario}">
+                                            
+                                            <button type="submit" class="btn btn-primary w-100"> Suscribirse </button>
                                     </form>
+                                    </c:if>
                                 </div>
                     </div>
                 </div>

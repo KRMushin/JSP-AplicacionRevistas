@@ -20,6 +20,10 @@
         <title> Revistas </title>
     </head>
 <body>
+
+     <!-- Mensaje donde aparecerá la respuesta del "Me Gusta" -->
+        <div id="likeMessage" class="alert alert-info text-center"></div>
+
     <c:if test="${empty revistasAsociadas}">
         <div class="alert alert-info text-center">AUN NO HAS PUBLICADO REVISTAS</div>
     </c:if>
@@ -40,6 +44,9 @@
                     
                 <c:if test="${usuario.rol == 'SUSCRIPTOR'}">
                     <h2 class="text-center"> REVISTA</h2>
+                    <c:if test="${not empty informacionLike}">
+                    <h2 class="text-center"> ${informacionLike} </h2>
+                    </c:if>
                 </c:if>
             </c:if>
                 

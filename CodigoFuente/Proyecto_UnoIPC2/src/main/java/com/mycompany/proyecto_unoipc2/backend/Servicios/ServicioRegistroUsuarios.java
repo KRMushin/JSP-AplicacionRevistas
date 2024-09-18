@@ -26,14 +26,14 @@ import java.util.List;
  *
  * @author kevin-mushin
  */
-public class ServicioRegistro {
+public class ServicioRegistroUsuarios {
     private Connection conn;
     private RepositorioLecturaEscritura<Usuario, String> usuarioRepositorio;
     private RepositorioLecturaEscritura<CarteraDigital, String> carteraRepositorio;
     private final RepositorioCRUD<PreferenciaUsuario, String> preferenciasRepositorio;
     private CreadorUsuario creadorUsuario;
 
-    public ServicioRegistro() throws SQLException {
+    public ServicioRegistroUsuarios() throws SQLException {
         this.conn = ConexionBaseDatos.getInstance();
         this.usuarioRepositorio = new RepositorioUsuario(conn);
         this.carteraRepositorio = new RepositorioCarteraDigital(conn);
