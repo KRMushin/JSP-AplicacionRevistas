@@ -31,10 +31,6 @@ CREATE TABLE carteras_digitales (
 );
 
 
-
-
-/*				EN FASE  DE ANALISIS						*/ 
-
 CREATE TABLE ARCHIVOS_REVISTA (
     id_archivo BIGINT  	AUTO_INCREMENT PRIMARY KEY,
     archivo MEDIUMBLOB 
@@ -120,6 +116,17 @@ CREATE TABLE suscripciones (
     FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario),
     FOREIGN KEY (id_revista) REFERENCES revistas(id_revista)
 );
+
+CREATE TABLE comentarios (
+    id_comentario BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre_usuario VARCHAR(15) NOT NULL,
+    id_revista BIGINT NOT NULL,
+    comentario TEXT,
+    FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario),
+    FOREIGN KEY (id_revista) REFERENCES revistas(id_revista)
+);
+
+
 
 -- Tabla para almacenar el historial de likes de revistas
 CREATE TABLE likes_revistas (
