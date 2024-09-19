@@ -23,7 +23,7 @@ public enum TipoOpciones {
             opciones.add(new OpcionesUsuario("Publicar revista","CategoriaEtiquetaServlet?accion=obtenerCategorias"));
             opciones.add(new OpcionesUsuario("Mis Revistas","EditorRevistaServlet?accion=obtenerRevistas"));
             /*  REPORTES QUE PODRAN VER LOS EDITORES*/
-            opciones.add(new OpcionesUsuario("Comentarios","ir a perfil.jsp"));
+            opciones.add(new OpcionesUsuario("Comentarios En Revistas","ReporteComentariosServlet"));
             opciones.add(new OpcionesUsuario("Suscripciones","ir a perfil.jsp"));
             opciones.add(new OpcionesUsuario("Mejores Revistas","ir a perfil.jsp"));
             opciones.add(new OpcionesUsuario("Cerrar Sesion","ir a perfil.jsp"));

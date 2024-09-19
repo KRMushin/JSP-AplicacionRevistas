@@ -89,6 +89,21 @@ public class RevistaRelacionRepositorio {
                     }
                 }
     }
+    
+    public List<Revista> obtenerRevistasLlaves() throws SQLException{
+        List<Revista> revistas = new ArrayList<>();
+        String insert = "SELECT *FROM revistas";
+        try(PreparedStatement stmt = conn.prepareStatement(insert)){
+             ResultSet rs = stmt.executeQuery();
+             while (rs.next()) {
+                Revista revista = new Revista();
+                revista.setTituloRevista(rs.getString("titulo_revista"));
+                revista.setIdRevista(rs.getLong("id_revista"));
+                revistas.add(revista);
+             }
+            return revistas;
+        }
+    }
 
 
     

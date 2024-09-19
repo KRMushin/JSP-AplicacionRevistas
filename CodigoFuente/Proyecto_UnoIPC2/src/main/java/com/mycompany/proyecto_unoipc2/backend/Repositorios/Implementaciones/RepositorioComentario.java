@@ -80,6 +80,20 @@ public class RepositorioComentario {
             
         } 
     }
+    public List<Comentario> listarComentariosRevista(Long id) throws SQLException{
+        List<Comentario> comentariosAsociados = new ArrayList<>();
+        
+        String insertQuery = "SELECT *FROM comentarios WHERE nombre_usuario = ? AND id_revista = ?";
+        try(PreparedStatement stmt = conn.prepareStatement(insertQuery)) {
+             stmt.setLong(1, id);
+             ResultSet rs = stmt.executeQuery();
+             while (rs.next()) {
+                 comentariosAsociados.add(crearComentario(rs));
+            }
+        } 
+    
+    return comentariosAsociados;
+    }
 
     private Comentario crearComentario(ResultSet rs) throws SQLException {
         Comentario comentario = new Comentario();

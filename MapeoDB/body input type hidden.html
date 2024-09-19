@@ -200,3 +200,46 @@
             </ul>
         </div>
     </nav>
+    
+    
+    
+    
+    
+    /////////////
+    <!-- Filtro por Revista -->
+        <c:if test="${not empty revistasDisponibles}">
+            <form action="${pageContext.request.contextPath}/ReporteComentariosServlet" method="POST" class="mb-4">
+                    <div class="mb-3">
+                        
+                        <<input type="hidden" id="accion" name="accion" value="filtrarRevista">
+                        
+            <label for="revista" class="form-label">Filtrar por Revista</label>
+                        <select class="form-select" id="idrevista" name="idRevista">
+                            <option value="">Selecciona una revista</option>
+                            <c:forEach var="revista" items="${revistasDisponibles}">
+                                <!-- El valor será el idRevista en lugar del título -->
+                                <option value="${revista.idRevista}">${revista.tituloRevista}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Filtrar por Revista</button>
+                </form>
+        </c:if>
+
+        <hr>
+        <!-- Filtro por Intervalo de Fechas -->
+        <form action="${pageContext.request.contextPath}/ReporteComentariosServlet" method="POST" class="mb-4">
+            
+            <<input type="hidden" id="accion" name="accion" value="filtrarFechas">
+            <div class="mb-3">
+                <label for="fechaInicio" class="form-label">Fecha Inicio</label>
+                <input type="date" class="form-control" id="fechaInicio" name="fechaInicio">
+            </div>
+
+            <div class="mb-3">
+                <label for="fechaFin" class="form-label">Fecha Fin</label>
+                <input type="date" class="form-control" id="fechaFin" name="fechaFin">
+            </div>
+            
+            <button type="submit" class="btn btn-primary">Filtrar por Fechas</button>
+        </form>

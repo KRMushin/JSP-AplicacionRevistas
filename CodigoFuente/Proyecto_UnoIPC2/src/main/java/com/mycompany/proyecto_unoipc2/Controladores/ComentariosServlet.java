@@ -36,7 +36,11 @@ public class ComentariosServlet extends HttpServlet {
             ServicioComentarios servicioComentarios = new ServicioComentarios();
             Usuario usuario = (Usuario) request.getSession().getAttribute("usuario");
             List<Comentario> comentariosUsuario = servicioComentarios.obtenerComentariosAsociados(usuario.getNombreUsuario(), idRevista);
-
+            
+            if (comentariosUsuario == null) {
+                return;
+            }
+            
             request.setAttribute("comentariosUsuario", comentariosUsuario);
             request.setAttribute("revistaComentable", servicioComentarios.esRevistaComentable(idRevista));
             request.setAttribute("idRevista", request.getParameter("idRevista"));

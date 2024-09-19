@@ -17,6 +17,8 @@ public class Comentario {
     private String nombreUsuario;
     private LocalDate fechaComentario;
     private String comentario;
+    private String tituloRevista;
+    
 
     public Comentario() {
     }
@@ -61,6 +63,15 @@ public class Comentario {
         this.idRevista = idRevista;
     }
 
+    public String getTituloRevista() {
+        return tituloRevista;
+    }
+
+    public void setTituloRevista(String tituloRevista) {
+        this.tituloRevista = tituloRevista;
+    }
+
+    
     @Override
     public String toString() {
         return "Comentario{" + "idComentario=" + idComentario + ", idRevista=" + idRevista + ", nombreUsuario=" + nombreUsuario + ", fechaComentario=" + fechaComentario + ", comentario=" + comentario + '}';
