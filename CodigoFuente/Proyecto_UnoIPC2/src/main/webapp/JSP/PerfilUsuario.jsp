@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Styles.css">
 </head>
 <body>
+            <jsp:include page="/includes/resources.jsp"/>
+
     <!-- Mensaje de éxito/error -->
     <c:if test="${not empty mensaje}">
         <div class="${tipoMensaje == 'success' ? 'alert alert-success' : 'alert alert-danger'}">

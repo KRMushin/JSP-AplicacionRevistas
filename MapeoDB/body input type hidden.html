@@ -186,3 +186,17 @@
     
     <script src="${pageContext.request.contextPath}/JS/PerfilUsuario.js"></script>
 </body>
+
+
+
+
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <c:forEach var="opcion" items="${menuOpciones}">
+                        <a class="nav-item" href="${pageContext.request.contextPath}/${opcion.opcionAccion}">${opcion.opcionNombre}</a>
+                </c:forEach>
+            </ul>
+        </div>
+    </nav>

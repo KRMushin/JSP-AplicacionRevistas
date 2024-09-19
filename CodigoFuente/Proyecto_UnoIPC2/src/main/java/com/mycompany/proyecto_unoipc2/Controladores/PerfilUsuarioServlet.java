@@ -54,6 +54,8 @@ public class PerfilUsuarioServlet extends HttpServlet {
                 getServletContext().getRequestDispatcher("/JSP/PerfilUsuario.jsp").forward(req, response);
             }
         } catch (SQLException | IOException | TransaccionFallidaException e) {
+                 req.setAttribute("mensaje", "Error en la obtencion del usuario");
+                 req.getRequestDispatcher("JSP/PerfilUsuario.jsp").forward(req, response);
         } 
         
     }
@@ -67,9 +69,12 @@ public class PerfilUsuarioServlet extends HttpServlet {
                 HttpSession session = req.getSession();
                 session.setAttribute("usuario", usuario); 
 
-                 req.setAttribute("actualizacionExitosa", true);  
+                 req.setAttribute("actualizacionExitosa", true);
+                 req.setAttribute("usuarioPerfil", usuario);
+                 req.setAttribute("isEditable", true);
+                 req.setAttribute("mensaje", "La actualizacion del perfil ha sido exitosa");
                  req.getRequestDispatcher("JSP/PerfilUsuario.jsp").forward(req, response);
-           
+
             } catch (DatosInvalidosRegistro | TransaccionFallidaException | ServletException | IOException | SQLException e) {
                  req.setAttribute("mensaje", "Error al actualizar el usuario: " + e.getMessage());
                  req.setAttribute("tipoMensaje", "error");

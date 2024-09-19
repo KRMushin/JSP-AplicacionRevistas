@@ -37,8 +37,7 @@ public enum TipoOpciones {
         @Override
         public List<OpcionesUsuario> obtenerOpcionesRol() {
             List<OpcionesUsuario> opciones = new ArrayList<>();
-            opciones.add(new OpcionesUsuario(" Ver Perfil","JSP/PerfilUsuario.jsp"));
-            
+            opciones.add(new OpcionesUsuario("Ver Perfil", "PerfilUsuarioServlet?action=perfilUsuario&edit=true"));
             opciones.add(new OpcionesUsuario(" Navegar ","JSP/EditoresSuscriptores/NavegadorRevistasFiltros.jsp"));
             opciones.add(new OpcionesUsuario(" Suscripciones","SuscripcionesServlet"));
             opciones.add(new OpcionesUsuario("  Cartera DIgital ","ir a perfil.jsp"));
