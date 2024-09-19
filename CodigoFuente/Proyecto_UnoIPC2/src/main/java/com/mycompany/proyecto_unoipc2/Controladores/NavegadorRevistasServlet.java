@@ -37,6 +37,7 @@ public class NavegadorRevistasServlet extends HttpServlet {
             getServletContext().getRequestDispatcher("/JSP/EditoresSuscriptores/NavegadorRevistasFiltros.jsp").forward(request, response);
 
         } catch (SQLException | FiltrosInvalidosBusqueda ex) {
+            System.out.println(ex);
             Logger.getLogger(NavegadorRevistasServlet.class.getName()).log(Level.SEVERE, null, ex);
         }
         

@@ -84,11 +84,12 @@ public class RepositorioRevistas implements RepositorioCRUD<Revista,String>{
     public Revista actualizar(Revista modelo) throws SQLException {
         
         /*          METODO PARA ACTUALIZAR LOS ESTADOS DE LA REVISTA */
-        String updateQuery = "UPDATE revistas SET revista_comentable = ? , revista_likeable = ?  WHERE id_revista = ?";
+        String updateQuery = "UPDATE revistas SET revista_comentable = ? , revista_likeable = ?, acepta_suscripciones = ?  WHERE id_revista = ?";
         try(PreparedStatement stmt = conn.prepareStatement(updateQuery)) {
              stmt.setBoolean(1, modelo.isRevistaComentable());
              stmt.setBoolean(2, modelo.isRevistaLikeable());
-             stmt.setLong(3, modelo.getIdRevista());
+             stmt.setBoolean(3, modelo.isAceptaSuscripciones());
+             stmt.setLong(4, modelo.getIdRevista());
              
              int affectedRows = stmt.executeUpdate();
              if (affectedRows <= 0) {
@@ -150,6 +151,7 @@ public class RepositorioRevistas implements RepositorioCRUD<Revista,String>{
         revista.setRevistaLikeable(rs.getBoolean("revista_likeable"));
         revista.setEstadoRevista(rs.getString("estado_revista"));
         revista.setNumeroLikes(rs.getInt("numero_likes"));
+        revista.setAceptaSuscripciones(rs.getBoolean("acepta_suscripciones"));
         return revista;
 
     }

@@ -37,7 +37,7 @@ public class ServicioNavegacionRevistas {
         String nombreUsuario = request.getParameter("nombreUsuario");
         
         if ((idEtiquetas == null || idEtiquetas.length <= 0) && (idCategoria == null || idCategoria.isEmpty())) {
-             revistasEncontradas = obtenerTodasLasRevistas();
+             revistasEncontradas = obtenerTodasLasRevistas(nombreUsuario);
 
         } else if ((idEtiquetas != null && idEtiquetas.length > 0) && (idCategoria == null || idCategoria.isEmpty())) {
             revistasEncontradas = obtenerRevistasPorEtiquetas(idEtiquetas,nombreUsuario);
@@ -53,8 +53,8 @@ public class ServicioNavegacionRevistas {
 
     }
 
-    private List<Revista> obtenerTodasLasRevistas() throws SQLException {
-        return repositorioFiltrado.obtenerRevistasActivas();
+    private List<Revista> obtenerTodasLasRevistas(String nombreUsuario) throws SQLException {
+        return repositorioFiltrado.obtenerRevistasActivas(nombreUsuario);
 
     }
 

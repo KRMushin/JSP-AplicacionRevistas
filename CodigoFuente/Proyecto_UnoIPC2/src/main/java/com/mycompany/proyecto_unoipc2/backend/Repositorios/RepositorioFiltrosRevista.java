@@ -24,19 +24,25 @@ public class RepositorioFiltrosRevista {
         this.conn = conn;
     }
     
-    public List<Revista> obtenerRevistasActivas() throws SQLException {
-        List<Revista> revistas = new ArrayList<>();
-        
-        String insertQuery = "SELECT *FROM revistas WHERE estado_revista = ?";
-        try(PreparedStatement stmt = conn.prepareStatement(insertQuery)){
-            stmt.setString(1, "ACTIVA");
-            ResultSet rs = stmt.executeQuery();
-            while (rs.next()) {
-                revistas.add(crearResumenRevista(rs));
-            }
+    public List<Revista> obtenerRevistasActivas(String nombreUsuario) throws SQLException {
+    List<Revista> revistas = new ArrayList<>();
+
+    String selectQuery = "SELECT r.* FROM revistas r " +
+                         "LEFT JOIN suscripciones s ON r.id_revista = s.id_revista AND s.nombre_usuario = ? " +
+                         "WHERE r.estado_revista = 'ACTIVA' AND s.id_revista IS NULL";
+
+    try (PreparedStatement stmt = conn.prepareStatement(selectQuery)) {
+        stmt.setString(1, nombreUsuario); // Se pasa el nombre del usuario como parámetro
+
+        ResultSet rs = stmt.executeQuery();
+        while (rs.next()) {
+            revistas.add(crearResumenRevista(rs)); // Añades cada revista a la lista
         }
-        return revistas;
     }
+
+    return revistas;
+}
+
     public List<Revista> obtenerRevistasPorEtiquetas(List<Long> etiquetasSeleccionadas,String nombreUsuario) throws SQLException {
         List<Revista> revistas = new ArrayList<>();
 
@@ -44,7 +50,7 @@ public class RepositorioFiltrosRevista {
             return revistas;
         }
 
-        StringBuilder selectQuery = new StringBuilder("SELECT DISTINCT r.id_revista, r.titulo_revista, r.nombre_autor ");
+        StringBuilder selectQuery = new StringBuilder("SELECT DISTINCT r.id_revista, r.titulo_revista, r.nombre_autor, r.acepta_suscripciones ");
         selectQuery.append("FROM revistas r ");
         selectQuery.append("JOIN revista_etiqueta re ON r.id_revista = re.id_revista ");
         selectQuery.append("LEFT JOIN suscripciones s ON r.id_revista = s.id_revista AND s.nombre_usuario = ? ");

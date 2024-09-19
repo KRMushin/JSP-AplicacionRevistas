@@ -29,6 +29,8 @@ public class Revista {
     private boolean revistaLikeable;
     private boolean aceptaSuscripciones;
     private int numeroLikes;
+    
+    
 
     public Revista() {
     }

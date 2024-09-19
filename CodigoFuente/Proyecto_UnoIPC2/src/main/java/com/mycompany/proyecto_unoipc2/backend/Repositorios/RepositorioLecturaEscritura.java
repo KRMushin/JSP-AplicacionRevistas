@@ -19,4 +19,5 @@ public interface RepositorioLecturaEscritura<T, ID> {
         T actualizar(T modelo) throws SQLException;
     
         T obtenerPorId(ID identificador) throws SQLException;
+
 }

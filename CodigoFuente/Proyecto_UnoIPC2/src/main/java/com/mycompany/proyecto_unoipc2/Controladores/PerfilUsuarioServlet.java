@@ -35,27 +35,26 @@ public class PerfilUsuarioServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse response)
             throws ServletException, IOException {
         try {
-            HttpSession session = req.getSession();
             ServicioUsuario servicio = new ServicioUsuario();
+            Usuario llaveUsuario = (Usuario) req.getSession().getAttribute("usuario");
             String accion = req.getParameter("action");
 
             if (accion != null && accion.equalsIgnoreCase("mostrarImagen")) {
+                    servicio.mostrarFotoPerfil(req,response);
+                    
+            }else if (accion != null && accion.equalsIgnoreCase("perfilUsuario")) {
                 
-                String idStrFoto = req.getParameter("idFoto");
-                Long idFoto = Long.valueOf(idStrFoto);
+                Usuario usuario = servicio.obtenerUsuario(llaveUsuario.getNombreUsuario());
+                String editar = req.getParameter("edit");
+                boolean isEditable = editar != null && editar.equalsIgnoreCase("true");
                 
-                response.setContentType("image/jpeg");
-                
-                OutputStream outPut = response.getOutputStream();
-                FotoUsuario foto = servicio.procesarFotoUsuario(idFoto, outPut);
-                session.setAttribute("fotoUsuario", foto);
+                req.setAttribute("usuarioPerfil", usuario);
+                req.setAttribute("isEditable", isEditable);
+
+                getServletContext().getRequestDispatcher("/JSP/PerfilUsuario.jsp").forward(req, response);
             }
-        
-        } catch (SQLException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al acceder a la base de datos.");
-        } catch (IOException e) {
-            response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Error al procesar la imagen.");
-        }
+        } catch (SQLException | IOException | TransaccionFallidaException e) {
+        } 
         
     }
 

@@ -39,7 +39,7 @@ public class ServicioAutenticadorUsuario {
             throw new LoginInvalido(" Revise sus datos porfavor ");
         }
                 
-        return usuario;
+        return servicioUsuario.obtenerLlaveUsuario(usuario.getNombreUsuario());
     }
     
 }

@@ -7,13 +7,8 @@
 <%@page import="com.mycompany.proyecto_unoipc2.backend.Modelos.FotoUsuario"%>
 <%@page import="com.mycompany.proyecto_unoipc2.backend.Modelos.Usuario"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
-<%
-Usuario usuario = (Usuario) session.getAttribute("usuario");
-FotoUsuario fotoUsuario = usuario.getFoto();
-%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -21,195 +16,119 @@ FotoUsuario fotoUsuario = usuario.getFoto();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Perfil de Usuario</title>
-     <script src="${pageContext.request.contextPath}/JS/PerfilUsuario.js"></script>
-      <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Styles.css">
+    <script src="${pageContext.request.contextPath}/JS/PerfilUsuario.js"></script>
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/CSS/Styles.css">
 </head>
 <body>
-            <input type="hidden" id="actualizacionExitosa" value="${actualizacionExitosa}" />
-            <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
-        <!-- Mostrar mensaje  error -->
-        <input type="hidden" id="contextPath" value="${pageContext.request.contextPath}" />
-<script>
-    console.log('Context Path:', document.getElementById("contextPath").value);
-</script>
-
-            <c:if test="${not empty mensaje}">
-                <div class="${tipoMensaje == 'success' ? 'alert alert-success' : 'alert alert-danger'}">
-                    <c:out value="${mensaje}" />
-                </div>
-            </c:if>
-        <button type="button" onclick="history.back()">Regresar</button>
-
-           <!-- seccion de foto usuario  -->
-           <h2>Perfil de: <strong>${usuario.nombreUsuario}</strong></h2>
-            <div class="foto-perfil">
-                <c:choose>
-                    <c:when test="${usuario.foto != null and usuario.foto.idFoto > 0}">
-                        <p>${usuario.foto != null and usuario.foto.idFoto > 0}</p>
-                        <img src="${pageContext.request.contextPath}/PerfilUsuarioServlet?action=mostrarImagen&idFoto=${usuario.foto.idFoto}" alt="Foto de Perfil" />
-                    </c:when>
-                    <c:otherwise>
-                        <p>Sin foto disponible</p>
-                    </c:otherwise>
-                </c:choose>
-            </div>
-    
-       <!-- seccion de datos -->
-        <div class="alert alert-info" role="alert">
-            Usuario: <strong>${usuario.nombreUsuario}</strong> | Rol: <strong>${usuario.rol} </strong>
-            <br></br>
+    <!-- Mensaje de éxito/error -->
+    <c:if test="${not empty mensaje}">
+        <div class="${tipoMensaje == 'success' ? 'alert alert-success' : 'alert alert-danger'}">
+            <c:out value="${mensaje}" />
         </div>
-       <!-- seccion de preferencias -->
-            
+    </c:if>
 
-   <c:set var="ListaPreferencias" value="${usuario.preferencias}"></c:set>
+    <button type="button" onclick="history.back()">Regresar</button>
 
-    <!-- fformulario para recoger todas las preferencias -->
+    <!-- Sección de perfil de usuario -->
+    <h2>Perfil de: <strong>${usuarioPerfil.nombreUsuario}</strong></h2>
+    <div class="foto-perfil">
+        <c:choose>
+            <c:when test="${usuarioPerfil.foto != null && usuarioPerfil.foto.idFoto > 0}">
+                <img src="${pageContext.request.contextPath}/PerfilUsuarioServlet?action=mostrarImagen&idFoto=${usuarioPerfil.foto.idFoto}" alt="Foto de Perfil" />
+            </c:when>
+            <c:otherwise>
+                <p>Sin foto disponible</p>
+            </c:otherwise>
+        </c:choose>
+    </div>
+
+    <div class="alert alert-info" role="alert">
+        Usuario: <strong>${usuarioPerfil.nombreUsuario}</strong> | Rol: <strong>${usuarioPerfil.rol}</strong>
+    </div>
+
+    <!-- Sección del formulario -->
     <form action="${pageContext.request.contextPath}/PerfilUsuarioServlet" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="nombreUsuario" value="${usuarioPerfil.nombreUsuario}" />
+        <input type="hidden" name="idFoto" value="${usuarioPerfil.foto.idFoto}" />
+
+        <!-- Foto de perfil -->
+        <p>Actualizar Foto Perfil</p> 
+        <input type="file" name="foto" accept="image/*" 
+               <c:if test="${not isEditable}">disabled</c:if> />
+
+        <!-- Descripción -->
+        <p>Descripción</p>
+        <textarea name="descripcion" <c:if test="${not isEditable}">readonly</c:if>>
+            <c:out value="${usuarioPerfil.descripcion != null ? usuarioPerfil.descripcion : 'Agrega una descripción...'}" />
+        </textarea>
+
+        <!-- Nombre de pila -->
         <div>
-            
-           <input type="hidden" name="nombreUsuario" value="${usuario.nombreUsuario}">
-           <input type="hidden" name="nombrePila" value="${usuario.nombre}">
-           <input type="hidden" name="idFoto" value="${usuario.foto.idFoto}">
+            <p>Nombre:</p>
+            <input type="text" id="nombreUsuarioInput" name="nombre" value="${usuarioPerfil.nombre}" 
+                   <c:if test="${not isEditable}">readonly</c:if> />
+        </div>
 
-            <!-- bton para habilitar edicion -->
-            <button type="button" onclick="mostrarEdicion()">Editar Perfil</button>
-                
-                <p>Actualizar Foto Perfil </p> 
-                <input type="file" name="foto" accept="image/*">
-                <p> Descripcion</p>
-               <c:choose>
-                    <c:when test="${usuario.descripcion != null && !usuario.descripcion.isEmpty()}">
-                        <textarea name="descripcion">${usuario.descripcion}</textarea>
-                    </c:when>
-                    <c:otherwise>
-                        <p>Sin descripción</p>
-                        <textarea name="descripcion" placeholder="Agrega una descripción..."></textarea>
-                    </c:otherwise>
-               </c:choose> 
-                        <div>
-                            <p> Nombre: </p>
-                            <input type="text" id="nombreUsuarioInput" name="nombre" value="${usuario.nombre}" />
-                            </div>         
-                        <!-- contenendores de prefrencias -->
-            <div id="temas_preferencia">
-                <h3>Temas de Preferencia</h3>
-                                <!-- Definimos los temas de preferencia estáticos -->
-                   <c:set var="preferenciasEstaticas">
-                       <c:out value="Terror,Arte,Ciencia,tecnologia" />
-                   </c:set>
-
-                   <!-- Bucle para los temas de preferencia estáticos -->
-                   <c:forEach var="tema" items="${fn:split(preferenciasEstaticas, ',')}">
-                       <!-- Definir variable de marcado como 'false' por defecto -->
-                       <c:set var="checked" value="false" />
-
-                       <!-- Comprobar si el tema ya está en la lista de preferencias del usuario -->
-                       <c:forEach var="preferencia" items="${ListaPreferencias}">
-                           <c:if test="${preferencia.tipoPreferencia == 'TEMA_PREFERENCIA' && preferencia.preferencia == tema}">
-                               <c:set var="checked" value="true" />
-                           </c:if>
-                       </c:forEach>
-        
-                    <!-- Mostrar el checkbox con el estado de marcado dinámico -->
-                    <input type="checkbox" id="${tema}" name="preferenciasTemas" value="${tema}" 
-                           <c:if test="${checked == 'true'}">checked="checked"</c:if> />
-                    <label for="${tema}">${tema}</label>
-                </c:forEach>
-                    
-                            <c:forEach var="preferencia" items="${ListaPreferencias}">
-                                <c:if test="${preferencia.tipoPreferencia == 'TEMA_PREFERENCIA' && !fn:contains(preferenciasEstaticas, preferencia.preferencia)}">
-
-                                    <div class="item-preferencia">
-                                        <input type="checkbox" id="${preferencia.preferencia}" name="preferenciasTemas" value="${preferencia.preferencia}" checked="checked" />
-                                        <label for="${preferencia.preferencia}">${preferencia.preferencia}</label>
-                                        <button type="button" class="boton-eliminar oculto" onclick="eliminarPreferencia(this)">Eliminar</button>            
-                                    </div>
-                                </c:if>
-                            </c:forEach>
-                        </div>
-
-            <div id="hobbies">
-                <h3>Hobbies</h3>
-                
-                  <!-- Definimos los hobbies fijos -->
-    <c:set var="hobbiesFijos" value="Deportes, Lectura, Música" />
-    
-                <!-- Bucle para los hobbies fijos -->
-                <c:forEach var="hobby" items="${hobbiesFijos}">
-                    <!-- Definir variable de marcado como 'false' por defecto -->
-                    <c:set var="checked" value="false" />
-
-                    <!-- Comprobar si el hobby ya está en la lista de preferencias del usuario -->
-                    <c:forEach var="preferencia" items="${ListaPreferencias}">
-                        <c:if test="${preferencia.tipoPreferencia == 'HOBBIE' && preferencia.preferencia == hobby}">
-                            <c:set var="checked" value="true" />
-                        </c:if>
-                    </c:forEach>
-
-                    <!-- Mostrar el checkbox de hobby con el estado de marcado dinámico -->
-                    <input type="checkbox" id="hobbies_${hobby}" name="preferenciasHobbies" value="${hobby}" 
-                           <c:if test="${checked == 'true'}">checked="checked"</c:if> />
-                    <label for="hobbies_${hobby}">${hobby}</label>
-                </c:forEach>
-                
-                <c:forEach var="preferencia" items="${ListaPreferencias}">
-                    <c:if test="${preferencia.tipoPreferencia == 'HOBBIE' && !fn:contains(hobbiesFijos, preferencia.preferencia)}">
-                        <div class="item-preferencia">
-                            <input type="checkbox" id="hobbies_${preferencia.nombreUsuario}" name="preferenciasHobbies" value="${preferencia.preferencia}" checked="checked" />
-                            <label for="hobbies_${preferencia.nombreUsuario}">${preferencia.preferencia}</label>
-                            <button type="button" class="boton-eliminar oculto" onclick="eliminarPreferencia(this)">Eliminar</button>
-                        </div>
+        <!-- Preferencias (Temas de Preferencia) -->
+        <div id="temas_preferencia">
+            <h3>Temas de Preferencia</h3>
+            <c:forEach var="tema" items="${fn:split('Terror,Arte,Ciencia,Tecnologia', ',')}">
+                <c:set var="checked" value="false" />
+                <!-- Comprobamos si el tema está en las preferencias del usuario -->
+                <c:forEach var="preferencia" items="${usuarioPerfil.preferencias}">
+                    <c:if test="${preferencia.tipoPreferencia == 'TEMA_PREFERENCIA' && preferencia.preferencia == tema}">
+                        <c:set var="checked" value="true" />
                     </c:if>
                 </c:forEach>
-            </div>
+                
+                <input type="checkbox" id="${tema}" name="preferenciasTemas" value="${tema}" 
+                       <c:if test="${checked == 'true'}">checked="checked"</c:if> 
+                       <c:if test="${not isEditable}">disabled</c:if> />
+                <label for="${tema}">${tema}</label>
+            </c:forEach>
+        </div>
 
-            <div id="gustos">
-                <h3>Gustos</h3>
-    <c:set var="gustosFijos" value="Cine, Viajar, Cocina" />
-    
-            <c:forEach var="gusto" items="${gustosFijos}">
+        <!-- Hobbies (Siempre visibles, editables solo si 'isEditable') -->
+        <div id="hobbies">
+            <h3>Hobbies</h3>
+            <c:forEach var="hobby" items="${fn:split('Deportes,Lectura,Música', ',')}">
                 <c:set var="checked" value="false" />
+                <c:forEach var="preferencia" items="${usuarioPerfil.preferencias}">
+                    <c:if test="${preferencia.tipoPreferencia == 'HOBBIE' && preferencia.preferencia == hobby}">
+                        <c:set var="checked" value="true" />
+                    </c:if>
+                </c:forEach>
 
-                <c:forEach var="preferencia" items="${ListaPreferencias}">
+                <input type="checkbox" id="hobbies_${hobby}" name="preferenciasHobbies" value="${hobby}" 
+                       <c:if test="${checked == 'true'}">checked="checked"</c:if> 
+                       <c:if test="${not isEditable}">disabled</c:if> />
+                <label for="hobbies_${hobby}">${hobby}</label>
+            </c:forEach>
+        </div>
+
+        <!-- Gustos (Siempre visibles, editables solo si 'isEditable') -->
+        <div id="gustos">
+            <h3>Gustos</h3>
+            <c:forEach var="gusto" items="${fn:split('Cine,Viajar,Cocina', ',')}">
+                <c:set var="checked" value="false" />
+                <c:forEach var="preferencia" items="${usuarioPerfil.preferencias}">
                     <c:if test="${preferencia.tipoPreferencia == 'GUSTO' && preferencia.preferencia == gusto}">
                         <c:set var="checked" value="true" />
                     </c:if>
                 </c:forEach>
 
                 <input type="checkbox" id="gustos_${gusto}" name="preferenciasGustos" value="${gusto}" 
-                       <c:if test="${checked == 'true'}">checked="checked"</c:if> />
+                       <c:if test="${checked == 'true'}">checked="checked"</c:if> 
+                       <c:if test="${not isEditable}">disabled</c:if> />
                 <label for="gustos_${gusto}">${gusto}</label>
             </c:forEach>
-
-        
-                <c:forEach var="preferencia" items="${ListaPreferencias}">
-                    <c:if test="${preferencia.tipoPreferencia == 'GUSTO' && !fn:contains(gustosFijos, preferencia.preferencia)}">
-                        <div class="item-preferencia">
-                            <input type="checkbox" id="gustos_${preferencia.nombreUsuario}" name="preferenciasGustos" value="${preferencia.preferencia}" checked="checked" />
-                            <label for="gustos_${preferencia.nombreUsuario}">${preferencia.preferencia}</label>
-                            <button type="button" class="boton-eliminar oculto" onclick="eliminarPreferencia(this)">Eliminar</button>
-                        </div>
-                    </c:if>
-                </c:forEach>
-            </div>
-
-            
-            <div class="agregar-preferencia oculto"> 
-                <input type="text" id="nuevaPreferencia" placeholder="Nueva preferencia">
-                <select id="tipoNuevaPreferencia">
-                    <option value="temas_preferencia">Temas de Preferencia</option>
-                    <option value="hobbies">Hobbies</option>
-                    <option value="gustos">Gustos</option>
-                </select>
-                <button type="button" onclick="agregarTemaPreferencia()">Añadir Preferencia</button>
-            </div>
-            
-            <button type="submit">  Actualizar Perfil</button>
         </div>
+
+        <!-- Botón para actualizar el perfil (solo habilitado si se puede editar) -->
+        <button type="submit" <c:if test="${not isEditable}">disabled</c:if>>Actualizar Perfil</button>
     </form>
-    <button type="button" onclick="history.back()">Regresar</button>
-    
+
     <script src="${pageContext.request.contextPath}/JS/PerfilUsuario.js"></script>
 </body>
 </html>
+

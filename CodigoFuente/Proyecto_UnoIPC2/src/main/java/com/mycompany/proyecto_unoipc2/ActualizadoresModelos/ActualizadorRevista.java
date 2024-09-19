@@ -20,6 +20,7 @@ public class ActualizadorRevista {
             revista.setIdRevista(obtenerIdRevista(req));
             revista.setRevistaComentable(validarEstadoComentarios(req));
             revista.setRevistaLikeable(validarEstadoLikes(req));
+            revista.setAceptaSuscripciones(validarEstadoSuscripciones(req));
         return revista;
     }
 
@@ -31,6 +32,10 @@ public class ActualizadorRevista {
     private boolean validarEstadoLikes(HttpServletRequest req) {
             String revistaLikeableCadena = req.getParameter("revistaLikeable");
             return (revistaLikeableCadena != null && revistaLikeableCadena.equals("true"));
+    }
+    private boolean validarEstadoSuscripciones(HttpServletRequest req) {
+            String revistaSuscripcionesCadena = req.getParameter("revistaAceptaSuscripciones");
+            return (revistaSuscripcionesCadena != null && revistaSuscripcionesCadena.equals("true"));
     }
 
     private Long obtenerIdRevista(HttpServletRequest req) throws DatosInvalidosRevista{

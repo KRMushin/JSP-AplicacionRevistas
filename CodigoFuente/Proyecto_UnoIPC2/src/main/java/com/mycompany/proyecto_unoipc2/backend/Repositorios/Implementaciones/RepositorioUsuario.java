@@ -103,4 +103,28 @@ public class RepositorioUsuario implements RepositorioLecturaEscritura<Usuario, 
         }
         return usuario;
     }
+
+    public Usuario obtenerLlaveUsuario(String nombreUsuario) throws SQLException {
+                String key = "SELECT nombre_usuario, rol_usuario, nombre_pila, id_foto FROM usuarios WHERE nombre_usuario = ?";
+
+        try(PreparedStatement stmt = conn.prepareStatement(key)){
+                    stmt.setString(1, nombreUsuario);
+                    ResultSet rs = stmt.executeQuery();
+                    if (rs.next()) {
+                        Usuario usuario = new Usuario();
+                        usuario.setNombreUsuario(nombreUsuario);
+                        usuario.setNombre(rs.getString("nombre_pila"));
+                        usuario.setRol(Rol.valueOf(rs.getString("rol_usuario")));
+                        Long idFoto = rs.getLong("id_foto");
+                         if (idFoto > 0) {
+                        usuario.getFoto().setIdFoto(idFoto);
+                        }
+                        return usuario;
+                    } else{
+                        throw new SQLException("EL usuario no exite o el nombre de usuario se escribio mal");
+                    }
+                }
+    }
+
+   
 }

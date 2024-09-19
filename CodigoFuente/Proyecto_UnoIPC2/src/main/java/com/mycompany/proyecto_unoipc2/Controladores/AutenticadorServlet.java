@@ -38,6 +38,7 @@ public class AutenticadorServlet extends HttpServlet {
             ServicioAutenticadorUsuario servicioAutenticador = new ServicioAutenticadorUsuario();
             Usuario usuario = servicioAutenticador.autenticarUsuario(req);
             ServicioCategoriaEtiqueta cat = new ServicioCategoriaEtiqueta();
+            System.out.println(usuario.getRol());
             List<OpcionesUsuario> opcionesMenu = TipoOpciones.valueOf(usuario.getRol().toString()).obtenerOpcionesRol();
            
             List<Categoria> categorias = cat.obtenerCategorias();
@@ -47,6 +48,7 @@ public class AutenticadorServlet extends HttpServlet {
             session.setAttribute("menuOpciones", opcionesMenu);
             session.setAttribute("categorias", categorias);
 
+            System.out.println(usuario.getNombreUsuario() + usuario.getPassword());
             // Reenviar al JSP `PaginaPrincipal.jsp`
             RequestDispatcher dispatcher = req.getRequestDispatcher("/JSP/PaginaPrincipal.jsp");
             dispatcher.forward(req, resp);

@@ -108,6 +108,13 @@
                                                     </c:if>>
                                                 <label class="custom-control-label" for="likeable">¿Permitir me gusta?</label>
                                             </div>
+                                            <div class="custom-control custom-checkbox mb-2">
+                                                <input type="checkbox" class="custom-control-input" id="suscripciones" name="revistaAceptaSuscripciones" value="true"
+                                                    <c:if test="${revistaVisualizar.aceptaSuscripciones}">
+                                                        checked
+                                                    </c:if>>
+                                                <label class="custom-control-label" for="suscripciones">¿Permitir suscripciones?</label>
+                                            </div>
                                         </div>
                                         <button type="submit" class="btn btn-primary">Actualizar</button>
                                     </form>
