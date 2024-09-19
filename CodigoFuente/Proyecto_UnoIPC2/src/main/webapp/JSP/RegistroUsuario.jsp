@@ -34,7 +34,7 @@
         <div class="container">
             <form action="${pageContext.request.contextPath}/RegistroServlet" method="post" enctype="multipart/form-data">
                 
-                <label for="nombreUsuario">Nombre de Usuario:
+                <label for="nombreUsuario"> *Nombre de Usuario:
                     <span class="informacion" title="Debe ser menor a 15 caracteres y sin espacios">
                                 <i class="bi bi-info-circle"></i>
                     </span>
@@ -42,18 +42,18 @@
                 <input type="text" id="nombreUsuario" name="nombreUsuario" required>
                 <br><br>
 
-                <label for="password">Contraseña:</label>
+                <label for="password"> *Contraseña:</label>
                 <input type="password" id="password" name="password" required>
                 <br><br>
 
-                <label for="nombrePila">Nombre Completo:
+                <label for="nombrePila"> * Nombre Completo:
                      <span class="informacion" title=" Nombre completo sin espacios">
                                 <i class="bi bi-info-circle"></i>
                     </span>
                 </label>
                 <input type="text" id="nombrePila" name="nombrePila" required>
                 
-                <p>Seleccione el tipo de usuario:</p>
+                <p> * Seleccione el tipo de usuario:</p>
                 <input type="radio" id="suscriptor" name="rolEscogido" value="SUSCRIPTOR" required>
                 <label for="suscriptor">Suscriptor</label><br>
 

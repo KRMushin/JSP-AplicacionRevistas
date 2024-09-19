@@ -126,17 +126,15 @@ CREATE TABLE comentarios (
     FOREIGN KEY (id_revista) REFERENCES revistas(id_revista)
 );
 
-
-
--- Tabla para almacenar el historial de likes de revistas
-CREATE TABLE likes_revistas (
-
-    id_revista BIGINT, -- Llave foránea a la tabla revistas
-    numero_likes INT DEFAULT 0,
-
-    PRIMARY KEY (id_revista),
-    FOREIGN KEY (id_revista) REFERENCES revistas(id_revista)
+CREATE TABLE anuncios (
+    id_anuncio BIGINT AUTO_INCREMENT PRIMARY KEY,
+    nombre_usuario VARCHAR(20) NOT NULL,
+    texto VARCHAR(255),
+    imagen MEDIUMBLOB,
+    video MEDIUMBLOB,
+    FOREIGN KEY (nombre_usuario) REFERENCES usuarios(nombre_usuario),
 );
+
 
 /*		INICIALIZAR LAS CATEGORIAS Y ETIQUETAS   				*/
 INSERT INTO categorias (nombre_categoria) VALUES ('ciencia');

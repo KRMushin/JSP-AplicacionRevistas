@@ -24,9 +24,6 @@ public enum TipoOpciones {
             opciones.add(new OpcionesUsuario("Mis Revistas","EditorRevistaServlet?accion=obtenerRevistas"));
             /*  REPORTES QUE PODRAN VER LOS EDITORES*/
             opciones.add(new OpcionesUsuario("Comentarios En Revistas","ReporteComentariosServlet"));
-            opciones.add(new OpcionesUsuario("Suscripciones","ir a perfil.jsp"));
-            opciones.add(new OpcionesUsuario("Mejores Revistas","ir a perfil.jsp"));
-            opciones.add(new OpcionesUsuario("Cerrar Sesion","ir a perfil.jsp"));
             return opciones;
 
         }
@@ -40,9 +37,7 @@ public enum TipoOpciones {
             opciones.add(new OpcionesUsuario("Ver Perfil", "PerfilUsuarioServlet?action=perfilUsuario&edit=true"));
             opciones.add(new OpcionesUsuario(" Navegar ","JSP/EditoresSuscriptores/NavegadorRevistasFiltros.jsp"));
             opciones.add(new OpcionesUsuario(" Suscripciones","SuscripcionesServlet"));
-            opciones.add(new OpcionesUsuario("  Cartera DIgital ","ir a perfil.jsp"));
 
-            opciones.add(new OpcionesUsuario("Cerrar Sesion ","ir a perfil.jsp"));
             return opciones;
         }
     
@@ -52,13 +47,10 @@ public enum TipoOpciones {
         @Override
         public List<OpcionesUsuario> obtenerOpcionesRol() {
             List<OpcionesUsuario> opciones = new ArrayList<>();
-            opciones.add(new OpcionesUsuario(" Ver Perfil","JSP/PerfilUsuario.jsp"));
-            
-            opciones.add(new OpcionesUsuario(" Promocionar Anuncio","ir a perfil.jsp"));
-            opciones.add(new OpcionesUsuario(" Cartera Digital","ir a perfil.jsp"));
+            opciones.add(new OpcionesUsuario("Ver Perfil", "PerfilUsuarioServlet?action=perfilUsuario&edit=true"));
+            opciones.add(new OpcionesUsuario(" Promocionar Anuncio","JSP/Comprador/ComprarAnuncio.jsp"));
+            opciones.add(new OpcionesUsuario(" Cartera Digital","JSP/Comprador/CarteraDigital.jsp"));
             opciones.add(new OpcionesUsuario(" Desactivar Anuncios","ir a perfil.jsp"));
-            
-            opciones.add(new OpcionesUsuario("Cerrar Sesion ","ir a perfil.jsp"));
             return opciones;
         }
     
@@ -72,6 +64,4 @@ public enum TipoOpciones {
     };
     
     public abstract List<OpcionesUsuario> obtenerOpcionesRol();
-
-    
 }
