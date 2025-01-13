@@ -17,8 +17,8 @@ import jakarta.servlet.http.HttpSession;
  *
  * @author kevin-mushin
  */
-@WebServlet(name = "Logout", urlPatterns = {"/LogoutServlet"})
-public class Logout extends HttpServlet {
+@WebServlet(name = "LogoutServlet", urlPatterns = {"/LogoutServlet"})
+public class LogoutServlet extends HttpServlet {
 
    
     @Override
@@ -28,10 +28,11 @@ public class Logout extends HttpServlet {
         HttpSession session = request.getSession(false);
         
         if (session != null) {
-            session.invalidate();
+            session.invalidate();  // Invalida la sesión si existe
         }
-        
-        response.sendRedirect("JSP/LoginUsuario.jsp"); 
+
+        // Redirige a la página de login con la ruta corregida
+        response.sendRedirect(request.getContextPath() + "/JSP/LoginUsuario.jsp");
     }
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)

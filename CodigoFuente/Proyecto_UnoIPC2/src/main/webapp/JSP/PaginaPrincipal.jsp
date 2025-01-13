@@ -50,7 +50,7 @@ if (session == null || session.getAttribute("usuario") == null) {
             Bienvenido: <strong>${usuario.nombreUsuario}</strong> | Rol: <strong>${usuario.rol} </strong>
         </div>
         
-        <a class="btn btn-danger mt-3" href="LogoutServlet" > Cerrar Sesion</a>
+        <a class="btn btn-danger mt-3" href="${pageContext.request.contextPath}/LogoutServlet" > Cerrar Sesion</a>
 
         <div id="contenido">
             <img src="${pageContext.request.contextPath}/includes/EDITMOSQUITO.webp" alt="Descripción de la imagen" class="img-fluid">

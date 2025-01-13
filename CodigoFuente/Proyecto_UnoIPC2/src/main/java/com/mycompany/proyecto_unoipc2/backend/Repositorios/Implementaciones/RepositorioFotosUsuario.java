@@ -28,12 +28,13 @@ public class RepositorioFotosUsuario implements RepositorioLecturaEscritura<Foto
     @Override
     public FotoUsuario guardar(FotoUsuario modelo) throws SQLException {
         String query = "INSERT INTO fotos_usuario (foto_usuario, foto) values(?,?)";
+        
         try (PreparedStatement stmt = connection.prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS)) {
             stmt.setString(1, modelo.getNombreUsuario());
             stmt.setBlob(2, modelo.getFoto());
             int affectedRows = stmt.executeUpdate();
 
-            if (affectedRows == 0) {
+            if (affectedRows <= 0) {
                 throw new SQLException("No se pudo guardar la foto, no se afectaron filas.");
             }
             try (ResultSet generatedKeys = stmt.getGeneratedKeys()) {

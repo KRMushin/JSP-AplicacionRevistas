@@ -50,7 +50,6 @@ public enum TipoOpciones {
             opciones.add(new OpcionesUsuario("Ver Perfil", "PerfilUsuarioServlet?action=perfilUsuario&edit=true"));
             opciones.add(new OpcionesUsuario(" Promocionar Anuncio","JSP/Comprador/ComprarAnuncio.jsp"));
             opciones.add(new OpcionesUsuario(" Cartera Digital","JSP/Comprador/CarteraDigital.jsp"));
-            opciones.add(new OpcionesUsuario(" Desactivar Anuncios","ir a perfil.jsp"));
             return opciones;
         }
     

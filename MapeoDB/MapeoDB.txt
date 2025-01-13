@@ -34,7 +34,6 @@ CREATE TABLE carteras_digitales (
 CREATE TABLE ARCHIVOS_REVISTA (
     id_archivo BIGINT  	AUTO_INCREMENT PRIMARY KEY,
     archivo MEDIUMBLOB 
-
 );
 CREATE TABLE categorias (
     id_categoria BIGINT AUTO_INCREMENT PRIMARY KEY,
@@ -152,8 +151,6 @@ INSERT INTO categorias (nombre_categoria) VALUES ('política y actualidad');
 INSERT INTO categorias (nombre_categoria) VALUES ('automotriz');
 INSERT INTO categorias (nombre_categoria) VALUES ('arquitectura y diseño');
 INSERT INTO categorias (nombre_categoria) VALUES ('cultura pop');
-
-
 
 INSERT INTO etiquetas (nombre_etiqueta) VALUES ('investigación');
 INSERT INTO etiquetas (nombre_etiqueta) VALUES ('avances científicos');
